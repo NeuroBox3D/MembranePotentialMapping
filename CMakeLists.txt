@@ -12,7 +12,7 @@ include_directories("annlib/include")
 
 # sources
 set(SOURCES	plugin_main.cpp
-			#vm2ug.cc
+			vm2ug.cc
 			bg.cc
 			my_commands.cc
 			solve.cc
