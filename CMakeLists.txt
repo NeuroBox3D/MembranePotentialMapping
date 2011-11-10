@@ -20,7 +20,7 @@ set(SOURCES	plugin_main.cpp
 			
 			
 # get the path to annlib
-option(ANNLIB "Sets the path in which metis shall be searched." OFF)
+option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
 
 if(NOT ANNLIB)
 	message(FATAL_ERROR "ERROR: annlib is required. Please set the option -DANNLIB=path_to_annlib.")
