@@ -8,7 +8,7 @@ project(MEMBRANE_POTENTIAL_MAPPING)
 
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
-include_directories("annlib/include")
+
 
 # sources
 set(SOURCES	plugin_main.cpp
@@ -17,27 +17,28 @@ set(SOURCES	plugin_main.cpp
 			my_commands.cc
 			solve.cc
 			gating.cc)
+			
+			
+# get the path to annlib
+option(ANNLIB "Sets the path in which metis shall be searched." OFF)
 
-set(ANN_SOURCES	annlib/src/ANN.cpp
-				annlib/src/brute.cpp
-				annlib/src/kd_tree.cpp
-				annlib/src/kd_util.cpp
-				annlib/src/kd_split.cpp
-				annlib/src/kd_dump.cpp
-				annlib/src/kd_search.cpp
-				annlib/src/kd_pr_search.cpp
-				annlib/src/kd_fix_rad_search.cpp
-				annlib/src/bd_tree.cpp
-				annlib/src/bd_search.cpp
-				annlib/src/bd_pr_search.cpp
-				annlib/src/bd_fix_rad_search.cpp
-				annlib/src/perf.cpp)
+if(NOT ANNLIB)
+	message(FATAL_ERROR "ERROR: annlib is required. Please set the option -DANNLIB=path_to_annlib.")
+endif(NOT ANNLIB)
+
+find_library(ANNLIB_LIBS NAMES ann PATHS ${ANNLIB}/lib)
+if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the specified path: " ${ANNLIB}/lib)
+else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	include_directories(${ANNLIB}/include)		
+endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+
 
 # create a shared library from the sources and link it against ug4.
-add_library(MembranePotentialMappingPlugin SHARED ${SOURCES} ${ANN_SOURCES})
+add_library(MembranePotentialMappingPlugin SHARED ${SOURCES})
 
 if(STATIC)
-	target_link_libraries (MembranePotentialMappingPlugin ug4_s)
+	target_link_libraries(MembranePotentialMappingPlugin ug4_s ${ANNLIB_LIBS})
 else(STATIC)
-	target_link_libraries (MembranePotentialMappingPlugin ug4)
+	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS})
 endif(STATIC)
