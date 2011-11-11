@@ -68,6 +68,10 @@ template <class T> class Vm2uG {
 
       ~Vm2uG();
       
+
+      double get_potential(double x, double y, double z, double t)	{return 0;}
+
+
       /** buildTree builds the tree with timestep specified in a class constructor
       
       @return void

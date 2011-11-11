@@ -8,6 +8,8 @@
 #include "lib_disc/domain.h"
 #include "lib_grid/lib_grid.h"
 
+#include "vm2ug.hh"
+
 #include <string>
 
 using namespace std;
@@ -23,4 +25,10 @@ extern "C" UG_API void InitUGPlugin(ug::bridge::Registry* reg, string parentGrou
 	string grp(parentGroup); grp.append("Neuro/");
 
 	reg->add_function("SayHelloMPM", &SayHello, grp);
+
+	typedef vug::Vm2uG<std::string> TVm2uG;
+	reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
+		.add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
+		.add_method("get_potential", &TVm2uG::get_potential, grp)
+		.add_method("build_tree", &TVm2uG::buildTree, grp);
 }
