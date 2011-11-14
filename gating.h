@@ -37,10 +37,11 @@ public:
 	{};
 
 
-    gating_parameter( double z_, double V_12_, double tau_0_ )
+   gating_parameter( double z_, double V_12_, double tau_0_ )
                 : z(z_), V_12(V_12_), tau_0( tau_0_),
 			F(9.648 * 10000), R(  8.314 * 1000 ), T( 300 ), simple(true)
-    {};
+    { gamma = 0; K = 0;};
+
 
 	gating_parameter() {};
 	

@@ -31,7 +31,7 @@ double gating_parameter::defect( double x_ip1_k, double x_i, double V,  double D
 double gating_parameter::tau_x ( double V  )
 {
 	double res = 0;
-
+  
 	if( simple ) 
 		res = tau_0;
 	else 
@@ -53,12 +53,13 @@ double gating_parameter::x_infty( double V )
 }
 
 double gating_parameter::alpha_prime_x( double V )
-{
+{  
 	double res = K * exp( ( z * gamma * ( V - V_12 ) * F ) / ( R * T ) );
 	return res;
 }
 
 double gating_parameter::beta_prime_x( double V ) 
+  
 {
 	double res = K * exp( ( -z * ( 1 - gamma ) * ( V - V_12 ) * F ) / ( R * T ) );
 	return res;

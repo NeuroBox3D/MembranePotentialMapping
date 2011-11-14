@@ -3,7 +3,6 @@
 /* File:      my_commands.cc                                            	*/
 /*                                                                          */
 /* Purpose:   several own functions in order to use the the classes    */ 
-/* 
 /* Author:	  Markus M. Knodel                                              */
 /*                Goethe Center for Scientific Computing             */
 /*                University of Frankfurt                   */
@@ -13,10 +12,8 @@
 /*                email: markus.knodel@gcsc.uni-frankfurt.de    */              
 /*                                                                  */
 /* History:   2009 begin            									   
-/*                                                                          */
-/* Remarks:                                                                 */
-/*                                                                          */
-/****************************************************************************/
+****************************************************************************/
+
 
 
 

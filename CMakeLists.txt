@@ -26,7 +26,7 @@ if(NOT ANNLIB)
 	message(FATAL_ERROR "ERROR: annlib is required. Please set the option -DANNLIB=path_to_annlib.")
 endif(NOT ANNLIB)
 
-find_library(ANNLIB_LIBS NAMES ann PATHS ${ANNLIB}/lib)
+find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
 if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the specified path: " ${ANNLIB}/lib)
 else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")

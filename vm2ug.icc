@@ -190,28 +190,14 @@ template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timeste
    }
 
    if (timestep == this->timestep) {
-      #pragma omp parallel 
-      {
-      #pragma omp for
          for (int i=0; i < size; i++) {
-            #pragma omp critical
-            {
             this->kdTree->annkSearch(queryPts[i], this->k, annQueryPtsIdxArray[i], this->annQueryPtsDistsArray[i], this->eps);
-            }
          }  
-      }
    } else {
       this->timestep = timestep;
       rebuildTree(timestep);
-      #pragma omp parallel
-      {
-      #pragma omp for
          for (int i=0; i < size; i++) {
-            #pragma omp critical 
-            {
             this->kdTree->annkSearch(queryPts[i], this->k, annQueryPtsIdxArray[i], this->annQueryPtsDistsArray[i], this->eps);
-            }
-         }  
       }
    }
    
@@ -223,8 +209,8 @@ template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timeste
       std::vector<double> queryP;
       std::vector<sPoint<T> > sP;
 
-      unsigned int j;
-      unsigned int l;
+      int j;
+      int l;
       for (j=0; j<dim; j++) queryP.push_back(queryPts[i][j]);
       
       for (l=0; l<k;l++) {
@@ -265,8 +251,8 @@ template <> uGPoint<string> Vm2uG<string>::vm_t(const string& timestep, const do
    std::vector<double> queryP;
    std::vector<sPoint<string> > sP;
 
-   unsigned int i;
-   unsigned int j;
+   int i;
+   int j;
 
    for (i=0; i<dim; i++) queryP.push_back(queryPt[i]);
 
@@ -301,8 +287,8 @@ if (!this->isTreeBuild) buildTree(timestep);
    std::vector<double> queryP;
    std::vector<sPoint<T> > sP;
 
-   unsigned int i;
-   unsigned int j;
+   int i;
+   int j;
 
    for (i=0; i<dim; i++) queryP.push_back(queryPt[i]);
 
@@ -434,15 +420,16 @@ template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
 }
 
 template <class T> ostream& operator<<(ostream& output, const Vm2uG<T>& p) {
-   cout << "current instance of Vm2uG holds the properties:" << endl;
-   cout << "|" << "        dim: " << p.dim << " (dimension of query points)" << endl;
-   cout << "|" << "          k: " << p.k << " (k nearest neihbors)" << endl;
-   cout << "|" << "        eps: " << p.eps << " (approximation factor)" << endl;
-   cout << "|" << "   BaseName: " << p.dataFileBaseName << " (current basename of files which hold timestep data)" << endl;
-   cout << "|" << "  Extension: " << p.dataFileExt << " (current extension for those files)" << endl;
-   cout << "|" << "   timestep: " << p.timestep << " (initial timestep for building the tree)" << endl;
-   cout << "|" << "     maxPts: " << p.maxPts << " (maximum number of points the tree can hold)" << endl;
-   cout << "|" << "    promise: " << (p.promise ? "true" : "false") << " (indicates if indices between dataFileBaseNames with timestep data do notvary)" << endl << endl;
+   output << "current instance of Vm2uG holds the properties:" << endl;
+   output << "|" << "        dim: " << p.dim << " (dimension of query points)" << endl;
+   output << "|" << "          k: " << p.k << " (k nearest neihbors)" << endl;
+   output << "|" << "        eps: " << p.eps << " (approximation factor)" << endl;
+   output << "|" << "   BaseName: " << p.dataFileBaseName << " (current basename of files which hold timestep data)" << endl;
+   output << "|" << "  Extension: " << p.dataFileExt << " (current extension for those files)" << endl;
+   output << "|" << "   timestep: " << p.timestep << " (initial timestep for building the tree)" << endl;
+   output << "|" << "     maxPts: " << p.maxPts << " (maximum number of points the tree can hold)" << endl;
+   output << "|" << "    promise: " << (p.promise ? "true" : "false") << " (indicates if indices between dataFileBaseNames with timestep data do notvary)" << endl << endl;
+   return output;
 }
 /* }}} */
 
