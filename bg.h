@@ -1,34 +1,10 @@
-/****************************************************************************/
-/*                                                                          */
-/* File:      globals.h                                            	*/
-/*                                                                          */
-/* Purpose:   global variables    */ 
-/*                                                                          */
-/* Author:	  Markus M. Knodel                                              */
-/*                Goethe Center for Scientific Computing             */
-/*                University of Frankfurt                   */
-/*                Kettenhofweg 139                           */
-/*                60325 Frankfurt              */
-/*                Germany              */
-/*                email: markus.knodel@gcsc.uni-frankfurt.de    */
-/*																			*/
-/* History:   2009 begin            									    */
-/*                                                                          */
-/* Remarks:                                                                 */
-/*                                                                          */
-/****************************************************************************/
-
-
 #ifndef __bg_h__
 #define __bg_h__
 
-/* system includes */
 #include <stddef.h>
 #include <cmath>
 #include <stdlib.h>
 #include <stdio.h>
-
-
 #include <vector>
 #include <string>
 #include "solve.h"
@@ -65,4 +41,3 @@ double initVm;
 	 
 }
 #endif
-

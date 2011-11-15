@@ -1,22 +1,3 @@
-/****************************************************************************/
-/*                                                                          */
-/* File:      my_commands.cc                                            	*/
-/*                                                                          */
-/* Purpose:   several own functions in order to use the the classes    */ 
-/* Author:	  Markus M. Knodel                                              */
-/*                Goethe Center for Scientific Computing             */
-/*                University of Frankfurt                   */
-/*                Kettenhofweg 139                           */
-/*                60325 Frankfurt              */
-/*                Germany              */
-/*                email: markus.knodel@gcsc.uni-frankfurt.de    */              
-/*                                                                  */
-/* History:   2009 begin            									   
-****************************************************************************/
-
-
-
-
 #include "my_commands.h"
 #include "bg.h"
 #include "solve.h"
@@ -83,5 +64,3 @@ double BG::getCurrent(double time, double delta_t, double Vm) {
    return current;
 
 }
-
-

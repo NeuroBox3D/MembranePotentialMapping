@@ -1,23 +1,3 @@
-/****************************************************************************/
-/*                                                                          */
-/* File:      gating.cc                                                	    */
-/*                                                                          */
-/* Purpose:   calculation of gating functions in Borg-Graham model          */
-/*			  										                        */
-/*                                                                          */
-/* Author:	  Markus M. Knodel                                              */
-/*            Goethe Center for Scientific Computing GCSC                   */
-/*              Kettenhofweg 139                                            */ 
-/*              University Frankfurt                                        */
-/*              Frankfurt, Germany                                          */
-/*              email: markus.knodel@gcsc.uni-frankfurt.de                  */
-/*																			*/
-/* History:   August 09 begin              									*/
-/*                                                                          */
-/* Remarks:                                                                 */
-/*                                                                          */
-/****************************************************************************/
-
 #include "gating.h"
 
 double gating_parameter::defect( double x_ip1_k, double x_i, double V,  double Delta_i )
@@ -71,4 +51,3 @@ double gating_parameter::x_1( double t, double x_0, double tau, double Vm )
 
    return x1;
 }
-

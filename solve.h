@@ -1,24 +1,3 @@
-/****************************************************************************/
-/*                                                                          */
-/* File:      solve.h                                           	*/
-/*                                                                          */
-/* Purpose:   solves the odes of the borg-graham model     */ 
-/*                                                                          */
-/* Author:	  Markus M. Knodel                                              */
-/*                Goethe Center for Scientific Computing             */
-/*                University of Frankfurt                   */
-/*                Kettenhofweg 139                           */
-/*                60325 Frankfurt              */
-/*                Germany              */
-/*                email: markus.knodel@gcsc.uni-frankfurt.de    */
-/*																			*/
-/* History:   2009 begin            									    */
-/*                                                                          */
-/* Remarks:                                                                 */
-/*                                                                          */
-/****************************************************************************/
-
-
 #ifndef __solve_h__
 #define __solve_h__
 
@@ -78,7 +57,4 @@ private:
 
 
 };
-
-
-
 #endif

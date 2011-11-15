@@ -1,31 +1,8 @@
-/****************************************************************************/
-/*                                                                          */
-/* File:      gating.h                                                	    */
-/*                                                                          */
-/* Purpose:   calculation of gating functions in Borg-Graham model          */
-/*			  										                        */
-/*                                                                          */
-/* Author:	  Markus M. Knodel                                              */
-/*            Goethe Center for Scientific Computing GCSC                   */
-/*              Kettenhofweg 139                                            */ 
-/*              University Frankfurt                                        */
-/*              Frankfurt, Germany                                          */
-/*              email: markus.knodel@gcsc.uni-frankfurt.de                  */
-/*																			*/
-/* History:   August 09 begin              									*/
-/*                                                                          */
-/* Remarks:                                                                 */
-/*                                                                          */
-/****************************************************************************/
-
-
 #ifndef __gating_h__
 #define __gating_h__
 
 #include <iostream>
-
 #include <cmath>
-
 
 class gating_parameter
 {
@@ -64,6 +41,4 @@ private:
 	bool simple;
 							 
 };
-
 #endif
-

@@ -31,4 +31,5 @@ extern "C" UG_API void InitUGPlugin(ug::bridge::Registry* reg, string parentGrou
 		.add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
 		.add_method("get_potential", &TVm2uG::get_potential, grp)
 		.add_method("build_tree", &TVm2uG::buildTree, grp);
+
 }
