@@ -1,15 +1,14 @@
 /* Vm2uG {{{ */
-template <class T> Vm2uG<T>::Vm2uG (string dataFileBaseName, string dataFileExt, const bool promise) {
+template <class T> Vm2uG<T>::Vm2uG(string dataFileBaseName_, string dataFileExt_, const bool promise_) {
    dim = 3;
    timestep = 0;
    maxPts = 100000;
    k = 1;
    eps = 0.0;
    isTreeBuild = false;
-
-   this->dataFileBaseName = dataFileBaseName;
-   this->dataFileExt = dataFileExt;
-   this->promise = promise;
+   dataFileBaseName = dataFileBaseName;
+   dataFileExt = dataFileExt_;
+   promise = promise_;
 }
 
 template <class T> Vm2uG<T>::Vm2uG (string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k) {
@@ -20,13 +19,12 @@ template <class T> Vm2uG<T>::Vm2uG (string dataFileBaseName, const short int& di
 }
 
 template <class T> Vm2uG<T>::~Vm2uG () {
-   // if buildTree was called -> delete everything!
-   if (this->isTreeBuild) {
+   if (this->isTreeBuild) { // if buildTree was called -> cleanup 
    delete [] nnIdx;
    delete [] dists;
 
    delete kdTree;
-   delete queryPt; // needs to be delete in ANY_case after destruction 
+   delete queryPt; // needs to be delete in any case after destruction
    }
 }
 
@@ -86,18 +84,16 @@ template <> void Vm2uG<double>::buildTree(const double& timestep) {
 }
 
 template <> void Vm2uG<string>::buildTree(const string& timestep) {
-
+   cout << timestep << endl;
    if (this->isTreeBuild) {
       rebuildTree(timestep);
    }
 
    static ifstream dataStream;
 
-   cout << timestep;
-
    dataStream.open((dataFileBaseName+timestep+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {
-      cerr << "Cannot open data file" << endl;
+      cerr << "Cannot open data file" << dataFileBaseName+timestep+this->dataFileExt << endl;
       exit(1);
    } else {
       dataIn =& dataStream;

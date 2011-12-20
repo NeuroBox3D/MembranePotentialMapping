@@ -12,11 +12,11 @@ include("../../../ug_plugin_cmake_includes.txt")
 
 # sources
 set(SOURCES	plugin_main.cpp
-			vm2ug.cc
-			bg.cc
-			my_commands.cc
-			solve.cc
-			gating.cc)
+			vm2ug.cpp
+			bg.cpp
+			my_commands.cpp
+			solve.cpp
+			gating.cpp)
 			
 			
 # get the path to annlib

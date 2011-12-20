@@ -51,7 +51,7 @@ template <class T> class Vm2uG {
       
       @return Vm2uG
       */
-      Vm2uG(std::string dataFileBaseName=std::string("timesteps/"), std::string dataFileExt=std::string(".csv"), const bool promise = false);
+      Vm2uG(std::string dataFileBaseName=std::string("timesteps/"), std::string dataFileExt=std::string(".csv"), const bool promise_ = false); 
 
       /** enhanced constructor
    
@@ -69,9 +69,12 @@ template <class T> class Vm2uG {
       ~Vm2uG();
       
 
-      double get_potential(double x, double y, double z, double t)	{return 0;}
+      double get_potential(double x, double y, double z, std::string t) {
+         double  node[3] = {x,y,z};
+         return vm_t(t, node).getVm();
+      }
 
-
+      std::string foo(std::string s) { return s; }
       /** buildTree builds the tree with timestep specified in a class constructor
       
       @return void

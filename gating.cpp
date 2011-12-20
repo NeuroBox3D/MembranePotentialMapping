@@ -45,7 +45,7 @@ double gating_parameter::beta_prime_x( double V )
 	return res;
 }
 
-double gating_parameter::x_1( double t, double x_0, double tau, double Vm )
+double gating_parameter::x_1( double x_0, double tau, double Vm )
 {
    double x1 = x_0 + tau * ( x_infty( Vm ) - x_0 )/tau_x( Vm ) ;
 

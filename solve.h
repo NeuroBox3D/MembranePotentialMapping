@@ -24,16 +24,16 @@ public:
 		{};
 
 
-        double initial_value_for_current( double basic_voltage = -65, double time = 0.0); // t = 0, uses -65 mV as standard value may be changed
+        double initial_value_for_current( double basic_voltage = -65); // t = 0, uses -65 mV as standard value may be changed
         double initial_value_for_current( double Ca_ext, double Ca_int, double basic_voltage, double time);
 	double calculate_current_expli_next_timestep( double time, double delta_t, double Vm, double Ca_ext, double Ca_int ); 
-	double calculate_current_expli_next_timestep( double time, double delta_t, double Vm);
+	double calculate_current_expli_next_timestep( double delta_t, double Vm);
 
         double current_x() { return current_x_0; }
         double current_y() { return current_y_0; }
 
         double Current_current( double time, double Ca_ext, double Ca_int ) { return I(  current_x_0, current_y_0, time, Ca_ext, Ca_int ); }
-      double Current_current (double time) { return I(current_x_0, current_y_0, time); }
+      double Current_current (double Vm) { return I(current_x_0, current_y_0, Vm); }
 
 private:
 

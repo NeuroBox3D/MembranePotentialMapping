@@ -33,7 +33,7 @@ public:
 
 	double beta_prime_x( double V ); 
 
-        double x_1( double t, double x_0, double tau, double Vm );
+        double x_1(double x_0, double tau, double Vm );
 
 private:
 

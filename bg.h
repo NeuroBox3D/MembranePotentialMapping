@@ -29,11 +29,11 @@ public:
  BG();
 
 double timestepping_of_gates_and_calc_current( double time, double delta_t, double Vm );
-double calc_current_at_start( double time = 0.0, double Vm =0);
+double calc_current_at_start( double Vm = -75);
 
-double getCurrent(double time,  double delta_t, double Vm);
+double getCurrent(double delta_t, double Vm);
 
-double getNeumannFlux(double time, double delta_t, double Vm);
+double getNeumannFlux(double delta_t, double Vm);
 
 double initVm;
 

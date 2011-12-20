@@ -3,6 +3,7 @@ include $(UGROOT)/ug.conf
 # application include paths corresponding to libraries
 
 ANNDIR = ../annlib
+
 VUGDIR = .
 
 ANNLIB = $(ANNDIR)/lib/libANN.a

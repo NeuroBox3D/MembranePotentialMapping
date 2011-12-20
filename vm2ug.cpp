@@ -1,5 +1,5 @@
 /* Includes {{{ */
-#include "vm2ug.hh"
+#include "vm2ug.h"
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
@@ -20,7 +20,7 @@ using namespace std;
 /* Template declarations for vug {{{ */
 namespace vug {
 
-#include "vm2ug.icc"
+#include "vm2ug_impl.h"
 
 template Vm2uG<int>::~Vm2uG();
 template Vm2uG<double>::~Vm2uG();

@@ -8,7 +8,8 @@
 #include "lib_disc/domain.h"
 #include "lib_grid/lib_grid.h"
 
-#include "vm2ug.hh"
+#include "vm2ug.h"
+#include "bg.h"
 
 #include <string>
 
@@ -26,10 +27,16 @@ extern "C" UG_API void InitUGPlugin(ug::bridge::Registry* reg, string parentGrou
 
 	reg->add_function("SayHelloMPM", &SayHello, grp);
 
-	typedef vug::Vm2uG<std::string> TVm2uG;
-	reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
-		.add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
-		.add_method("get_potential", &TVm2uG::get_potential, grp)
-		.add_method("build_tree", &TVm2uG::buildTree, grp);
-
+   typedef vug::Vm2uG<std::string> TVm2uG;
+reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
+       .add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
+       .add_method("get_potential", &TVm2uG::get_potential, grp)
+       .add_method("build_tree", &TVm2uG::buildTree, grp);
+   
+   typedef bg::BG TBG;
+   reg->add_class_<TBG>("BorgGraham", grp)
+       .add_constructor()
+       .add_method("install_can_gates", &TBG::install_can_gates, grp)
+       .add_method("get_current", &TBG::getCurrent, grp)
+       .add_method("calc_current_at_start", &TBG::calc_current_at_start, grp);
 }
