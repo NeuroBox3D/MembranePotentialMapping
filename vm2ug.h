@@ -152,9 +152,12 @@ template <class T> class Vm2uG {
       void setdataFileBaseName(std::string dataFileBaseName);
       
       void setdataFileExt(std::string dataFileExt);
+
+      bool treeBuild() { return isTreeBuild; }
       
    protected:
       bool promise;
+
       bool isTreeBuild;
 
       short int k;
@@ -313,6 +316,6 @@ template <class T> class uGPoint {
 /* }}} */
 
 /* End guard {{{ */
-#endif
+#endif /* _VM2UG_HH_ */
 /* }}} */
 /* }}} */

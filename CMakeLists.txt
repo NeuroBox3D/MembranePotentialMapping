@@ -16,14 +16,14 @@ set(SOURCES	plugin_main.cpp
 			bg.cpp
 			my_commands.cpp
 			solve.cpp
-			gating.cpp)
-			
+			gating.cpp
+      unit_tests/src/basic_tests.cpp)
 			
 # get the path to annlib
 option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
 
 if(NOT ANNLIB)
-	message(FATAL_ERROR "ERROR: annlib is required. Please set the option -DANNLIB=path_to_annlib.")
+	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
 endif(NOT ANNLIB)
 
 find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)

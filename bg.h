@@ -29,6 +29,7 @@ public:
  BG();
 
 double timestepping_of_gates_and_calc_current( double time, double delta_t, double Vm );
+
 double calc_current_at_start( double Vm = -75);
 
 double getCurrent(double delta_t, double Vm);
@@ -40,4 +41,4 @@ double initVm;
 };
 	 
 }
-#endif
+#endif /* __bg_h__ */ 
