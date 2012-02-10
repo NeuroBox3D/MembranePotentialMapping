@@ -4,7 +4,7 @@
 /*                                                                          */
 /* Purpose:   several own functions in order to use the the classes    */ 
 /* 
- Author:	  Markus M. Knodel                                              */
+* Author:	  Markus M. Knodel                                              */
 /*                Goethe Center for Scientific Computing             */
 /*                University of Frankfurt                   */
 /*                Kettenhofweg 139                           */
@@ -13,7 +13,8 @@
 /*                email: markus.knodel@gcsc.uni-frankfurt.de    */              
 /*                                                                  */
 /* History:   2009 begin            									   
- * Remarks:                                                                 */
+*                                                                          */
+/* Remarks:                                                                 */
 /*                                                                          */
 /****************************************************************************/
 
@@ -56,7 +57,7 @@ double BG::timestepping_of_gates_and_calc_current( double time, double delta_t )
 
 double BG::calc_current_at_start( double time )
 {
- //   double time_in_ms = time * 1000.;
+    double time_in_ms = time * 1000.;
 
     Neumann_flux = solgat.initial_value_for_current();
 

@@ -1,8 +1,8 @@
 /****************************************************************************/
 /*                                                                          */
-/* File:      gating.h                                                	    */
+/* File:      spannung.h                                                	    */
 /*                                                                          */
-/* Purpose:   calculation of gating functions in Borg-Graham model          */
+/* Purpose:   voltage model for action potentials                           */
 /*			  										                        */
 /*                                                                          */
 /* Author:	  Markus M. Knodel                                              */
@@ -19,50 +19,11 @@
 /****************************************************************************/
 
 
-#ifndef __gating_h__
-#define __gating_h__
+#ifndef __spannung_h__
+#define __spannung_h__
 
-#include <iostream>
+double ttrafo_into_ap( double time ); // transforms the time into the interval of one AP
 
-#include <cmath>
-
-#include "spannung.h"
-
-class gating_parameter
-{
-public:
-    
-	gating_parameter( double V_12_, double z_, double gamma_, double K_, double tau_0_ )
-		: K( K_), z(z_), gamma(gamma_), V_12(V_12_), tau_0( tau_0_),
-		F(9.648 * 10000), R(  8.314 * 1000 ), T( 300 ), simple(false)
-	{};
-
-
-    gating_parameter( double z_, double V_12_, double tau_0_ )
-                : z(z_), V_12(V_12_), tau_0( tau_0_),
-			F(9.648 * 10000), R(  8.314 * 1000 ), T( 300 ), simple(true)
-    {};
-
-	gating_parameter() {};
-	
-	double defect( double x_ip1_k, double x_i, double V,  double Delta_i );
- 
-	double tau_x ( double V );
-
-	double x_infty( double V );
-
-	double alpha_prime_x( double V );
-
-	double beta_prime_x( double V ); 
-
-        double x_1( double t, double x_0, double tau );
-
-private:
-
-	double K, z, gamma, V_12, tau_0, F, R, T;
-	bool simple;
-							 
-};
+double Voltage( double time ); // time: in ms!!!!
 
 #endif
-

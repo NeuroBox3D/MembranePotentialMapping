@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*                                                                          */
-/* File:      globals.h                                            	*/
+/* File:      globals.cc                                            	*/
 /*                                                                          */
 /* Purpose:   global variables    */ 
 /*                                                                          */
@@ -18,55 +18,35 @@
 /*                                                                          */
 /****************************************************************************/
 
-
-#ifndef __globals_h__
-#define __globals_h__
-
-/* system includes */
-#include <stddef.h>
-#include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "bg.h"
 
 
-#include <vector>
-#include <string>
-#include "solve.h"
-#include <fstream>
+using namespace bg;
+int BG::ap_interval_duration_in_ms = 10;
+/////////////////////////////////////////////////////////////////////////////
 
-using namespace std;
-
-namespace bg {
-
-class BG
+void BG::install_can_gates(double cond)
 {
-public:
 
-   static int ap_interval_duration_in_ms; // which stimulation transformation should be choosen
-   void install_can_gates(double cond = 1000);
-   bool installed_can_gates();
-   
- solve_gating solgat;
+ // Ca N type m
+	gating_parameter gate_can_m( 3.4, -21, 1.5 );
+    // Ca N type h
+	gating_parameter gate_can_h( -2, - 40, 75  );
 
- double Neumann_flux;
+    //solgat =  solve_gating( gate_can_m, gate_can_h, 0.06*1, 135, 2, 1 );    
+    solgat = solve_gating( gate_can_m, gate_can_h,  conductivity, 135, 2, 1 );
 
- string output_file_current;
- 
- double  conductivity; // assumed as 1000 mA / mV !
- 
- static double Voltage( double time_glob ); // returns the voltage ( time in milliseconds here: if trivial case, i. e. typical AP given)
-  
- static double ttrafo_into_ap( double time ); // 100 Hz trafo; time in ms here
-   
-   double timestepping_of_gates_and_calc_current( double time, double delta_t );
-   double calc_current_at_start( double time );
-   double get_Neumann_Flux();
-   BG();
-private:
-   bool inst_can_gates;
-};
-}	 
+}
 
-#endif
+/////////////////////////////////////////////////////////////////////////////
 
+// static objects, values to be choosen for each case seperately
+
+BG::BG() {
+   conductivity = 1000 ;
+   Neumann_flux = 0;
+   output_file_current = string("calculated_values.gdt" );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////

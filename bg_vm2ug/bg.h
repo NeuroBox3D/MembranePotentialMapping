@@ -34,8 +34,10 @@
 #include <string>
 #include "solve.h"
 #include <fstream>
+#include "vm2ug.h"
 
 using namespace std;
+using namespace vug;
 
 namespace bg {
 
@@ -63,6 +65,12 @@ public:
    double calc_current_at_start( double time );
    double get_Neumann_Flux();
    BG();
+   static Vm2uG<std::string> mapping;
+
+   static double x, y, z;
+   static void setXYZ(double x, double y, double z);
+   static void setTimeStepBaseDir(std::string);
+   static std::string TimeStepBaseDir;
 private:
    bool inst_can_gates;
 };

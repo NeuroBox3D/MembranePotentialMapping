@@ -1,8 +1,8 @@
 /****************************************************************************/
 /*                                                                          */
-/* File:      gating.cc                                                	    */
+/* File:      spannung.cc                                                	    */
 /*                                                                          */
-/* Purpose:   calculation of gating functions in Borg-Graham model          */
+/* Purpose:   voltage model for action potentials                           */
 /*			  										                        */
 /*                                                                          */
 /* Author:	  Markus M. Knodel                                              */
@@ -18,59 +18,49 @@
 /*                                                                          */
 /****************************************************************************/
 
-#include "gating.h"
+
 #include "spannung.h"
 #include "bg.h"
 
 using namespace bg;
-double gating_parameter::defect( double x_ip1_k, double x_i, double V,  double Delta_i )
+/////////////////////////////////////////////////////////////////////////////
+
+double BG::Voltage( double time_glob ) // time in ms!!!!
 {
-	return - ( ( x_ip1_k - x_i ) * tau_x( V ) 
-			   - Delta_i * ( x_infty(V) - x_ip1_k ))
-		/ ( tau_x( V ) + Delta_i );
+    double time = ttrafo_into_ap( time_glob );
+
+	if( time < 1 || time > 8 )
+        return - 65;
+
+    if( time < 2.5 ) 
+		return -65 + 8. * ( time - 1 );
+
+    if( time < 3 )
+        return - 53 + 160 * ( time - 2.5 );
+
+    if( time < 4.5 )
+        return 27 - 62 * ( time - 3 );
+
+    if( time < 7 )
+        return -66 + 0.4 * ( time - 4.5 );
+
+    return - 65;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 
-double gating_parameter::tau_x ( double V  )
+double BG::ttrafo_into_ap( double time ) // 100 Hz trafo
 {
-	double res = 0;
+        int tt_ganz = static_cast<int>( time );
 
-	if( simple ) 
-		res = tau_0;
-	else 
-      res = 1. / ( alpha_prime_x( V ) + beta_prime_x(V) ) + tau_0;
+        double tt_anh = time - tt_ganz;
 
-   return res;
+        //int tt_teil = tt_ganz % 10;
+        int tt_teil = tt_ganz % 10; //ap_interval_duration_in_ms;
+
+        double tt = tt_teil + tt_anh; 
+
+        return tt;
+
 }
-
-double gating_parameter::x_infty( double V )
-{
-    double res = 0;
-
-    if( simple )
-      res = 1. / ( 1. + exp( - z * ( V - V_12 ) * F / ( R*T ) ) );
-    else
-      res = alpha_prime_x( V ) / ( alpha_prime_x( V ) + beta_prime_x(V) );
-
-    return res;
-}
-
-double gating_parameter::alpha_prime_x( double V )
-{
-	double res = K * exp( ( z * gamma * ( V - V_12 ) * F ) / ( R * T ) );
-	return res;
-}
-
-double gating_parameter::beta_prime_x( double V ) 
-{
-	double res = K * exp( ( -z * ( 1 - gamma ) * ( V - V_12 ) * F ) / ( R * T ) );
-	return res;
-}
-
-double gating_parameter::x_1( double t, double x_0, double tau )
-{
-   double x1 = x_0 + tau * ( x_infty( BG::Voltage( t ) ) - x_0 )/tau_x( BG::Voltage(t) ) ;
-
-   return x1;
-}
-
+/////////////////////////////////////////////////////////////////////////////

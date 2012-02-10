@@ -42,10 +42,8 @@ namespace bg {
 class BG
 {
 public:
-
-   static int ap_interval_duration_in_ms; // which stimulation transformation should be choosen
+   static int ap_interval_duration_in_ms;
    void install_can_gates(double cond = 1000);
-   bool installed_can_gates();
    
  solve_gating solgat;
 
@@ -53,18 +51,16 @@ public:
 
  string output_file_current;
  
- double  conductivity; // assumed as 1000 mA / mV !
+ double  conductivity;
  
- static double Voltage( double time_glob ); // returns the voltage ( time in milliseconds here: if trivial case, i. e. typical AP given)
+ static double Voltage( double time_glob );
   
- static double ttrafo_into_ap( double time ); // 100 Hz trafo; time in ms here
+ static double ttrafo_into_ap( double time ); // 100 Hz trafo
    
    double timestepping_of_gates_and_calc_current( double time, double delta_t );
    double calc_current_at_start( double time );
-   double get_Neumann_Flux();
+
    BG();
-private:
-   bool inst_can_gates;
 };
 }	 
 

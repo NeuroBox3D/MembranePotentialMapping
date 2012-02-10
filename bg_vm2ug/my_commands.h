@@ -8,7 +8,7 @@
 /*                                                                          */
 /* Purpose:   several own functions in order to use the the classes    */ 
 /* 
- * Author:	  Markus M. Knodel                                              */
+ Author:	  Markus M. Knodel                                              */
 /*                Goethe Center for Scientific Computing             */
 /*                University of Frankfurt                   */
 /*                Kettenhofweg 139                           */

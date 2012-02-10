@@ -1,8 +1,9 @@
 /****************************************************************************/
 /*                                                                          */
-/* File:      globals.h                                            	*/
+/* File:      main.cc                                            	*/
 /*                                                                          */
-/* Purpose:   global variables    */ 
+/* Purpose:   main program as example in order to get familiar with  */
+/*            classes  used      */ 
 /*                                                                          */
 /* Author:	  Markus M. Knodel                                              */
 /*                Goethe Center for Scientific Computing             */
@@ -19,54 +20,46 @@
 /****************************************************************************/
 
 
-#ifndef __globals_h__
-#define __globals_h__
-
-/* system includes */
+/* standard C library */
 #include <stddef.h>
-#include <cmath>
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <cmath>
 
+/* standard C library */
+#include <stddef.h>
+#include <stdio.h>
+#include <math.h>
 
-#include <vector>
-#include <string>
-#include "solve.h"
-#include <fstream>
+#include "bg.h"
+#include "my_commands.h"
 
-using namespace std;
+using namespace bg;
 
-namespace bg {
-
-class BG
+int main (int argc, char **argv)
 {
-public:
+   BG b;
+  double n =  b.Neumann_flux;
+   b.install_can_gates(1000.0);
 
-   static int ap_interval_duration_in_ms; // which stimulation transformation should be choosen
-   void install_can_gates(double cond = 1000);
-   bool installed_can_gates();
-   
- solve_gating solgat;
+    double delta_t = 0.001;
 
- double Neumann_flux;
+    double maxtime = 0.5; 
 
- string output_file_current;
- 
- double  conductivity; // assumed as 1000 mA / mV !
- 
- static double Voltage( double time_glob ); // returns the voltage ( time in milliseconds here: if trivial case, i. e. typical AP given)
-  
- static double ttrafo_into_ap( double time ); // 100 Hz trafo; time in ms here
-   
-   double timestepping_of_gates_and_calc_current( double time, double delta_t );
-   double calc_current_at_start( double time );
-   double get_Neumann_Flux();
-   BG();
-private:
-   bool inst_can_gates;
-};
-}	 
+    double time = 0;
 
-#endif
+    b.calc_current_at_start( time );
 
+    for( int step = 1; step <= 80; step++ )
+    {
+        time = delta_t * 1;
+        b.timestepping_of_gates_and_calc_current( time, delta_t );
+    }
+
+    for( int step = 1; step <= 80; step++ )
+    {
+        time = delta_t * 2;
+        b.timestepping_of_gates_and_calc_current( time, delta_t );
+    }
+
+    return 0;
+}
