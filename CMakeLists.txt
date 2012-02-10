@@ -15,11 +15,11 @@ project(MEMBRANE_POTENTIAL_MAPPING)
 option(MPM "Build MPMTestsuite" OFF)
 message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
+option(EXTENDED_BG "Build EXTENDED_BG" OFF)
+message(STATUS "Info: EXTENDED_BG:       "${EXTENDED_BG}" (options are: ON, OFF)")
+
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
-
-option(EXTENDED_BG "Build EXTENDED_BG" OFF)
-message(STATUS "Info: EXTENDED_BG:       "${EXTENDED_BG}" (options are: ON, OFF")
 
 # sources
 set(SOURCES	plugin_main.cpp
@@ -30,7 +30,7 @@ set(SOURCES	plugin_main.cpp
 			gating.cpp
             spannung.cpp)
 
-set(SOURCES_ALTERNATIVE bg_vm2ug/plugin.main.cpp
+set(SOURCES_ALTERNATIVE bg_vm2ug/plugin_main.cpp
 						bg_vm2ug/vm2ug.cpp
 						bg_vm2ug/my_commands.cpp
 					    bg_vm2ug/solve.cpp

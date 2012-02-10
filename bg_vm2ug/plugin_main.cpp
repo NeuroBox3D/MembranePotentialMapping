@@ -38,9 +38,8 @@ reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
        .add_constructor()
        .add_method("install_can_gates", &TBG::install_can_gates, grp)
        .add_method("get_current", &TBG::timestepping_of_gates_and_calc_current, grp)
- //      .add_method("get_current", &TBG::getCurrent, grp)
        .add_method("calc_current_at_start", &TBG::calc_current_at_start, grp)
-       .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp); 
-   .add_method("setXYZ", &TBG::setXYZ, grp) // extended case: bg_vm2ug
-   .add_method("setTimeStepBaseDir", &TBG::setTimeStepBaseDir, grp);
+       .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp);
+      /* .add_method("setXYZ", &TBG::setXYZ, grp)
+       .add_method("setTimeStepBaseDir", &TBG::setTimeStepBaseDir, grp); */
 }
