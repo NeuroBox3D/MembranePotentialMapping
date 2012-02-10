@@ -2,7 +2,7 @@
 # MEMBRANE_POTENTIAL_MAPPING ugplugin
 #
 #
-# adopted by martin scherer
+# adopted by martin scherer & s. reiter
 # created on: 10.02.2012
 # author: smgrein
 #
@@ -18,6 +18,8 @@ message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
+option(EXTENDED_BG "Build EXTENDED_BG" OFF)
+message(STATUS "Info: EXTENDED_BG:       "${EXTENDED_BG}" (options are: ON, OFF")
 
 # sources
 set(SOURCES	plugin_main.cpp
@@ -27,7 +29,14 @@ set(SOURCES	plugin_main.cpp
 			solve.cpp
 			gating.cpp
             spannung.cpp)
-			
+
+set(SOURCES_ALTERNATIVE bg_vm2ug/plugin.main.cpp
+						bg_vm2ug/vm2ug.cpp
+						bg_vm2ug/my_commands.cpp
+					    bg_vm2ug/solve.cpp
+					    bg_vm2ug/gating.cpp
+					    bg_vm2ug/spannung.cpp)
+					    
 set(SOURCES_TEST unit_tests/src/basic_tests.cpp)
 			
 # get the path to annlib
@@ -46,7 +55,11 @@ endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 
 # create a shared library from the sources and link it against ug4.
-add_library(MembranePotentialMappingPlugin SHARED ${SOURCES})
+if(EXTENDED_BG)
+	add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_ALTERNATIVE})
+else(EXTENDED_BG)
+	add_library(MembranePotentialMappingPlugin SHARED ${SOURCES})
+endif(EXTENDED_BG)
 
 if(MPMTestsuite)
 	add_executable(MPMTestsuite ${SOURCES_TEST})
