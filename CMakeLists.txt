@@ -1,5 +1,11 @@
 ################################################################################
-# Your description here...
+# MEMBRANE_POTENTIAL_MAPPING ugplugin
+#
+#
+# adopted by martin scherer
+# created on: 10.02.2012
+# author: smgrein
+#
 ################################################################################
 
 cmake_minimum_required(VERSION 2.6)
@@ -7,7 +13,7 @@ cmake_minimum_required(VERSION 2.6)
 project(MEMBRANE_POTENTIAL_MAPPING)
 
 option(MPM "Build MPMTestsuite" OFF)
-message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)"
+message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
@@ -20,12 +26,9 @@ set(SOURCES	plugin_main.cpp
 			my_commands.cpp
 			solve.cpp
 			gating.cpp
-      spannung.cpp
-      unit_tests/src/basic_tests.cpp)
+            spannung.cpp)
 			
-set(SOURCES_TEST unit_tests/src/basic_tests.cpp
-   )
-				
+set(SOURCES_TEST unit_tests/src/basic_tests.cpp)
 			
 # get the path to annlib
 option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
@@ -52,11 +55,11 @@ endif(MPMTestsuite)
 if(STATIC)
 	target_link_libraries(MembranePotentialMappingPlugin ug4_s ${ANNLIB_LIBS})
 	if(MPMTestsuite)
-		target_link_libraries (MPMTestsuite MPMTestSuiteExe ug4_s)
+		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s)
 	endif(MPMTestsuite)
 else(STATIC)
 	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS})
 	if(MPMTestsuite)
-		target_link_libraries (MPMTestsuite MPMTestSuiteExe ug4)
+		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
 	endif(MPMTestsuite)
 endif(STATIC)
