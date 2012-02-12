@@ -26,32 +26,32 @@
 #include "bg.h"
 
 using namespace bg;
-double solve_gating::I( double x, double y, double t )
+double solve_gating::I( double x, double y, double t, double xx, double yy, double zz, double myVm)
 {
-    double curr = - g * pow( x, xp ) * pow( y, yp ) * ( BG::Voltage(t) - V_ret );    
+    double curr = - g * pow( x, xp ) * pow( y, yp ) * ( BG::Voltage(t, xx, yy, zz, myVm) - V_ret );    
 
 	return curr;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-double solve_gating::initial_value_for_current( double basic_voltage ) // t = 0
+double solve_gating::initial_value_for_current( double basic_voltage, double x, double y, double z, double myVm ) // t = 0
 {
   current_x_0 = gate_x.x_infty( basic_voltage );
   current_y_0 = gate_y.x_infty( basic_voltage );
 
   double time = 0.;
 
-  return I( current_x_0, current_y_0, time );
+  return I( current_x_0, current_y_0, time, x, y, z, myVm);
 }
 
-double solve_gating::calculate_current_expli_next_timestep( double time, double delta_t )
+double solve_gating::calculate_current_expli_next_timestep( double time, double delta_t, double x, double y, double z, double myVm )
 {
     
-   current_x_0 = gate_x.x_1( time, current_x_0, delta_t );
-   current_y_0 = gate_y.x_1( time, current_y_0, delta_t );
+   current_x_0 = gate_x.x_1( time, current_x_0, delta_t, x, y, z, myVm);
+   current_y_0 = gate_y.x_1( time, current_y_0, delta_t, x, y, z, myVm );
 
-   return I( current_x_0, current_y_0, time );
+   return I( current_x_0, current_y_0, time, x, y, z, myVm );
 } 
 
 /////////////////////////////////////////////////////////////////////////////

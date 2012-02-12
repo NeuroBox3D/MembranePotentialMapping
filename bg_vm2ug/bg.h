@@ -57,20 +57,15 @@ public:
  
  double  conductivity; // assumed as 1000 mA / mV !
  
- static double Voltage( double time_glob ); // returns the voltage ( time in milliseconds here: if trivial case, i. e. typical AP given)
+ static double Voltage( double time_glob, double x, double y, double z, double myVm ); // returns the voltage ( time in milliseconds here: if trivial case, i. e. typical AP given)
   
  static double ttrafo_into_ap( double time ); // 100 Hz trafo; time in ms here
    
-   double timestepping_of_gates_and_calc_current( double time, double delta_t );
+   double timestepping_of_gates_and_calc_current( double time, double delta_t, double x, double y, double z, double myVm );
    double calc_current_at_start( double time );
    double get_Neumann_Flux();
    BG();
-   static Vm2uG<std::string> mapping;
-
-   static double x, y, z;
-   static void setXYZ(double x, double y, double z);
-   static void setTimeStepBaseDir(std::string);
-   static std::string TimeStepBaseDir;
+ //  static Vm2uG<std::string> mapping;
 private:
    bool inst_can_gates;
 };

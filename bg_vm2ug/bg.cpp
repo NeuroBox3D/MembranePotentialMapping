@@ -19,16 +19,12 @@
 /****************************************************************************/
 
 #include "bg.h"
-
+#include "vm2ug.h"
 
 using namespace bg;
 using namespace vug;
 int BG::ap_interval_duration_in_ms = 10;
-Vm2uG<std::string> mapping = Vm2uG<std::string> ("", ".csv");
-double x = 0;
-double y = 0;
-double z = 0;
-std::string TimeStepBaseDir = std::string("");
+//Vm2uG<std::string> mapping = Vm2uG<std::string> ("", ".csv");
 /////////////////////////////////////////////////////////////////////////////
 
 bool BG::installed_can_gates() {
@@ -58,9 +54,6 @@ BG::BG() {
    Neumann_flux = 0;
    output_file_current = string("calculated_values.gdt" );
    inst_can_gates = false;
-   x = 0;
-   y = 0;
-   z = 0;
 }
 
 double BG::get_Neumann_Flux() {
@@ -68,13 +61,4 @@ double BG::get_Neumann_Flux() {
 
 }
 
-void BG::setXYZ(double xx, double yy, double zz) {
-   BG::x = xx;
-   BG::y = yy;
-   BG::z = zz;
-}
-
-void BG::setTimeStepBaseDir(std::string) {
-   
-}
 /////////////////////////////////////////////////////////////////////////////

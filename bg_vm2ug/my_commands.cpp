@@ -32,12 +32,12 @@ using namespace std;
 using namespace bg;
 /////////////////////////////////////////////////////////////////////////////
 
-double BG::timestepping_of_gates_and_calc_current( double time, double delta_t )
+double BG::timestepping_of_gates_and_calc_current( double time, double delta_t, double x, double y, double z, double myVm )
 {
     double time_in_ms = time * 1000.;
     double delta_t_in_ms = delta_t * 1000.;
 
-      Neumann_flux = solgat.calculate_current_expli_next_timestep( time_in_ms, delta_t_in_ms ); 
+      Neumann_flux = solgat.calculate_current_expli_next_timestep( time_in_ms, delta_t_in_ms, x, y, z, myVm ); 
 
  /*   fstream dat_stream;
     dat_stream.open( output_file_current.c_str(), ios::out | ios::app );
@@ -50,14 +50,14 @@ double BG::timestepping_of_gates_and_calc_current( double time, double delta_t )
     dat_stream.close(); */
    
  //   return Neumann_flux;
-   return solgat.Current_current(time_in_ms);
+   return solgat.Current_current(time_in_ms, x, y, z, myVm);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 double BG::calc_current_at_start( double time )
 {
-    double time_in_ms = time * 1000.;
+ //   double time_in_ms = time * 1000.;
 
     Neumann_flux = solgat.initial_value_for_current();
 

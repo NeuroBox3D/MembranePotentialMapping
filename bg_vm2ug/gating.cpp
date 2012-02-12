@@ -67,9 +67,9 @@ double gating_parameter::beta_prime_x( double V )
 	return res;
 }
 
-double gating_parameter::x_1( double t, double x_0, double tau )
+double gating_parameter::x_1( double t, double x_0, double tau, double x, double y, double z, double myVm )
 {
-   double x1 = x_0 + tau * ( x_infty( BG::Voltage( t ) ) - x_0 )/tau_x( BG::Voltage(t) ) ;
+   double x1 = x_0 + tau * ( x_infty( BG::Voltage( t, x, y, z, myVm ) ) - x_0 )/tau_x( BG::Voltage(t, x, y, z, myVm) ) ;
 
    return x1;
 }

@@ -55,7 +55,7 @@ public:
 
 	double beta_prime_x( double V ); 
 
-        double x_1( double t, double x_0, double tau );
+        double x_1( double t, double x_0, double tau, double x, double y, double z, double myVm );
 
 private:
 

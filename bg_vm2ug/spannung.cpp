@@ -29,7 +29,7 @@
 using namespace bg;
 /////////////////////////////////////////////////////////////////////////////
 
-double BG::Voltage( double time_glob ) // time in ms!!!!
+double BG::Voltage( double time_glob, double x, double y, double z, double myVm ) // time in ms!!!!
 {
 /*    double time = ttrafo_into_ap( time_glob );
 
@@ -49,12 +49,14 @@ double BG::Voltage( double time_glob ) // time in ms!!!!
         return -66 + 0.4 * ( time - 4.5 );
 
     return - 65; */
-   
+   /*   
    double time_in_seconds = time_glob / 1000.0;
    char temp[100];
-   sprintf(temp, "%.7f", time_in_seconds);
-   BG::mapping.buildTree(BG::TimeStepBaseDir + temp);
-   return BG::mapping.get_potential(BG::x, BG::y, BG::z, BG::TimeStepBaseDir + temp);
+   sprintf(temp, "%.7f", time_in_seconds); */
+   return myVm;
+ //  BG::mapping.buildTree(stepdir + temp);
+   //return BG::mapping.get_potential(x, y, z, stepdir + temp);
+ //  return 0.0;
    
 }
 

@@ -41,17 +41,17 @@ public:
 			: gate_x( gate_x_ ), gate_y( gate_y_ ), g(g_), V_ret(V_ret_), xp(xp_), yp(yp_)
 		{};
 
-        double initial_value_for_current( double basic_voltage = -65 ); // t = 0, uses -65 mV as standard value may be changed
-	double calculate_current_expli_next_timestep( double time, double delta_t ); 
+        double initial_value_for_current( double basic_voltage = -65, double x=0, double y=0, double z=0, double myVm = -75 ); // t = 0, uses -65 mV as standard value may be changed
+	double calculate_current_expli_next_timestep( double time, double delta_t , double x, double y, double z, double myVm); 
 
         double current_x() { return current_x_0; }
         double current_y() { return current_y_0; }
 
-        double Current_current( double time ) { return I(  current_x_0, current_y_0, time ); }
+        double Current_current( double time, double x, double y, double z, double myVm) { return I(  current_x_0, current_y_0, time , x, y, z, myVm); }
 
 private:
 
-	double I( double x, double y, double t );
+	double I( double x, double y, double t, double xx, double yy, double zz, double myVm );
 
 	gating_parameter gate_x, gate_y;
 

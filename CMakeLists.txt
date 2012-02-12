@@ -23,19 +23,20 @@ include("../../../ug_plugin_cmake_includes.txt")
 
 # sources
 set(SOURCES	plugin_main.cpp
-			vm2ug.cpp
-			bg.cpp
-			my_commands.cpp
-			solve.cpp
-			gating.cpp
-            spannung.cpp)
+			       vm2ug.cpp
+			       bg.cpp
+			       my_commands.cpp
+			       solve.cpp
+			       gating.cpp
+             spannung.cpp)
 
-set(SOURCES_ALTERNATIVE bg_vm2ug/plugin_main.cpp
-						bg_vm2ug/vm2ug.cpp
-						bg_vm2ug/my_commands.cpp
-					    bg_vm2ug/solve.cpp
-					    bg_vm2ug/gating.cpp
-					    bg_vm2ug/spannung.cpp)
+set(SOURCES_ALTERNATIVE  bg_vm2ug/plugin_main.cpp
+						             bg_vm2ug/vm2ug.cpp
+                         bg_vm2ug/bg.cpp
+						             bg_vm2ug/my_commands.cpp
+					               bg_vm2ug/solve.cpp
+					               bg_vm2ug/gating.cpp
+					               bg_vm2ug/spannung.cpp)
 					    
 set(SOURCES_TEST unit_tests/src/basic_tests.cpp)
 			
@@ -53,7 +54,6 @@ else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	include_directories(${ANNLIB}/include)		
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
-
 # create a shared library from the sources and link it against ug4.
 if(EXTENDED_BG)
 	add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_ALTERNATIVE})
@@ -66,13 +66,17 @@ if(MPMTestsuite)
 endif(MPMTestsuite)
 
 if(STATIC)
+
 	target_link_libraries(MembranePotentialMappingPlugin ug4_s ${ANNLIB_LIBS})
 	if(MPMTestsuite)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s)
 	endif(MPMTestsuite)
+
 else(STATIC)
+
 	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS})
 	if(MPMTestsuite)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
 	endif(MPMTestsuite)
+
 endif(STATIC)

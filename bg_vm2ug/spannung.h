@@ -21,9 +21,10 @@
 
 #ifndef __spannung_h__
 #define __spannung_h__
+#include <string>
 
 double ttrafo_into_ap( double time ); // transforms the time into the interval of one AP
 
-double Voltage( double time ); // time: in ms!!!!
+double Voltage( double time, double x, double y, double z, double myVm ); // time: in ms!!!!
 
 #endif

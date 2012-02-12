@@ -1,6 +1,6 @@
 #ifndef __my_commands_h__
 #define __my_commands_h__
-
+#include <string>
 
 /****************************************************************************/
 /*                                                                          */
@@ -23,7 +23,7 @@
 /****************************************************************************/
 
 
-double timestepping_of_gates_and_calc_current( double time, double delta_t );
+double timestepping_of_gates_and_calc_current( double time, double delta_t, double x, double y, double z, double myVm );
 
 double calc_current_at_start( double time = 0 );
 
