@@ -45,7 +45,11 @@ public:
 
    static int ap_interval_duration_in_ms; // which stimulation transformation should be choosen
    void install_can_gates(double cond = 1000);
+   void install_cal_gates(double cond = 0.3*0.6);
+   void install_cat_gates(double cond = 0.3);
    bool installed_can_gates();
+   bool installed_cal_gates();
+   bool installed_cat_gates();
    
  solve_gating solgat;
 
@@ -65,6 +69,8 @@ public:
    BG();
 private:
    bool inst_can_gates;
+   bool inst_cal_gates;
+   bool inst_cat_gates;
 };
 }	 
 

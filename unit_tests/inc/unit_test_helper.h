@@ -13,7 +13,7 @@
 #include <cmath>
 
 bool AreSame(double a, double b) {
-   return std::fabs(a - b) < std::numeric_limits<double>::epsilon();
+   return ! std::fabs(a - b) < std::numeric_limits<double>::epsilon();
 }
 
 #endif /* UNIT_TEST_HELPER_H_ */

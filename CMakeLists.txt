@@ -2,7 +2,7 @@
 # MEMBRANE_POTENTIAL_MAPPING ugplugin
 #
 #
-# adopted by martin scherer & sebastian reiter
+# adopted by sebastian reiter (and martin scherer)
 # created on: 10.02.2012
 # author: smgrein
 #
@@ -30,13 +30,13 @@ set(SOURCES_simple	 plugin_main.cpp
 			               gating.cpp
                      spannung.cpp)
 
-set(SOURCES_vm2ug  bg_vm2ug/plugin_main.cpp
-						             bg_vm2ug/vm2ug.cpp
-                         bg_vm2ug/bg.cpp
-						             bg_vm2ug/my_commands.cpp
-					               bg_vm2ug/solve.cpp
-					               bg_vm2ug/gating.cpp
-					               bg_vm2ug/spannung.cpp)
+set(SOURCES_vm2ug    bg_vm2ug/plugin_main.cpp
+						         bg_vm2ug/vm2ug.cpp
+                     bg_vm2ug/bg.cpp
+						         bg_vm2ug/my_commands.cpp
+					           bg_vm2ug/solve.cpp
+					           bg_vm2ug/gating.cpp
+					           bg_vm2ug/spannung.cpp)
 
 set(SOURCES_userdef  bg_userdef/plugin_main.cpp
                      bg_userdef/spannung.cpp
@@ -89,4 +89,5 @@ else(STATIC)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
 	endif(MPMTestsuite)
 endif(STATIC)
+
 # ENDOF CMAKE
