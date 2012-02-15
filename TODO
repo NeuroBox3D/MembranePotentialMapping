@@ -1,3 +1,3 @@
 #1: Add concentration dependency (Ca_ext : Ca_int) to flux.
 #2: vm_t mitführen in paraview
-#3: stromumrechung testen
+#3: stromumrechung testen (einheiten in cleft_bg und cleft_bg_extended)

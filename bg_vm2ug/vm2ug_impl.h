@@ -49,7 +49,7 @@ template <> void Vm2uG<double>::buildTree(const double& timestep) {
    
    s << timestep;
 
-   cout << timestep;
+  // cout << timestep;
 
    dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {
@@ -84,7 +84,7 @@ template <> void Vm2uG<double>::buildTree(const double& timestep) {
 }
 
 template <> void Vm2uG<string>::buildTree(const string& timestep) {
-   cout << timestep << endl;
+   //cout << timestep << endl;
    if (this->isTreeBuild) {
       rebuildTree(timestep);
    }
@@ -132,7 +132,7 @@ template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
    ostringstream s;
    s << timestep; 
 
-   cout << timestep;
+  // cout << timestep;
    dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {
       cerr << "Cannot open data file" << endl;
@@ -369,7 +369,7 @@ template <class T> long Vm2uG<T>::genHash(const T& timestep) {
 }
 
 template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
-      cout << "tree needs rebuild!" << endl;
+ ////     cout << "tree needs rebuild!" << endl;
    // tree needs to be rebuild if indices and or datapoints vary during timestepping (default: promise=false, i.e. we need to rebuild all)
    if (!promise) {
       delete [] nnIdx;
@@ -380,7 +380,7 @@ template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
    static ifstream dataStream;
    ostringstream s;
    s << timestep;
-   cout << timestep;
+   //cout << timestep;
 
    dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {

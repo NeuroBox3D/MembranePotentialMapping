@@ -15,20 +15,28 @@ project(MEMBRANE_POTENTIAL_MAPPING)
 option(MPM "Build MPMTestsuite" OFF)
 message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
-option(FLAVOR "Build FLAVOR" simple)
-message(STATUS "Info: FLAVOR:            "${FLAVOR}" (options are: simple, vm2ug, userdef)")
+option(FLAVOR "Build FLAVOR" default)
+message(STATUS "Info: FLAVOR:            "${FLAVOR}" (options are: default, simple, vm2ug)")
  
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
 # sources
-set(SOURCES_simple	 plugin_main.cpp
-			               vm2ug.cpp
-			               bg.cpp
-			               my_commands.cpp
-			               solve.cpp
-			               gating.cpp
-                     spannung.cpp)
+#set(SOURCES_simple	 plugin_main.cpp
+#			               vm2ug.cpp
+#			               bg.cpp
+#			               my_commands.cpp
+#			               solve.cpp
+#			               gating.cpp
+#                     spannung.cpp)
+
+set(SOURCES_simple	 bg_simple/plugin_main.cpp
+			               bg_simple/vm2ug.cpp
+			               bg_simple/bg.cpp
+			               bg_simple/my_commands.cpp
+			               bg_simple/solve.cpp
+			               bg_simple/gating.cpp
+                     bg_simple/spannung.cpp)
 
 set(SOURCES_vm2ug    bg_vm2ug/plugin_main.cpp
 						         bg_vm2ug/vm2ug.cpp
@@ -38,14 +46,19 @@ set(SOURCES_vm2ug    bg_vm2ug/plugin_main.cpp
 					           bg_vm2ug/gating.cpp
 					           bg_vm2ug/spannung.cpp)
 
-set(SOURCES_userdef  bg_userdef/plugin_main.cpp
-                     bg_userdef/spannung.cpp
-                     vm2ug.cpp
-                     bg.cpp
-                     solve.cpp
-                     gating.cpp)
-					    
-set(SOURCES_TEST unit_tests/src/basic_tests.cpp)
+set(SOURCES_default  bg_default/plugin_main.cpp
+                     bg_default/spannung.cpp
+                     bg_default/my_commands.cpp
+                     bg_default/vm2ug.cpp
+                     bg_default/bg.cpp
+                     bg_default/solve.cpp
+                     bg_default/gating.cpp)
+	
+if(${FLAVOR} STREQUAL simple)
+   set(SOURCES_TEST unit_tests/src/basic_tests_simple.cpp)
+else(${FLAVOR} STREQUAL simple)
+   set(SOURCES_TEST unit_tests/src/basic_tests_default_vm2ug.cpp)
+endif(${FLAVOR} STREQUAL simple)
 			
 # get the path to annlib
 option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
@@ -65,11 +78,11 @@ endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 if(${FLAVOR} STREQUAL "vm2ug")
 	add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_vm2ug})
 else(${FLAVOR} STREQUAL "vm2ug")
-   if (${FLAVOR} STREQUAL "userdef")
-	   add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_userdef})
-   else(${FLAVOR} STREQUAL "userdef")
+   if (${FLAVOR} STREQUAL "default")
+	   add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_default})
+   else(${FLAVOR} STREQUAL "default")
      add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_simple})
-  endif(${FLAVOR} STREQUAL "userdef")
+  endif(${FLAVOR} STREQUAL "default")
 endif(${FLAVOR} STREQUAL "vm2ug")
 
 # decide if you want to build the boost testsuite
