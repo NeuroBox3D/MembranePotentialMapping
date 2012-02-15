@@ -21,7 +21,7 @@ message(STATUS "Info: FLAVOR:            "${FLAVOR}" (options are: default, simp
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
-# sources
+# sources (same as in bg_simple) -> need to change that
 #set(SOURCES_simple	 plugin_main.cpp
 #			               vm2ug.cpp
 #			               bg.cpp
