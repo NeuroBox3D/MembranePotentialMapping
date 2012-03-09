@@ -31,11 +31,13 @@ bool BG::installed_cal_gates() {
 void BG::install_cal_gates(double cond) {
    gating_parameter gate_cal_m(3, -36, 1.5);
    gating_parameter gate_cal_h(0, 0, 0);
-   solgat = solve_gating(gate_cal_m, gate_cal_h, conductivity, 135, 2, 0);
+   solgat = solve_gating(gate_cal_m, gate_cal_h, cond, 135, 2, 0);
 
    inst_cal_gates = true;
    inst_cat_gates = false;
    inst_can_gates = false;
+
+   conductivity = cond;
 }
 
 
@@ -46,11 +48,13 @@ bool BG::installed_cat_gates() {
 void BG::install_cat_gates(double cond) {
    gating_parameter gate_cat_m(3, -36, 1.5);
    gating_parameter gate_cat_h(-5.2, -68, 10);
-   solgat = solve_gating(gate_cat_m, gate_cat_h, conductivity, 135, 2, 1);
+   solgat = solve_gating(gate_cat_m, gate_cat_h, cond, 135, 2, 1);
 
    inst_cal_gates = false;
    inst_cat_gates = true;
    inst_can_gates = false;
+
+   conductivity = cond;
 }
 
 bool BG::installed_can_gates() {
@@ -65,11 +69,13 @@ void BG::install_can_gates(double cond)
 	gating_parameter gate_can_h( -2, - 40, 75  );
 
     //solgat =  solve_gating( gate_can_m, gate_can_h, 0.06*1, 135, 2, 1 );    
-    solgat =  solve_gating( gate_can_m, gate_can_h,  conductivity, 135, 2, 1 );    
+    solgat =  solve_gating( gate_can_m, gate_can_h, cond, 135, 2, 1 );    
       
    inst_can_gates = true;
    inst_cal_gates = false;
    inst_cat_gates = false;
+
+   conductivity = cond;
 
 }
 

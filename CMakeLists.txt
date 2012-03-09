@@ -88,6 +88,7 @@ endif(${FLAVOR} STREQUAL "vm2ug")
 # decide if you want to build the boost testsuite
 if(MPMTestsuite)
 	add_executable(MPMTestsuite ${SOURCES_TEST})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
 endif(MPMTestsuite)
 
 # create a shared library from the sources and link it against ug4.
