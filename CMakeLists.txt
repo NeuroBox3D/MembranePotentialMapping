@@ -12,12 +12,25 @@ cmake_minimum_required(VERSION 2.6)
 
 project(MEMBRANE_POTENTIAL_MAPPING)
 
+set(FLAVOR "default")
+
+set(MPMTestsuite OFF)
+
+set(STD_C++0x OFF) #currently compiles only with gcc (when using c++0x language features!)
+
+IF(STD_C++0x)                                                          
+  SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++0x")
+ENDIF(STD_C++0x)
+
 option(MPM "Build MPMTestsuite" OFF)
 message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
 option(FLAVOR "Build FLAVOR" default)
 message(STATUS "Info: FLAVOR:            "${FLAVOR}" (options are: default, simple, vm2ug)")
  
+option(STD_C++0x "Build with C++0x language features" defaultSTD_C++0x)
+message(STATUS "Info: C++0x              "${STD_C++0x}" (options are: ON, OFF)")
+
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
@@ -49,10 +62,12 @@ set(SOURCES_vm2ug    bg_vm2ug/plugin_main.cpp
 set(SOURCES_default  bg_default/plugin_main.cpp
                      bg_default/spannung.cpp
                      bg_default/my_commands.cpp
-                     bg_default/vm2ug.cpp
+                     #bg_default/vm2ug.cpp
                      bg_default/bg.cpp
                      bg_default/solve.cpp
-                     bg_default/gating.cpp)
+                     bg_default/gating.cpp
+                     vm2ug.cpp #experimental
+                     mvec.cpp) #experimental
 	
 if(${FLAVOR} STREQUAL simple)
    set(SOURCES_TEST unit_tests/src/basic_tests_simple.cpp)
