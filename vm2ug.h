@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <istream>
+#include <ostream>
 #include <cmath>
 #include "common_typedefs.h"
 #include "mvec.h"
@@ -32,9 +33,10 @@ template <class T> std::ostream& operator<< (std::ostream& output, const Vm2uG<T
 template <class T> std::ostream& operator<< (std::ostream& output, const sPoint<T>& p);
 template <class T> std::ostream& operator<< (std::ostream& output, const uGPoint<T>& p);
 
-template <class T = int> class Vm2uG;
+/*template <class T = int> class Vm2uG;
 template <class T = int> class sPoint;
 template <class T = int> class uGPoint;
+*/
 /* }}} */
 /* }}} */
 
@@ -77,6 +79,36 @@ template <class T> class Vm2uG {
     		  return vm_t(timestep, node).getVm();
 
     	  double Vm_intp = 0.0;
+
+
+
+    	  uGPoint<T> nearest = vm_t(timestep, node);
+    	  std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
+
+
+			  if (nearestPoints[0].getVm() > cutoff)
+    		  nearestPoints = vm_t_k(timestep, node, k);
+    	  else
+    		  return nearestPoints[0].getVm();
+
+       	  mvecd3 u;
+
+    	  for (int i=0; i < 3; i++)
+    		  u.push_back(node[i]);
+
+    	  typedef typename std::vector<sPoint<T> >::const_iterator SPIT;
+
+
+    	  for (SPIT it1 = nearestPoints.begin(); it1 < nearestPoints.end(); it1++)
+    		  for (SPIT it2 = nearestPoints.begin(); it2 < nearestPoints.end(); it2++)
+    			  for (SPIT it3 = nearestPoints.begin(); it3 < nearestPoints.end(); it3++)
+    				  for (SPIT it4 = nearestPoints.begin(); it4 < nearestPoints.end(); it4++) {
+    					  if (it1 != it2 != it3 != it4) {
+
+    					  }
+    				  }
+
+
     	  /* TODO:
     	   * pseudo code:
     	   *
@@ -113,7 +145,7 @@ template <class T> class Vm2uG {
     	  std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
 
 
-    	  if (nearestPoints[0].getVm() > cutoff)
+			  if (nearestPoints[0].getVm() > cutoff)
     		  nearestPoints = vm_t_k(timestep, node, k);
     	  else
     		  return nearestPoints[0].getVm();

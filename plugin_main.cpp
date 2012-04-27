@@ -32,7 +32,8 @@ reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
        .add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
        .add_method("get_potential", &TVm2uG::get_potential, grp)
        .add_method("build_tree", &TVm2uG::buildTree, grp);
-   
+		//.add_method("get_potential_lin", &TVm2uG::get_potential_lin, grp)
+		//  .add_method("get_potential_bilin", &TVm2UG::get_potential_bilin, grp);
    typedef bg::BG TBG;
    reg->add_class_<TBG>("BorgGraham", grp)
        .add_constructor()

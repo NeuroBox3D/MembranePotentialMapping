@@ -1,7 +1,7 @@
-/**
- * mvec.cpp
+/*
+ * mvec_impl.h
  *
- *  Created on: Apr 9, 2012
+ *  Created on: Apr 27, 2012
  *      Author: stephan
  */
 
@@ -11,7 +11,6 @@
 #include <numeric> // needed for std::inner_product
 #include <common/log.h>
 #include <iostream>
-
 
 /**
  * default constructors
@@ -99,15 +98,16 @@ template <class T, size_t i> mvec<T, i> mvec<T, i>::vec(const mvec<T, i>& rhs) c
 		return ret;
 	}
 
+	std::vector<T> temp2;
 	ret.clear();
-	temp.clear();
+	temp2.clear();
 
 	for (typename std::vector<T>::const_iterator it = this->begin(); it < this->end(); it++)
-		temp.push_back(boost::lexical_cast<T>(*it));
+		temp2.push_back(boost::lexical_cast<T>(*it));
 
-    ret.push_back(boost::lexical_cast<T>(temp[1] * rhs[2] - temp[2] * rhs[1]));
-    ret.push_back(boost::lexical_cast<T>(temp[2] * rhs[0] - temp[0] * rhs[2]));
-	ret.push_back(boost::lexical_cast<T>(temp[0] * rhs[1] - temp[1] * rhs[0]));
+    ret.push_back(boost::lexical_cast<T>(temp2[1] * rhs[2] - temp2[2] * rhs[1]));
+    ret.push_back(boost::lexical_cast<T>(temp2[2] * rhs[0] - temp2[0] * rhs[2]));
+	ret.push_back(boost::lexical_cast<T>(temp2[0] * rhs[1] - temp2[1] * rhs[0]));
 
 	return ret;
 
@@ -124,6 +124,7 @@ template <class T, size_t i> mvec<T, i> mvec<T, i>::neg() const {
 }
 
 template <class T, size_t i> mvec<T, i> mvec<T, i>::id() const {
+	//mvec<T, i> ret = std::vector<T>(i);
 	return *this;
 }
 
@@ -147,48 +148,4 @@ template <class T, size_t i> const double mvec<T, i>::norm(NORM norm) const {
      }
      return ret;
 }
-
-
-/*
- * main method
- */
-/*
-int main() {
-  std::vector<double> foofoo;
-   foofoo.push_back(3.0);
-   foofoo.push_back(3.0);
-   foofoo.push_back(3.0);
-   std::vector<double> foofoo2;
-   foofoo2.push_back(5.0);
-   foofoo2.push_back(5.0);
-   foofoo2.push_back(5.0);
-
-  mvec<double, 3> blabla();
-	mvec<double, 3> foo(foofoo);
-  mvec<double, 3> foo2(foofoo2);
-	mvec<double, 3> a = foofoo;
-	mvec<double, 3> b = foofoo2;
-
-	mvec<double, 3> c = a + b;
-	for (DITC mit3 = c.begin(); mit3 < c.end(); mit3++)
-		std::cout << *mit3;
-	std::cout << std::endl;
-
-	//mvec<double, 3> c = a.add(b).add(b);
-
-//	mvec<double, 3> d = c.dot(c);
-
-	/*mvec<double, 3> c = foo + foo2;
-  mvecd3 d = c + foo;
-   typedef mvec<double, 3>::const_iterator MIT;
-   std::cout << "START" << std::endl;
-   for (MIT mit = d.begin(); mit < d.end(); mit++)
-      std::cout << *mit;
-
-
-   double d2 = c * foo;
-   std::cout << "d2" << d2 << std::endl;
-}
-   */
-
 

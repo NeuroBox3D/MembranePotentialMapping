@@ -22,5 +22,4 @@ enum NORM {
 	INF=0, MANHATTAN, EUCLIDEAN
 };
 
-
 #endif /* _COMMON_TYPEDEFS_H_ */

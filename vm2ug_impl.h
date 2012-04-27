@@ -1,3 +1,7 @@
+#include "vm2ug.h"
+
+using namespace vug;
+
 /* Vm2uG {{{ */
 template <class T> Vm2uG<T>::Vm2uG(string dataFileBaseName_, string dataFileExt_, const bool promise_) {
    dim = 3;
@@ -6,7 +10,7 @@ template <class T> Vm2uG<T>::Vm2uG(string dataFileBaseName_, string dataFileExt_
    k = 1;
    eps = 0.0;
    isTreeBuild = false;
-   dataFileBaseName = dataFileBaseName;
+   this->dataFileBaseName = dataFileBaseName;
    dataFileExt = dataFileExt_;
    promise = promise_;
 }
@@ -535,3 +539,4 @@ template <class T> ostream& operator<<(ostream& output, const uGPoint<T>& p) {
    return output;
    }
 /* }}} */
+

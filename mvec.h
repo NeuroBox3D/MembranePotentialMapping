@@ -16,14 +16,13 @@
 // TODO: *) add bilineare interpolation! mathenexus.zum.de/html/geometrie/abstaende/AbstandPE_Hilfsger_Paraform.htm
 // TODO: *) Exception handling (try/catch/finally)
 // TODO  *) refactor code interp_linear in vm2ug.h!
-/// todo: *) trilineare interpolation?
 template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 		public:
 			// constructors
 			mvec();
 
-			mvec(size_t t);
+		    //mvec(size_t t);
 
 			mvec(const std::vector<T>& init);
 
@@ -47,6 +46,12 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 		    inline mvec<T, i> operator-() const { return this->neg(); }
 
 		    inline mvec<T, i> operator+() const { return this->id(); }
+
+		    // TODO: needs implementation ...
+//		    inline mvec<T, i> operator=(const mvec<T, i>& rhs) { assign(rhs); return *this; }
+	//	    inline mvec<T, i> operator+=(const mvec<T, i>& rhs) { assign(rhs + *this); return *this; }
+
+		//    inline mvec<T, i> operator-=(const mvec<T, i>& rhs) { assign(rhs - *this); return *this; }
 
 
 		private:
@@ -73,4 +78,8 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 };
 
+#include "mvec_impl.h"
+
 #endif /* _MVEC_H_ */
+
+
