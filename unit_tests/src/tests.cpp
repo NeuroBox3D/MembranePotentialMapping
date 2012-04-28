@@ -8,14 +8,20 @@
 
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
+#include <cmath>
 
 #include "../inc/unit_test_helper.h"
-#include "../../bg.h"
-#include "../../vm2ug.h"
 #include "../inc/fixtures.cpp"
+
+// #ifdef FLAVOR
+#include "../../bg.h"
+// #else
+// #include "../bg_default/bg.h"
+// #endif
+
+#include "../../vm2ug.h"
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
-#include <cmath>
 
 using namespace boost::unit_test;
 using namespace vug;
@@ -40,7 +46,7 @@ BOOST_AUTO_TEST_CASE(test_add)  {
 		   mvec<double, 3> c = m1 + m2;
 
 		   for (std::vector<double>::const_iterator it = c.begin(); it < c.end(); it++) {
-			   BOOST_REQUIRE_MESSAGE(!AreSame(*it, 3.0), "Index i:= " << *it << "not equal to 3.0!");
+			   BOOST_REQUIRE_CLOSE(*it, 3.0, SMALL);
 		   }
 }
 BOOST_AUTO_TEST_CASE(test_sub)  {
@@ -59,7 +65,7 @@ BOOST_AUTO_TEST_CASE(test_sub)  {
 	   mvec<double, 3> c = m1 - m2;
 
 	   for (std::vector<double>::const_iterator it = c.begin(); it < c.end(); it++) {
-	  			   BOOST_REQUIRE_MESSAGE(!AreSame(*it, 1.0), "Index i:= " << *it << "not equal to 1.0!");
+	  			  BOOST_REQUIRE_CLOSE(*it, 1.0, SMALL);
 	  		   }
 
 }
@@ -77,9 +83,9 @@ BOOST_AUTO_TEST_CASE(test_vec)  {
 		   mvec<double, 3> m2(b);
 		  mvec<double, 3> c = m1 % m2;
 
-		   BOOST_REQUIRE_MESSAGE(!AreSame(c[0],0.0), "Index i:= " << c[0] << "not equal to 0.0!");
-		   BOOST_REQUIRE_MESSAGE(!AreSame(c[1],0.0), "Index i:= " << c[1] << "not equal to 0.0!");
-		   BOOST_REQUIRE_MESSAGE(!AreSame(c[2],0.0), "Index i:= " << c[2] << "not equal to 0.0!");
+	   for (std::vector<double>::const_iterator it = c.begin(); it < c.end(); it++) {
+	  			  BOOST_REQUIRE_CLOSE(*it, 0.0, SMALL);
+	  		   }
 
 }
 
@@ -94,7 +100,7 @@ BOOST_AUTO_TEST_CASE(test_dot)  {
 
 		   double c = m1 * m1;
 
-		   BOOST_REQUIRE_MESSAGE(!AreSame(c, 12.0), "Dotproduct not equal to 12.0!");
+		   BOOST_REQUIRE_CLOSE(c, 12.0, SMALL);
 
 }
 BOOST_AUTO_TEST_CASE(test_neg)  {
@@ -107,7 +113,7 @@ BOOST_AUTO_TEST_CASE(test_neg)  {
 		 mvec<double, 3> m2 = -m1;
 
 		for (size_t i = 0; i < 3; i++)
-			BOOST_REQUIRE_MESSAGE(!AreSame(m2[i], -m1[i]), "Index i:= " << i << "not equal!");
+			BOOST_REQUIRE_CLOSE(m2[i], -m1[i], SMALL);
 }
 BOOST_AUTO_TEST_CASE(test_id)   {
 	 std::vector<double> a;
@@ -118,9 +124,7 @@ BOOST_AUTO_TEST_CASE(test_id)   {
 	 mvec<double, 3> m2 = +m1;
 
 	for (size_t i = 0; i < 3; i++) {
-		UG_LOG(m2[i] << std::endl);
-		UG_LOG(m1[i] << std::endl);
-		BOOST_REQUIRE_MESSAGE(!AreSame(m2[i], m1[i]), "Index i:= " << i << "not equal!");
+		BOOST_REQUIRE_CLOSE(m2[i], m1[i], SMALL);
 	}
 
 }
@@ -137,7 +141,7 @@ BOOST_AUTO_TEST_CASE(test_norm) {
 			   double res = m1.norm(EUCLIDEAN);
 			   double check = std::sqrt(12.0);
 
-			   BOOST_REQUIRE_MESSAGE(!AreSame(res, check), "Norm not equal to sqrt(12.0)");
+			   BOOST_REQUIRE_CLOSE(res, check, SMALL);
 
 
 }
@@ -190,26 +194,28 @@ BOOST_AUTO_TEST_CASE(install_gates) {
    BOOST_MESSAGE("End test >>install_gates<<");
 }
 
-#ifdef FLAVOR
+#ifndef FLAVOR
 BOOST_AUTO_TEST_CASE(check_fluxes) {
    BOOST_MESSAGE("Starting test >>flux<<");
    BG* b = new BG();
    BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
-   b->install_can_gates();
+   b->install_can_gates(1000.0);
    b->calc_current_at_start(0);
    std::vector<double> results;
-   results.push_back(1.63453);
-   results.push_back(1.63453);
+   results.push_back(1.6345251904980005);
+   results.push_back(1.6345251904980005);
    results.push_back(7.80493);
    results.push_back(41460.8);
    results.push_back(14315.6);
    results.push_back(1946.1);
    results.push_back(240.059);
-   results.push_back(36.0448);
+   results.push_back(36.044762202708);
    double delta_t = 0.001;
-   for (int i = 0; i < results.size(); i++)
-      BOOST_CHECK_MESSAGE(AreSame(results[i], b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t)), "Currents are not equal!");
-   BOOST_MESSAGE("End test >>check_fluxes<<");
+   for (size_t i = 0; i < results.size(); i++) {
+      double d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t);
+      BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
+      BOOST_MESSAGE("End test >>check_fluxes<<");
+   }
 }
 #endif
 

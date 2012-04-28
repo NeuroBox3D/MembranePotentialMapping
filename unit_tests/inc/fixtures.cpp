@@ -8,7 +8,13 @@
 #include <boost/test/included/unit_test.hpp>
 #include "../../vm2ug.h"
 #include "../../mvec.h"
+
+//#ifdef FLAVOR
 #include "../../bg.h"
+//#else
+// #include "../bg_simple/bg.h"
+//#endif
+
 #include "../../common_typedefs.h"
 
 using namespace boost::unit_test;

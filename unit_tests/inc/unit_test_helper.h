@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef UNIT_TEST_HELPER_H_
-#define UNIT_TEST_HELPER_H_
+#ifndef _UNIT_TEST_HELPER_H_
+#define _UNIT_TEST_HELPER_H_
 
 #include <limits>
 #include <cmath>
@@ -19,9 +19,11 @@
                                        && std::fabs(value - high) <= std::numeric_limits<T>::epsilon(); }; }
 #endif
 
-
-bool AreSame(double a, double b) {
-   return ! std::fabs(a - b) < std::numeric_limits<double>::epsilon();
+bool SameDoubles(const double& a, const double& b) {
+   return std::fabs(a - b) < std::numeric_limits<double>::epsilon();
 }
 
-#endif /* UNIT_TEST_HELPER_H_ */
+static const double SMALL = 0.0001;
+static const double VERY_SMALL = 0.0000001;
+
+#endif /* _UNIT_TEST_HELPER_H_ */

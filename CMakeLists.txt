@@ -15,7 +15,7 @@ project(MEMBRANE_POTENTIAL_MAPPING)
 option(MPMTestsuite "Build MPMTestsuite" ON)
 message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
-option(FLAVOR "Build FLAVOR" ON)
+option(FLAVOR "Build FLAVOR" OFF)
 message(STATUS "Info: FLAVOR:            "${FLAVOR}" (options are: ON, OFF)")
  
 # include the definitions and dependencies for ug-plugins.
@@ -37,13 +37,14 @@ set(SOURCES_default  bg_default/plugin_main.cpp
                      bg_default/bg.cpp
                      bg_default/solve.cpp
                      bg_default/gating.cpp
-                     #experimental
+                     #experimental -> top dir is experimental!
                      vm2ug.cpp)
                     # mvec.cpp)
                      
-					    
+                     
+### IF DONE: delete duplicated vm2ug files from bg_simple and bg_default, only keep bg files by markus knodel
 set(SOURCES_TEST unit_tests/src/tests.cpp)
-			
+		
 # get the path to annlib
 option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
 
@@ -59,11 +60,12 @@ else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 # decide which flavor of the plugin you want to build
-if(FLAVOR)
+if(${FLAVOR} STREQUAL "ON")
     add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_default})
-else(FLAVOR)
+    add_definitions(-DFLAVOR)
+else(${FLAVOR} STREQUAL "ON")
     add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_simple})
-endif(FLAVOR)
+endif(${FLAVOR} STREQUAL "ON")
 
 #if(${FLAVOR} STREQUAL "vm2ug")
 #	add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_vm2ug})

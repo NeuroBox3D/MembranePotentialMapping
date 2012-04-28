@@ -15,6 +15,9 @@ template <class T, size_t i> class mvec;
 
 // common typedefs
 typedef mvec<double, 3> mvecd3;
+typedef mvec<double, 2> mvecd2;
+typedef mvec<double, 1> mvecd1;
+
 typedef std::vector<double>::const_iterator DITC;
 typedef std::vector<double>::iterator DIT;
 
