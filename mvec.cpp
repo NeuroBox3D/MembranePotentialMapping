@@ -21,10 +21,10 @@ template <class T, size_t i> mvec<T, i>::mvec() {
 	temp.reserve(i);
 }
 
-/*template <class T, size_t i> mvec<T, i>::mvec(size_t t) {
+template <class T, size_t i> mvec<T, i>::mvec(size_t t) {
 	this->reserve(t);
 	temp.reserve(i);
-}*/
+}
 
 /**
  * main constructor

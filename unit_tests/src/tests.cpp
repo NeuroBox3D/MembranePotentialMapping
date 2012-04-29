@@ -28,9 +28,6 @@ using namespace vug;
 using namespace bg;
 using std::string;
 
-
-// TODO (test mvec)
-
 BOOST_AUTO_TEST_SUITE(vec);
 
 BOOST_AUTO_TEST_CASE(test_add)  {
@@ -130,7 +127,6 @@ BOOST_AUTO_TEST_CASE(test_id)   {
 }
 BOOST_AUTO_TEST_CASE(test_norm) {
 
-
 	           std::vector<double> a;
 	          		 	 for (size_t i = 0; i < 3; i++) {
 	          		 				  			   a.push_back(2.0);
@@ -145,6 +141,78 @@ BOOST_AUTO_TEST_CASE(test_norm) {
 
 
 }
+
+BOOST_AUTO_TEST_CASE(test_assignment) {
+	std::vector<double> a;
+	for (size_t i = 0; i < 3; i++)
+			a.push_back(2.0);
+	mvec<double, 3> m1 = a;
+
+	for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+		BOOST_REQUIRE_CLOSE(*cit, 2.0, SMALL);
+}
+
+BOOST_AUTO_TEST_CASE(test_assignment_plus) {
+	std::vector<double> a;
+		for (size_t i = 0; i < 3; i++)
+				a.push_back(2.0);
+
+		std::vector<double> b;
+			for (size_t i = 0; i < 3; i++)
+					b.push_back(1.0);
+		mvec<double, 3> m1 = a;
+		mvec<double, 3> m2 = b;
+
+		m2 += m1;
+
+		for (typename std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+				BOOST_REQUIRE_CLOSE(*cit, 3.0, SMALL);
+
+		for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+				BOOST_REQUIRE_CLOSE(*cit, 2.0, SMALL);
+}
+
+BOOST_AUTO_TEST_CASE(test_assignment_minus) {
+	std::vector<double> a;
+		for (size_t i = 0; i < 3; i++)
+				a.push_back(2.0);
+
+		std::vector<double> b;
+			for (size_t i = 0; i < 3; i++)
+					b.push_back(1.0);
+		mvec<double, 3> m1 = a;
+		mvec<double, 3> m2 = b;
+
+		m1 -= m2;
+
+		for (typename std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+				BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
+
+		for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+				BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
+
+}
+BOOST_AUTO_TEST_CASE(test_assignment_vector) {
+	std::vector<double> a;
+		for (size_t i = 0; i < 3; i++)
+				a.push_back(2.0);
+
+		std::vector<double> b;
+			for (size_t i = 0; i < 3; i++)
+					b.push_back(1.0);
+
+		mvec<double, 3> m1 = a;
+		mvec<double, 3> m2 = b;
+
+		m1 %= m2;
+
+		for (typename std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+				BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
+
+		for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+				BOOST_CHECK_CLOSE(*cit, 0.0, SMALL);
+}
+
 BOOST_AUTO_TEST_SUITE_END();
 
 BOOST_FIXTURE_TEST_SUITE(vm2ug, Fixture<string>);

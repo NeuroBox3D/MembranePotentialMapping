@@ -12,9 +12,8 @@
 #include <numeric> // needed for std::inner_product
 #include "common_typedefs.h"
 
-// TODO: *) validate lin interpolate and mvec (with boost unit tests)
-// TODO: *) add bilineare interpolation! mathenexus.zum.de/html/geometrie/abstaende/AbstandPE_Hilfsger_Paraform.htm
-// TODO: *) Exception handling (try/catch/finally)
+// TODO: *) validate lin interpolate (with boost unit tests)
+// TODO: *) implement bilin interp:  mathenexus.zum.de/html/geometrie/abstaende/AbstandPE_Hilfsger_Paraform.htm
 // TODO  *) refactor code interp_linear in vm2ug.h!
 template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
@@ -22,17 +21,13 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 			// constructors
 			mvec();
 
-		    //mvec(size_t t);
-
 			mvec(const std::vector<T>& init);
-
 
 			// default destructor
 			~mvec();
 
 			// norm
 			const double norm(NORM) const;
-
 
 			// operators
 			inline mvec<T, i> operator+(const mvec<T, i>& rhs) const { return this->add(rhs); }
@@ -47,12 +42,13 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 		    inline mvec<T, i> operator+() const { return this->id(); }
 
-		    // TODO: needs implementation ...
-//		    inline mvec<T, i> operator=(const mvec<T, i>& rhs) { assign(rhs); return *this; }
-	//	    inline mvec<T, i> operator+=(const mvec<T, i>& rhs) { assign(rhs + *this); return *this; }
+		    inline mvec<T, i> operator=(const mvec<T, i>& rhs);
 
-		//    inline mvec<T, i> operator-=(const mvec<T, i>& rhs) { assign(rhs - *this); return *this; }
+	        inline mvec<T, i>& operator+=(const mvec<T, i>& rhs);
 
+	        inline mvec<T, i>& operator-=(const mvec<T, i>& rhs);
+
+	        inline mvec<T, i>& operator%=(const mvec<T, i>& rhs);
 
 		private:
 			// add
@@ -72,10 +68,6 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 			// identity
 			mvec<T, i> id() const;
-
-
-			std::vector<T> temp;
-
 };
 
 #include "mvec_impl.h"
