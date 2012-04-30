@@ -36,6 +36,33 @@ using std::string;
  */
 BOOST_AUTO_TEST_SUITE(vec);
 
+// test basic constructor
+BOOST_AUTO_TEST_CASE(test_constructor) {
+	BOOST_MESSAGE("Starting test >>test_constructor<<");
+	mvec<double, 3> m1;
+	for (size_t i = 0; i < 3; i++)
+			m1.push_back(2.0);
+
+	for (std::vector<double>::const_iterator it = m1.begin(); it < m1.end(); it++)
+		BOOST_CHECK_CLOSE(*it, 2.0, SMALL);
+
+	BOOST_MESSAGE("End test >>test_constructor<<");
+}
+
+// test default constructor
+BOOST_AUTO_TEST_CASE(test_default_constructor) {
+	BOOST_MESSAGE("Starting test >>test_default_constructor<<");
+	std::vector<double> a;
+	for (size_t i = 0; i < 3; i++)
+		a.push_back(2.0);
+
+	mvec<double, 3> m1(a);
+	for (std::vector<double>::const_iterator it = m1.begin(); it < m1.end(); it++)
+		BOOST_CHECK_CLOSE(*it, 2.0, SMALL);
+
+	BOOST_MESSAGE("End test >>default_constructor<<");
+}
+
 // test add
 BOOST_AUTO_TEST_CASE(test_add) {
 	BOOST_MESSAGE("Starting test >>test_add<<");

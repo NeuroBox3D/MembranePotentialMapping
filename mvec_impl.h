@@ -124,8 +124,7 @@ template <class T, size_t i> mvec<T, i> mvec<T, i>::vec(const mvec<T, i>& rhs) c
 
 template <class T, size_t i> mvec<T, i> mvec<T, i>::neg() const {
 
-	mvec<T, i> ret = std::vector<T>(i);
-	ret.clear();
+	mvec<T, i> ret;
 
 	for (typename std::vector<T>::const_iterator it = this->begin(); it < this->end(); it++)
 				 ret.push_back(boost::lexical_cast<T>(-(*it)));
@@ -174,7 +173,6 @@ template <class T, size_t i > mvec<T, i>& mvec<T, i>::operator-=(const mvec<T, i
 			this->data()[t] = boost::lexical_cast<T>(this->data()[t] - rhs[t]);
 
 		return *this;
-
 }
 
 template <class T, size_t i> mvec<T, i>& mvec<T, i>::operator%=(const mvec<T, i>& rhs) {
