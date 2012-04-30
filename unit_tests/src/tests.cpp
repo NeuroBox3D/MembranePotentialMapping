@@ -1,7 +1,7 @@
 /*
  * tests.cpp
  *
- * purpose: creates a hierachically testing tree with three leafs
+ * purpose: creates a hierachically testing tree with three leafs (mvec, vm2ug and bg)
  *
  *  Created on: Apr 27, 2012
  *      Author: stephan grein

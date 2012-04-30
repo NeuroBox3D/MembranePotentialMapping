@@ -53,7 +53,7 @@ template <> void Vm2uG<double>::buildTree(const double& timestep) {
    
    s << timestep;
 
-   cout << timestep;
+  // cout << timestep;
 
    dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {
@@ -88,7 +88,7 @@ template <> void Vm2uG<double>::buildTree(const double& timestep) {
 }
 
 template <> void Vm2uG<string>::buildTree(const string& timestep) {
-   cout << timestep << endl;
+   //cout << timestep << endl;
    if (this->isTreeBuild) {
       rebuildTree(timestep);
    }
@@ -136,7 +136,7 @@ template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
    ostringstream s;
    s << timestep; 
 
-   cout << timestep;
+   //cout << timestep;
    dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {
       cerr << "Cannot open data file" << endl;
@@ -384,7 +384,7 @@ template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
    static ifstream dataStream;
    ostringstream s;
    s << timestep;
-   cout << timestep;
+//   cout << timestep;
 
    dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
    if (!dataStream) {
