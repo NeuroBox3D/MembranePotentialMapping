@@ -2,7 +2,7 @@
  * mvec_impl.h
  *
  *  Created on: Apr 27, 2012
- *      Author: stephan
+ *      Author: stephan grein
  */
 
 #include "mvec.h"
@@ -94,7 +94,7 @@ template <class T, size_t i> const double mvec<T, i>::dot(const mvec<T, i>& rhs)
 	return std::inner_product(this->begin(), this->end(), rhs.begin(), 0);
 }
 
-// TODO: implementation for dim != 3 needed.
+
 template <class T, size_t i> mvec<T, i> mvec<T, i>::vec(const mvec<T, i>& rhs) const {
 	const size_t lhs_s = this->size();
 	const size_t rhs_s = rhs.size();
@@ -138,11 +138,11 @@ template <class T, size_t i> mvec<T, i> mvec<T, i>::id() const {
 
 template <class T, size_t i> mvec<T, i> mvec<T, i>::operator=(const mvec<T, i>& rhs) {
 	this->clear();
-	this->reserve(i);
 
 	for (typename std::vector<T>::const_iterator cit = rhs.begin(); cit < rhs.end(); cit++)
 			this->push_back(boost::lexical_cast<T>(*cit));
-	 return *this;
+
+	return *this;
 }
 
 template <class T, size_t i > mvec<T, i>& mvec<T, i>::operator+=(const mvec<T, i>& rhs) {
@@ -155,7 +155,7 @@ template <class T, size_t i > mvec<T, i>& mvec<T, i>::operator+=(const mvec<T, i
 		}
 
 		for (size_t t = 0; t < lhs_s; t++)
-			this->data()[t] = this->data()[t] + rhs[t];
+			this->data()[t] = boost::lexical_cast<T>(this->data()[t] + rhs[t]);
 
 		return *this;
 
@@ -171,13 +171,12 @@ template <class T, size_t i > mvec<T, i>& mvec<T, i>::operator-=(const mvec<T, i
 		}
 
 		for (size_t t = 0; t < lhs_s; t++)
-			this->data()[t] = this->data()[t] - rhs[t];
+			this->data()[t] = boost::lexical_cast<T>(this->data()[t] - rhs[t]);
 
 		return *this;
 
 }
 
-// TODO: implementation for dim != 3 needed.
 template <class T, size_t i> mvec<T, i>& mvec<T, i>::operator%=(const mvec<T, i>& rhs) {
 	const size_t lhs_s = this->size();
 	const size_t rhs_s = rhs.size();
@@ -189,12 +188,12 @@ template <class T, size_t i> mvec<T, i>& mvec<T, i>::operator%=(const mvec<T, i>
 		return *this;
 	}
 
-	const T temp = this->data()[0];
-	const T temp2 = this->data()[1];
+	const T first = this->data()[0];
+	const T second = this->data()[1];
 
-	this->data()[0] = this->data()[1] * rhs[2] - this->data()[2] * rhs[1];
-    this->data()[1] = this->data()[2] * rhs[0] - temp * rhs[2];
-	this->data()[2] = temp * rhs[1] - temp2 * rhs[0];
+	this->data()[0] = boost::lexical_cast<T>(this->data()[1] * rhs[2] - this->data()[2] * rhs[1]);
+    this->data()[1] = boost::lexical_cast<T>(this->data()[2] * rhs[0] - first * rhs[2]);
+	this->data()[2] = boost::lexical_cast<T>(first * rhs[1] - second * rhs[0]);
 
 	return *this;
 }

@@ -72,6 +72,9 @@ template <class T> class Vm2uG {
       Vm2uG(std::string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k);
 
       ~Vm2uG();
+
+      // TODO 1: implement bilin interp:  mathenexus.zum.de/html/geometrie/abstaende/AbstandPE_Hilfsger_Paraform.htm
+      // TODO 2: refactor code interp_linear in vm2ug.h!
       
       const double interp_bilin_vms(const T& timestep, const double node[], const double cutoff, const int k) {
 
@@ -109,7 +112,7 @@ template <class T> class Vm2uG {
     				  }
 
 
-    	  /* TODO:
+    	  /* TODO 3:
     	   * pseudo code:
     	   *
     	   * Get K nearest neighbors

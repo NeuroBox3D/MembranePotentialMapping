@@ -1,7 +1,8 @@
-/**
- * author: stephanmg
- * date: 04m07d12y
- * file: mVec.h
+/*
+ * mvec.h
+ *
+ *  Created on: Apr 07, 2012
+ *      Author: stephan grein
  */
 
 #ifndef _MVEC_H_
@@ -9,12 +10,10 @@
 #include <vector>
 #include <cstddef>
 #include <cmath>
-#include <numeric> // needed for std::inner_product
+#include <numeric>
 #include "common_typedefs.h"
 
-// TODO: *) validate lin interpolate (with boost unit tests)
-// TODO: *) implement bilin interp:  mathenexus.zum.de/html/geometrie/abstaende/AbstandPE_Hilfsger_Paraform.htm
-// TODO  *) refactor code interp_linear in vm2ug.h!
+// TODO: introduce namespace for mvec
 template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 		public:
@@ -68,6 +67,7 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 			// identity
 			mvec<T, i> id() const;
+
 };
 
 #include "mvec_impl.h"
