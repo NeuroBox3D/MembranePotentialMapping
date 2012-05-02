@@ -61,5 +61,13 @@ template ostream& operator<<(ostream& output, const uGPoint<int>& p);
 template ostream& operator<<(ostream& output, const uGPoint<double>& p);
 template ostream& operator<<(ostream& output, const uGPoint<string>& p);
 
+template const double Vm2uG<int>::interp_bilin_vms(const int& timestep, const double node[], const double cutoff, const int k);
+template const double Vm2uG<double>::interp_bilin_vms(const double& timestep, const double node[], const double cutoff, const int k);
+template const double Vm2uG<string>::interp_bilin_vms(const string& timestep, const double node[], const double cutoff, const int k);
+
+template const double Vm2uG<int>::interp_lin_vms(const int& timestep, const double node[], const double cutoff, const int k);
+template const double Vm2uG<double>::interp_lin_vms(const double& timestep, const double node[], const double cutoff, const int k);
+template const double Vm2uG<string>::interp_lin_vms(const string& timestep, const double node[], const double cutoff, const int k);
+
 }
 /* }}} */

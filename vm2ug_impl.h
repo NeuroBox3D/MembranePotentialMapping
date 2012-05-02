@@ -14,7 +14,8 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 	std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
 
 	if (nearestPoints[0].getVm() > cutoff)
-		nearestPoints = vm_t_k(timestep, node, k);
+		nearestPoints = vm_t_k(timestep, node, k).getNearestNeighbors();
+		//nearestPoints = vm_t_k(timestep, node, k);
 	else
 		return nearestPoints[0].getVm();
 
@@ -33,11 +34,10 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 					it3++)
 				for (SPIT it4 = nearestPoints.begin();
 						it4 < nearestPoints.end(); it4++) {
-					if (it1 != it2 != it3 != it4) {
-						std::vector<T> coords1 = (*it1).getCoords();
-						std::vector<T> coords2 = (*it2).getCoords();
-						std::vector<T> coords3 = (*it3).getCoords();
-						std::vector<T> coords4 = (*it4).getCoords();
+						std::vector<double> coords1 = (*it1).getCoordinates();
+						std::vector<double> coords2 = (*it2).getCoordinates();
+						std::vector<double> coords3 = (*it3).getCoordinates();
+						std::vector<double> coords4 = (*it4).getCoordinates();
 						mvecd3 Q11(coords1);
 						mvecd3 Q12(coords2);
 						mvecd3 Q21(coords3);
@@ -77,20 +77,17 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 							double dist = (pointOnPlane - u).norm(EUCLIDEAN);
 
 							if (dist < current_cutoff) {
+								double local_rhs;
+								double local_dist;
+								double local_lhs;
+
 								// project L onto line Q12-Q22 => yields R1
 								// project L onto line Q11-Q21 => yields R2
 
 								// point 1
 								double c_norm = 0;
 								double a_norm = 0;
-								double local_dist = 0;
 								double r_star = 0;
-								double d_minus = 0;
-								double r_minus = 0;
-								double d_plus = 0;
-								double d_sum = 0;
-								double local_rhs = 0;
-								double local_lhs = 0;
 
 								mvecd3 a = Q12 - Q22;
 								mvecd3 b = pointOnPlane - Q22;
@@ -101,7 +98,7 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 								local_dist = (c_norm / a_norm);
 								local_rhs = a * Q22;
 								local_lhs = a * a;
-								r_star = -rhs / lhs;
+								r_star = -local_rhs / local_lhs;
 
 								mvecd3 pointOnG;
 								mvecd3 R = std::vector<double>(3, r_star);
@@ -112,9 +109,9 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 								mvecd3 d_plus_v = pointOnG - Q12;
 								mvecd3 d_sum_v = Q22 - Q12;
 
-								d_minus = d_minus_v.norm(EUCLIDEAN);
+	/*							d_minus = d_minus_v.norm(EUCLIDEAN);
 								d_plus = d_plus_v.norm(EUCLIDEAN);
-								d_sum = d_sum_v.norm(EUCLIDEAN);
+								d_sum = d_sum_v.norm(EUCLIDEAN); */
 
 								// point 2
 								mvecd3 R1 = pointOnG;
@@ -127,7 +124,7 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 								local_dist = (c_norm / a_norm);
 								local_rhs = a * Q21;
 								local_lhs = a * a;
-								r_star = -rhs / lhs;
+								r_star = -local_rhs / local_lhs;
 
 								R = std::vector<double>(3, r_star);
 
@@ -137,9 +134,9 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 								d_plus_v = pointOnG - Q11;
 								d_sum_v = Q21 - Q11;
 
-								d_minus = d_minus_v.norm(EUCLIDEAN);
+/*								d_minus = d_minus_v.norm(EUCLIDEAN);
 								d_plus = d_plus_v.norm(EUCLIDEAN);
-								d_sum = d_sum_v.norm(EUCLIDEAN);
+								d_sum = d_sum_v.norm(EUCLIDEAN); */
 
 								mvecd3 R2 = pointOnG;
 
@@ -163,11 +160,10 @@ template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 								double l2 = (pointOnPlane - R2).norm(EUCLIDEAN);
 
 								Vm_intp = l1 / r3 * r1 + l2 / r3 * r2;
-								current_cutoff = dist;
+								current_cutoff = local_dist;
 							}
 						}
 					}
-				}
 
 	return Vm_intp;
 }
@@ -185,7 +181,7 @@ template<class T> const double Vm2uG<T>::interp_lin_vms(const T& timestep,
 	std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
 
 	if (nearestPoints[0].getVm() > cutoff)
-		nearestPoints = vm_t_k(timestep, node, k);
+		nearestPoints = vm_t_k(timestep, node, k).getNearestNeighbors();
 	else
 		return nearestPoints[0].getVm();
 
