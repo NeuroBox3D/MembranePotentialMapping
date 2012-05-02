@@ -775,12 +775,12 @@ template <class T> uGPoint<T>::uGPoint() { }
 
 template <class T> uGPoint<T>::~uGPoint() { }
 
-template <class T> DOUBLE uGPoint<T>::getVm() {
-   return (DOUBLE)nearestNeighbors[0].getVm();
+template <class T> double uGPoint<T>::getVm() {
+   return nearestNeighbors[0].getVm();
 }
 
-template <class T> DOUBLE uGPoint<T>::getDist() {
-   return (DOUBLE)nearestNeighbors[0].getDist();
+template <class T> double uGPoint<T>::getDist() {
+   return nearestNeighbors[0].getDist();
 }
 
 

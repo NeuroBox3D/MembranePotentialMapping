@@ -38,6 +38,10 @@ BOOST_AUTO_TEST_SUITE(vec);
 
 // test basic constructor
 BOOST_AUTO_TEST_CASE(test_constructor) {
+#ifdef DIM
+	UG_LOG("Dim: " << DIM << std::endl);
+#endif
+
 	BOOST_MESSAGE("Starting test >>test_constructor<<");
 	mvec<double, 3> m1;
 	for (size_t i = 0; i < 3; i++)

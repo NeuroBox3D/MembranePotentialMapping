@@ -12,6 +12,8 @@ cmake_minimum_required(VERSION 2.6)
 
 project(MEMBRANE_POTENTIAL_MAPPING)
 
+message(STATUS "Info: Additional options:")
+
 option(MPMTestsuite "Build MPMTestsuite" ON)
 message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 

@@ -49,13 +49,13 @@ template uGPoint<int>::~uGPoint();
 template uGPoint<double>::~uGPoint();
 template uGPoint<string>::~uGPoint();
 
-template DOUBLE uGPoint<int>::getVm();
-template DOUBLE uGPoint<double>::getVm();
-template DOUBLE uGPoint<string>::getVm();
+template double uGPoint<int>::getVm();
+template double uGPoint<double>::getVm();
+template double uGPoint<string>::getVm();
 
-template DOUBLE uGPoint<int>::getDist();
-template DOUBLE uGPoint<double>::getDist();
-template DOUBLE uGPoint<string>::getDist();
+template double uGPoint<int>::getDist();
+template double uGPoint<double>::getDist();
+template double uGPoint<string>::getDist();
 
 template ostream& operator<<(ostream& output, const uGPoint<int>& p);
 template ostream& operator<<(ostream& output, const uGPoint<double>& p);

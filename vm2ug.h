@@ -20,7 +20,6 @@ namespace vug {
 /* Macros {{{ */
 #ifndef QDIM
 #define QDIM 3
-#define DOUBLE double
 #endif
 /* }}} */
 
@@ -334,9 +333,8 @@ template <class T> class uGPoint {
       const inline std::vector<sPoint<T> > getNearestNeighbors() const;
       const inline std::vector<double> getCoordinates() const;
 
-      /* returns uG DOUBLE */
-      DOUBLE getVm();
-      DOUBLE getDist();
+      double getVm();
+      double getDist();
       
    protected:
       std::vector<double> coordinates; /* {uG} */
