@@ -63,6 +63,83 @@ BOOST_AUTO_TEST_CASE(test_default_constructor) {
 	BOOST_MESSAGE("End test >>default_constructor<<");
 }
 
+// test determinante
+BOOST_AUTO_TEST_CASE(test_determinante) {
+	BOOST_MESSAGE("Starting test >>test_determinante<<");
+
+	std::vector<double> a;
+	std::vector<double> b;
+
+		a.push_back(-2.0);
+		a.push_back(5.0);
+
+		b.push_back(3.0);
+		b.push_back(0.5);
+
+
+	mvecd3 mvec1 = a;
+	mvecd3 mvec2 = b;
+
+
+	std::vector<mvecd3> mvecs;
+	mvecs.push_back(mvec1);
+	mvecs.push_back(mvec2);
+
+	double ret = mvec<double, 3>::det(mvecs);
+	BOOST_REQUIRE_CLOSE(-16.0, ret, SMALL);
+
+	a.clear();
+	b.clear();
+	mvecs.clear();
+
+	std::vector<double> c;
+
+	a.push_back(2.0);
+	a.push_back(-1.0);
+	a.push_back(3.0);
+
+	b.push_back(-2.0);
+	b.push_back(5.0);
+	b.push_back(4.0);
+
+	c.push_back(0.0);
+	c.push_back(1.0);
+	c.push_back(5.0);
+
+	mvec1 = a;
+	mvec2 = b;
+	mvecd3 mvec3 = c;
+
+	mvecs.push_back(mvec1);
+	mvecs.push_back(mvec2);
+	mvecs.push_back(mvec3);
+
+	double ret2 = mvec<double, 3>::det(mvecs);
+	BOOST_REQUIRE_CLOSE(26.0, ret2, SMALL);
+
+	BOOST_MESSAGE("End test >> test_determinante<<");
+}
+
+// test norm
+BOOST_AUTO_TEST_CASE(test_norm) {
+	BOOST_MESSAGE("Starting test >>test_norm<<");
+	std::vector<double> a;
+	for (size_t i = 0; i < 3; i++) {
+		a.push_back(2.0);
+	}
+
+	mvec<double, 3> m1(a);
+
+	double res = m1.norm(EUCLIDEAN);
+	double check = std::sqrt(12.0);
+
+	BOOST_REQUIRE_CLOSE(res, check, SMALL);
+
+	BOOST_MESSAGE("End test >>test_norm<<");
+}
+
+
+
 // test add
 BOOST_AUTO_TEST_CASE(test_add) {
 	BOOST_MESSAGE("Starting test >>test_add<<");
@@ -172,24 +249,6 @@ BOOST_AUTO_TEST_CASE(test_id) {
 	}
 
 	BOOST_MESSAGE("End test >>test_id<<");
-}
-
-// test norm
-BOOST_AUTO_TEST_CASE(test_norm) {
-	BOOST_MESSAGE("Starting test >>test_norm<<");
-	std::vector<double> a;
-	for (size_t i = 0; i < 3; i++) {
-		a.push_back(2.0);
-	}
-
-	mvec<double, 3> m1(a);
-
-	double res = m1.norm(EUCLIDEAN);
-	double check = std::sqrt(12.0);
-
-	BOOST_REQUIRE_CLOSE(res, check, SMALL);
-
-	BOOST_MESSAGE("End test >>test_norm<<");
 }
 
 // test assignment

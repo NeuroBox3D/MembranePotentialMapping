@@ -21,15 +21,22 @@
 #endif
 
 extern "C" UG_API void InitUGPlugin(ug::bridge::Registry* reg, string parentGroup) {
+   // group to which the plugin shall belong
    std::string grp(parentGroup); grp.append("Neuro/");
 
+   // register functionalities of the Vm2uG tool
    typedef vug::Vm2uG<std::string> TVm2uG;
+
    reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
        .add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
        .add_method("get_potential", &TVm2uG::get_potential, grp)
-       .add_method("build_tree", &TVm2uG::buildTree, grp);
+       .add_method("build_tree", &TVm2uG::buildTree, grp)
+       .add_method("get_potential_lin", &TVm2uG::get_potential_lin, grp)
+       .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, grp);
 
+   // register functionalities of the Borg Graham model
    typedef bg::BG TBG;
+
    reg->add_class_<TBG>("BorgGraham", grp)
        .add_constructor()
        .add_method("install_can_gates", &TBG::install_can_gates, grp)

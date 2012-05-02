@@ -29,6 +29,32 @@ template<class T, size_t i> mvec<T, i>::mvec(const std::vector<T>& init) {
 template<class T, size_t i> mvec<T, i>::~mvec() {
 }
 
+// determinante
+template <class T, size_t i> const double mvec<T, i>::det(const std::vector<mvec<T, i> >& mvecs) {
+
+	double ret = 0.0;
+
+	switch(mvecs.size()) {
+		case 2:
+			ret += mvecs[0][0] * mvecs[1][1];
+			ret -= mvecs[1][0] * mvecs[0][1];
+			break;
+		case 3:
+			ret += mvecs[0][0] * mvecs[1][1] * mvecs[2][2];
+			ret += mvecs[1][0] * mvecs[2][1] * mvecs[0][2];
+			ret += mvecs[2][0] * mvecs[0][1] * mvecs[1][2];
+			ret -= mvecs[0][2] * mvecs[1][1] * mvecs[2][0];
+			ret -= mvecs[1][2] * mvecs[2][1] * mvecs[0][0];
+			ret -= mvecs[2][2] * mvecs[0][1] * mvecs[1][0];
+			break;
+		default:
+			UG_LOG("mvec::det currently only works for 2 <= dim <= 3");
+			ret = 0.0;
+			break;
+	}
+	return ret;
+}
+
 // norm
 template <class T, size_t i> const double mvec<T, i>::norm(NORM norm) const {
      typedef typename std::vector<T>::const_iterator CIT;
@@ -195,3 +221,4 @@ template <class T, size_t i> mvec<T, i>& mvec<T, i>::operator%=(const mvec<T, i>
 
 	return *this;
 }
+

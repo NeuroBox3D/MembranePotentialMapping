@@ -2,6 +2,275 @@
 
 using namespace vug;
 
+template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
+		const double node[], const double cutoff, const int k) {
+	// need at least four nearest neighbors for bilinear interpolation
+	if (k < 4)
+		return vm_t(timestep, node).getVm();
+
+	double Vm_intp = 0.0;
+
+	uGPoint<T> nearest = vm_t(timestep, node);
+	std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
+
+	if (nearestPoints[0].getVm() > cutoff)
+		nearestPoints = vm_t_k(timestep, node, k);
+	else
+		return nearestPoints[0].getVm();
+
+	mvecd3 u; // query point
+
+	for (int i = 0; i < 3; i++)
+		u.push_back(node[i]);
+
+	typedef typename std::vector<sPoint<T> >::const_iterator SPIT;
+
+	double current_cutoff = cutoff;
+
+	for (SPIT it1 = nearestPoints.begin(); it1 < nearestPoints.end(); it1++)
+		for (SPIT it2 = nearestPoints.begin(); it2 < nearestPoints.end(); it2++)
+			for (SPIT it3 = nearestPoints.begin(); it3 < nearestPoints.end();
+					it3++)
+				for (SPIT it4 = nearestPoints.begin();
+						it4 < nearestPoints.end(); it4++) {
+					if (it1 != it2 != it3 != it4) {
+						std::vector<T> coords1 = (*it1).getCoords();
+						std::vector<T> coords2 = (*it2).getCoords();
+						std::vector<T> coords3 = (*it3).getCoords();
+						std::vector<T> coords4 = (*it4).getCoords();
+						mvecd3 Q11(coords1);
+						mvecd3 Q12(coords2);
+						mvecd3 Q21(coords3);
+						mvecd3 Q22(coords4);
+
+						mvecd3 c1 = Q11 - Q12;
+						mvecd3 c2 = Q11 - Q21;
+						mvecd3 c3 = Q11 - Q22;
+						std::vector<mvecd3> mvecs;
+						mvecs.push_back(c1);
+						mvecs.push_back(c2);
+						mvecs.push_back(c3);
+
+						// iff all 4 points lay in one plane, then interpolate
+						if (mvecd3::det(mvecs) != 0) {
+
+							// construct a "Hilfsgerade"
+							mvecd3 p = mvecs[0];
+							mvecd3 q = p - mvecs[1];
+							mvecd3 r = p - mvecs[2];
+
+							mvecd3 n = r % q;
+							mvecd3 o = n - p;
+
+
+							double rhs = -(p * n);
+							double lhs = o * p;
+
+							double sigma = rhs / lhs;
+
+							mvecd3 mysigma;
+							for (size_t t = 0; t < 3; t++)
+								mysigma.push_back(sigma * n[t]);
+
+							mvecd3 pointOnPlane = u + mysigma; // Lotfußpunkt on the plane, orthogole Projektion
+
+							double dist = (pointOnPlane - u).norm(EUCLIDEAN);
+
+							if (dist < current_cutoff) {
+								// project L onto line Q12-Q22 => yields R1
+								// project L onto line Q11-Q21 => yields R2
+
+								// point 1
+								double c_norm = 0;
+								double a_norm = 0;
+								double local_dist = 0;
+								double r_star = 0;
+								double d_minus = 0;
+								double r_minus = 0;
+								double d_plus = 0;
+								double d_sum = 0;
+								double local_rhs = 0;
+								double local_lhs = 0;
+
+								mvecd3 a = Q12 - Q22;
+								mvecd3 b = pointOnPlane - Q22;
+								mvecd3 c = a % b;
+
+								c_norm = c.norm(EUCLIDEAN);
+								a_norm = a.norm(EUCLIDEAN);
+								local_dist = (c_norm / a_norm);
+								local_rhs = a * Q22;
+								local_lhs = a * a;
+								r_star = -rhs / lhs;
+
+								mvecd3 pointOnG;
+								mvecd3 R = std::vector<double>(3, r_star);
+
+								pointOnG = Q22 + (R % a);
+
+								mvecd3 d_minus_v = Q22 - pointOnG;
+								mvecd3 d_plus_v = pointOnG - Q12;
+								mvecd3 d_sum_v = Q22 - Q12;
+
+								d_minus = d_minus_v.norm(EUCLIDEAN);
+								d_plus = d_plus_v.norm(EUCLIDEAN);
+								d_sum = d_sum_v.norm(EUCLIDEAN);
+
+								// point 2
+								mvecd3 R1 = pointOnG;
+								a = Q11 - Q21;
+								b = pointOnPlane - Q21;
+								c = a % b;
+
+								c_norm = c.norm(EUCLIDEAN);
+								a_norm = a.norm(EUCLIDEAN);
+								local_dist = (c_norm / a_norm);
+								local_rhs = a * Q21;
+								local_lhs = a * a;
+								r_star = -rhs / lhs;
+
+								R = std::vector<double>(3, r_star);
+
+								pointOnG = Q21 + (R % a);
+
+								d_minus_v = Q21 - pointOnG;
+								d_plus_v = pointOnG - Q11;
+								d_sum_v = Q21 - Q11;
+
+								d_minus = d_minus_v.norm(EUCLIDEAN);
+								d_plus = d_plus_v.norm(EUCLIDEAN);
+								d_sum = d_sum_v.norm(EUCLIDEAN);
+
+								mvecd3 R2 = pointOnG;
+
+								// calculates bilinearly interpolated membrane potential
+								double r1 = (Q12 - R2).norm(EUCLIDEAN)
+										/ (Q12 - Q22).norm(EUCLIDEAN)
+										* (*it1).getVm();
+								r1 += (Q22 - R2).norm(EUCLIDEAN)
+										/ (Q12 - Q22).norm(EUCLIDEAN)
+										* (*it3).getVm();
+
+								double r2 = (Q12 - R2).norm(EUCLIDEAN)
+										/ (Q12 - Q22).norm(EUCLIDEAN)
+										* (*it2).getVm();
+								r2 += (Q22 - R2).norm(EUCLIDEAN)
+										/ (Q12 - Q22).norm(EUCLIDEAN)
+										* (*it4).getVm();
+
+								double r3 = (R1 - R2).norm(EUCLIDEAN);
+								double l1 = (pointOnPlane - R1).norm(EUCLIDEAN);
+								double l2 = (pointOnPlane - R2).norm(EUCLIDEAN);
+
+								Vm_intp = l1 / r3 * r1 + l2 / r3 * r2;
+								current_cutoff = dist;
+							}
+						}
+					}
+				}
+
+	return Vm_intp;
+}
+
+template<class T> const double Vm2uG<T>::interp_lin_vms(const T& timestep,
+		const double node[], const double cutoff, const int k) {
+
+	// need at least two nearest neighbors!
+	if (k < 2)
+		return vm_t(timestep, node).getVm();
+
+	double Vm_intp = 0.0;
+
+	uGPoint<T> nearest = vm_t(timestep, node);
+	std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
+
+	if (nearestPoints[0].getVm() > cutoff)
+		nearestPoints = vm_t_k(timestep, node, k);
+	else
+		return nearestPoints[0].getVm();
+
+	mvecd3 u;
+
+	for (int i = 0; i < 3; i++)
+		u.push_back(node[i]);
+
+	double current_cutoff = cutoff;
+	double c_norm;
+	double a_norm;
+	double dist;
+	double rhs;
+	double lhs;
+	double r_star;
+	double d_minus;
+	double d_plus;
+	double d_sum;
+
+	typedef typename std::vector<sPoint<T> >::const_iterator SPIT;
+	/**
+	 * iterate over all pairwise different points (nearest neighbors) and calculate
+	 * closest point on line ("Lotpunkt") w. r. t. the query point (node).
+	 *
+	 * iterate over all to find best one.
+	 */
+	for (SPIT it1 = nearestPoints.begin(); it1 < nearestPoints.end(); it1++) {
+		for (SPIT it2 = nearestPoints.begin(); it2 < nearestPoints.end();
+				it2++) {
+			/*
+			 * calculate distance to the "Lotpunkt" (nearest point on line G)
+			 * w. r. t. the query point (node)
+			 */
+			if (it1 != it2) {
+				sPoint<T> t1 = *it1;
+				mvecd3 m1 = t1.getCoordinates();
+				sPoint<T> t2 = *it2;
+				mvecd3 m2 = t2.getCoordinates();
+				mvecd3 a = m2 - m1;
+				mvecd3 b = u - m1;
+				mvecd3 c = a % b;
+
+				c_norm = c.norm(EUCLIDEAN);
+				a_norm = a.norm(EUCLIDEAN);
+				dist = (c_norm / a_norm);
+
+				/**
+				 * construct now the line through the "Ortsvektor" m1
+				 * and the "Richtungsvektor" a. g: m1 + R * a
+				 *
+				 * calculate the scalar lambda "R" which gives us the
+				 * the coordinates of the point ("Lotpunkt") on line G
+				 */
+				if (areSame(dist, current_cutoff)) {
+
+					std::cout << "Point found!" << std::endl;
+
+					rhs = a * m1;
+					lhs = a * a;
+					r_star = -rhs / lhs;
+
+					mvecd3 pointOnG;
+					mvecd3 R = std::vector<double>(3, r_star);
+
+					pointOnG = m1 + (R % a);
+
+					mvecd3 d_minus_v = m1 - pointOnG;
+					mvecd3 d_plus_v = pointOnG - m2;
+					mvecd3 d_sum_v = m1 - m2;
+
+					d_minus = d_minus_v.norm(EUCLIDEAN);
+					d_plus = d_plus_v.norm(EUCLIDEAN);
+					d_sum = d_sum_v.norm(EUCLIDEAN);
+
+					Vm_intp = 0.0;
+					Vm_intp += (d_minus / d_sum) * (t1.getVm());
+					Vm_intp += (d_plus / d_sum) * (t2.getVm());
+					current_cutoff = dist;
+				}
+			}
+		}
+	}
+	return Vm_intp;
+}
+
 /* Vm2uG {{{ */
 template <class T> Vm2uG<T>::Vm2uG(string dataFileBaseName_, string dataFileExt_, const bool promise_) {
    dim = 3;

@@ -13,7 +13,6 @@
 #include <numeric>
 #include "common_typedefs.h"
 
-// TODO: introduce namespace for mvec
 template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 		public:
@@ -24,6 +23,9 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 			// default destructor
 			~mvec();
+
+			// determinant
+			static const double det(const std::vector<mvec<T, i> >& mvecs);
 
 			// norm
 			const double norm(NORM) const;
