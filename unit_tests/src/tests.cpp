@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE(test_assignment) {
 	a.push_back(2.0);
 	mvec<double, 3> m1 = a;
 
-	for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 	BOOST_REQUIRE_CLOSE(*cit, 2.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment<<");
@@ -285,10 +285,10 @@ BOOST_AUTO_TEST_CASE(test_assignment_plus) {
 
 	m2 += m1;
 
-	for (typename std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 3.0, SMALL);
 
-	for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 2.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment_plus<<");
@@ -310,10 +310,10 @@ BOOST_AUTO_TEST_CASE(test_assignment_minus) {
 
 	m1 -= m2;
 
-	for (typename std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
 
-	for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment_minus<<");
@@ -335,10 +335,10 @@ BOOST_AUTO_TEST_CASE(test_assignment_vec) {
 
 	m1 %= m2;
 
-	for (typename std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
 
-	for (typename std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 		BOOST_CHECK_CLOSE(*cit, 0.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment_vec<<");
