@@ -52,7 +52,7 @@ endif(NOT ANNLIB)
 
 find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
 if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the specified path: " ${ANNLIB}/lib)
+	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
 else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	include_directories(${ANNLIB}/include)		
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")

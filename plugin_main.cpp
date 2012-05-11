@@ -40,7 +40,7 @@ extern "C" UG_API void InitUGPlugin(ug::bridge::Registry* reg, string parentGrou
    reg->add_class_<TBG>("BorgGraham", grp)
        .add_constructor()
        .add_method("install_can_gates", &TBG::install_can_gates, grp)
-       .add_method("get_current", &TBG::timestepping_of_gates_and_calc_current, grp)
+    //   .add_method("get_current", &TBG::timestepping_of_gates_and_calc_current, grp)
        .add_method("calc_current_at_start", &TBG::calc_current_at_start, grp)
        .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp);
 }
