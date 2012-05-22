@@ -20,7 +20,8 @@
 #include "bg_simple/bg.h"
 #endif
 
-extern "C" UG_API void InitUGPlugin(ug::bridge::Registry* reg, string parentGroup) {
+extern "C" UG_API void
+InitUGPlugin_MembranePotentialMappingPlugin(ug::bridge::Registry* reg, string parentGroup) {
    // group to which the plugin shall belong
    std::string grp(parentGroup); grp.append("Neuro/");
 
