@@ -27,8 +27,8 @@
 #include "../../common_typedefs.h"
 
 using namespace boost::unit_test;
-using namespace vug;
-using namespace bg;
+using namespace ug::vug;
+using namespace ug::bg;
 using std::string;
 
 /**

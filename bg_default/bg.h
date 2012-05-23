@@ -37,6 +37,7 @@
 
 using namespace std;
 
+namespace ug {
 namespace bg {
 
 class BG
@@ -74,6 +75,7 @@ private:
    bool inst_cat_gates;
 };
 }	 
+}
 
 #endif
 

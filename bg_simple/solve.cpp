@@ -25,7 +25,7 @@
 #include <assert.h>
 #include "bg.h"
 
-using namespace bg;
+using namespace ug::bg;
 double solve_gating::I( double x, double y, double t )
 {
     double curr = - g * pow( x, xp ) * pow( y, yp ) * ( BG::Voltage(t) - V_ret );    

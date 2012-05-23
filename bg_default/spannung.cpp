@@ -22,7 +22,7 @@
 #include "spannung.h"
 #include "bg.h"
 
-using namespace bg;
+using namespace ug::bg;
 /////////////////////////////////////////////////////////////////////////////
 
 double BG::Voltage( double myVm ) // time in ms!!!!

@@ -14,11 +14,13 @@
 #include <string>
 
 #include "vm2ug.h"
-#ifdef DEFAULT
+#ifdef MPMDEFAULT
 #include "bg_default/bg.h"
 #else
 #include "bg_simple/bg.h"
 #endif
+
+using namespace ug;
 
 extern "C" UG_API void
 InitUGPlugin_MembranePotentialMappingPlugin(ug::bridge::Registry* reg, string parentGroup) {

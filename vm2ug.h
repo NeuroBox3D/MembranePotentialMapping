@@ -13,6 +13,8 @@
 
 /* }}} */
 
+// start namespace ug (ug)
+namespace ug {
 /* Start namespace {{{ */
 namespace vug {
 /* }}} */
@@ -345,6 +347,8 @@ template <class T> class uGPoint {
 
 /* Footer {{{ */
 /* End namespace {{{ */
+}
+// end namespace ug (ug)
 }
 /* }}} */
 

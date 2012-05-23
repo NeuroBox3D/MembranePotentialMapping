@@ -20,7 +20,7 @@
 
 #include "bg.h"
 
-using namespace bg;
+using namespace ug::bg;
 int BG::ap_interval_duration_in_ms = 10;
 /////////////////////////////////////////////////////////////////////////////
 bool BG::installed_cal_gates() {

@@ -28,7 +28,7 @@
 
 using namespace std;
 
-using namespace bg;
+using namespace ug::bg;
 /////////////////////////////////////////////////////////////////////////////
 
 double BG::timestepping_of_gates_and_calc_current( double time, double delta_t )

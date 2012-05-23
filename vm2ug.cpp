@@ -17,6 +17,8 @@
 using namespace std;
 /* }}} */
 
+// start namespace ug (ug)
+namespace ug {
 /* Template declarations for vug {{{ */
 namespace vug {
 
@@ -69,5 +71,7 @@ template const double Vm2uG<int>::interp_lin_vms(const int& timestep, const doub
 template const double Vm2uG<double>::interp_lin_vms(const double& timestep, const double node[], const double cutoff, const int k);
 template const double Vm2uG<string>::interp_lin_vms(const string& timestep, const double node[], const double cutoff, const int k);
 
+}
+// end namespace ug (ug)
 }
 /* }}} */
