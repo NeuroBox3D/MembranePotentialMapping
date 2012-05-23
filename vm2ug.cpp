@@ -20,7 +20,7 @@ using namespace std;
 // start namespace ug (ug)
 namespace ug {
 /* Template declarations for vug {{{ */
-namespace vug {
+namespace membrane_potential_mapping {
 
 #include "vm2ug_impl.h"
 

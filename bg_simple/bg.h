@@ -38,6 +38,7 @@
 using namespace std;
 
 namespace ug {
+namespace membrane_potential_mapping {
 namespace bg {
 
 class BG
@@ -74,6 +75,7 @@ private:
    bool inst_cat_gates;
 };
 }	 
+}
 }
 #endif
 

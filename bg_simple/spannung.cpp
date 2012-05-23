@@ -22,7 +22,7 @@
 #include "spannung.h"
 #include "bg.h"
 
-using namespace ug::bg;
+using namespace ug::membrane_potential_mapping::bg;
 /////////////////////////////////////////////////////////////////////////////
 
 double BG::Voltage( double time_glob ) // time in ms!!!!

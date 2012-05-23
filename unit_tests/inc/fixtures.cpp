@@ -20,17 +20,17 @@
 using namespace boost::unit_test;
 
 template <class T> struct FixtureVUG {
-	ug::vug::Vm2uG<T>* vm2ug;
+	ug::membrane_potential_mapping::Vm2uG<T>* vm2ug;
 
-	FixtureVUG() : vm2ug(new ug::vug::Vm2uG<T>("","")) { BOOST_TEST_MESSAGE("setup fixture >>vm2ug<<"); }
+	FixtureVUG() : vm2ug(new ug::membrane_potential_mapping::Vm2uG<T>("","")) { BOOST_TEST_MESSAGE("setup fixture >>vm2ug<<"); }
 	~FixtureVUG() { BOOST_TEST_MESSAGE("teardown fixture >>vm2ug<<"); }
 
 };
 
 struct FixtureBG {
-	ug::bg::BG* bg;
+	ug::membrane_potential_mapping::bg::BG* bg;
 
-	FixtureBG() : bg(new ug::bg::BG()) { BOOST_TEST_MESSAGE("setup fixture >>vm2ug<<"); }
+	FixtureBG() : bg(new ug::membrane_potential_mapping::bg::BG()) { BOOST_TEST_MESSAGE("setup fixture >>vm2ug<<"); }
 	~FixtureBG() { BOOST_TEST_MESSAGE("teardown fixture >>bg<<"); }
 
 };

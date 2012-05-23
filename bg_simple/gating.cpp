@@ -22,7 +22,7 @@
 #include "spannung.h"
 #include "bg.h"
 
-using namespace ug::bg;
+using namespace ug::membrane_potential_mapping::bg;
 double gating_parameter::defect( double x_ip1_k, double x_i, double V,  double Delta_i )
 {
 	return - ( ( x_ip1_k - x_i ) * tau_x( V ) 

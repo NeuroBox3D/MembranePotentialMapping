@@ -28,7 +28,7 @@ InitUGPlugin_MembranePotentialMappingPlugin(ug::bridge::Registry* reg, string pa
    std::string grp(parentGroup); grp.append("Neuro/");
 
    // register functionalities of the Vm2uG tool
-   typedef vug::Vm2uG<std::string> TVm2uG;
+   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 
    reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
        .add_constructor<void (*)(std::string, std::string, bool)>("Timestep-File#File-Extension#NodesCanChange")
@@ -38,7 +38,7 @@ InitUGPlugin_MembranePotentialMappingPlugin(ug::bridge::Registry* reg, string pa
        .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, grp);
 
    // register functionalities of the Borg Graham model
-   typedef bg::BG TBG;
+   typedef membrane_potential_mapping::bg::BG TBG;
 
    reg->add_class_<TBG>("BorgGraham", grp)
        .add_constructor()

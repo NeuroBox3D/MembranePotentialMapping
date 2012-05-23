@@ -16,7 +16,7 @@
 // start namespace ug (ug)
 namespace ug {
 /* Start namespace {{{ */
-namespace vug {
+namespace membrane_potential_mapping {
 /* }}} */
 
 /* Macros {{{ */

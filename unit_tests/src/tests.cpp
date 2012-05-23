@@ -27,9 +27,11 @@
 #include "../../common_typedefs.h"
 
 using namespace boost::unit_test;
-using namespace ug::vug;
-using namespace ug::bg;
+using namespace ug::membrane_potential_mapping;
+using namespace ug::membrane_potential_mapping::bg;
 using std::string;
+using ug::membrane_potential_mapping::SMALL;
+using ug::membrane_potential_mapping::VERY_SMALL;
 
 /**
  * BOOST Test Suite for testing of mvec class

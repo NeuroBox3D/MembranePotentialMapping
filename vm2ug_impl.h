@@ -1,7 +1,7 @@
 
 #include "vm2ug.h"
 
-using namespace ug::vug;
+using namespace ug::membrane_potential_mapping;
 
 template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 		const double node[], const double cutoff, const int k) {

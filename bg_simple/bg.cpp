@@ -20,7 +20,7 @@
 
 #include "bg.h"
 
-using namespace ug::bg;
+using namespace ug::membrane_potential_mapping::bg;
 int BG::ap_interval_duration_in_ms = 10;
 /////////////////////////////////////////////////////////////////////////////
 

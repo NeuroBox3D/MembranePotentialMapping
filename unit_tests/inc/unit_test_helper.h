@@ -11,6 +11,9 @@
 #include <limits>
 #include <cmath>
 
+namespace ug {
+namespace membrane_potential_mapping {
+
 static const double SMALL = 0.0001;
 static const double VERY_SMALL = 0.0000001;
 
@@ -25,4 +28,6 @@ const bool SameDoubles(const double& a, const double& b) {
    return std::fabs(a - b) < std::numeric_limits<double>::epsilon();
 }
 
+}
+}
 #endif /* _UNIT_TEST_HELPER_H_ */
