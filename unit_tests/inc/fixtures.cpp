@@ -11,7 +11,7 @@
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
 
-#ifdef DEFAULT
+#ifdef MPMDEFAULT
 #include "../../bg_default/bg.h"
 #else
 #include "../../bg_simple/bg.h"

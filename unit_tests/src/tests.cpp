@@ -16,7 +16,7 @@
 #include "../inc/unit_test_helper.h"
 #include "../inc/fixtures.cpp"
 
-#ifdef DEFAULT
+#ifdef MPMDEFAULT
 #include "../../bg_default/bg.h"
 #else
 #include "../../bg_simple/bg.h"
@@ -403,7 +403,7 @@ BOOST_AUTO_TEST_CASE(install_gates) {
 }
 
 // test check_fluxes only if simple case of fluxes is used and hence we know the outcome
-#ifndef DEFAULT
+#ifndef MPMDEFAULT
 BOOST_AUTO_TEST_CASE(check_fluxes) {
 	BOOST_MESSAGE("Starting test >>flux<<");
 	BG* b = new BG();
