@@ -13,6 +13,7 @@
 #include <numeric>
 #include "common_typedefs.h"
 
+
 template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 
 		public:
@@ -73,6 +74,7 @@ template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 };
 
 #include "mvec_impl.h"
+
 
 #endif /* _MVEC_H_ */
 
