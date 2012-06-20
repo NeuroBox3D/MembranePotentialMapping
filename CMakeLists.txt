@@ -65,7 +65,7 @@ if(MPMTestsuite)
 endif(MPMTestsuite)
 
 # create a shared library from the sources and link it against ug4.
-if(STATIC)
+if(buildEmbeddedPlugins)
 # decide which build of the plugin you want to build
     if(${MPMDefault} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_MPMDefault})
@@ -76,7 +76,7 @@ if(STATIC)
 	if(MPMTestsuite)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s)
 	endif(MPMTestsuite)
-else(STATIC)
+else(buildEmbeddedPlugins)
 # decide which build of the plugin you want to build
     if(${MPMDefault} STREQUAL "ON")
         add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_default})
@@ -90,6 +90,6 @@ else(STATIC)
 	if(MPMTestsuite)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
 	endif(MPMTestsuite)
-endif(STATIC)
+endif(buildEmbeddedPlugins)
 
 # ENDOF CMAKE
