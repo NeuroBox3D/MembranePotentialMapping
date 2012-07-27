@@ -1,11 +1,13 @@
 /**
- * author: stephanmg
- * date: 04m07d12y
- * file: common_typedefs.h
+ * \file common_typedefs.h
+ * \brief common typedefs. TODO: move to namespace ug::membrane_potential_mapping
+ *
+ * \author Stephan Grein
+ * \date Created on: 07 April, 2012
  */
 
-#ifndef _COMMON_TYPEDEFS_H_
-#define _COMMON_TYPEDEFS_H_
+#ifndef __H__COMMON_TYPEDEFS__
+#define __H__COMMON_TYPEDEFS__
 
 #include <vector>
 #include <cstddef>
@@ -25,4 +27,4 @@ enum NORM {
 	INF=0, MANHATTAN, EUCLIDEAN
 };
 
-#endif /* _COMMON_TYPEDEFS_H_ */
+#endif /* __H__COMMON_TYPEDEFS__ */

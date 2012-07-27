@@ -1,4 +1,3 @@
-
 #include "vm2ug.h"
 
 using namespace ug::membrane_potential_mapping;
@@ -804,5 +803,4 @@ template <class T> ostream& operator<<(ostream& output, const uGPoint<T>& p) {
    output << "****************************************************************************************" << endl;
    return output;
    }
-/* }}} */
 

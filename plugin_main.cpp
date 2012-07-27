@@ -45,7 +45,7 @@ extern "C" UG_API void InitUGPlugin_MembranePotentialMapping(ug::bridge::Registr
 		   .add_method("get_potential_lin", &TVm2uG::get_potential_lin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
 		   .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default");
 
-	   /** registry BG (\see bg.h), but soon obsolete */
+	   /** registry BG (\see bg.h), but soon obsolete. TODO: remove BG (see meeting.pdf) */
 	   reg->add_class_<TBG>("BorgGraham", grp)
 		   .add_constructor()
 		   .add_method("install_can_gates", &TBG::install_can_gates, grp)

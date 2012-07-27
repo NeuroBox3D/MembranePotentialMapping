@@ -1,16 +1,20 @@
 /*
- * mvec_impl.h
+ * \file mvec_impl.h
+ * \brief implementation of mvec (\see mvec.h)
  *
- *  Created on: Apr 27, 2012
- *      Author: stephan grein
+ *  \date Created on: Apr 27, 2012
+ *  \author Stephan Grein
  */
 
-#include "mvec.h"
-#include "common_typedefs.h"
+// includes
 #include <boost/lexical_cast.hpp>
 #include <numeric> // needed for std::inner_product
 #include <common/log.h>
 #include <iostream>
+
+#include "mvec.h"
+#include "common_typedefs.h"
+
 
 // default constructor
 template <class T, size_t i> mvec<T, i>::mvec() {
@@ -221,4 +225,3 @@ template <class T, size_t i> mvec<T, i>& mvec<T, i>::operator%=(const mvec<T, i>
 
 	return *this;
 }
-
