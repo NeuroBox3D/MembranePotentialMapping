@@ -1,14 +1,14 @@
-/*
- * tests.cpp
+/**
+ * \file tests.cpp
+ * \brief boost unit test for the membrane_potenial_mapping ug plugin
  *
- * purpose: creates a hierachically testing tree with three leafs (mvec, vm2ug and bg)
- *
- *  Created on: Apr 27, 2012
- *      Author: stephan grein
+ * \date created on Apr 27, 2012
+ * \author Stephan Grein
  */
 
-#define BOOST_TEST_MODULE tests_vm2ug
+#define BOOST_TEST_MODULE __CPP__UNIT_TESTS__UG__PLASMA_MEMBRANE__
 
+// includes
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
 #include <cmath>
@@ -26,6 +26,8 @@
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
 
+
+// using directives
 using namespace boost::unit_test;
 using namespace ug::membrane_potential_mapping;
 using namespace ug::membrane_potential_mapping::bg;
@@ -430,5 +432,9 @@ BOOST_AUTO_TEST_CASE(check_fluxes) {
 }
 #endif
 
-BOOST_AUTO_TEST_SUITE_END();
+// to avoid warning ...
+BOOST_AUTO_TEST_CASE(dummy) {
+	BOOST_CHECK_SMALL(0.0, SMALL);
+}
 
+BOOST_AUTO_TEST_SUITE_END();

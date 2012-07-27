@@ -1,19 +1,22 @@
 ################################################################################
-# MEMBRANE_POTENTIAL_MAPPING ugplugin
+# CMake for the membrane_potential_mapping ug plugin 
 #
 #
-# adopted by sebastian reiter (and martin scherer)
-# created on: 10.02.2012
-# author: smgrein
+# created by: Stephan Grein, adopted by Sebastian Reiter and Martin Scherer
+# on 02. Feb, 2012
+# see: docs for additional informations
 #
 ################################################################################
 
+# minimum required CMake version for project below
 cmake_minimum_required(VERSION 2.6)
 
+# specify project name
 project(MEMBRANE_POTENTIAL_MAPPING)
 
 message(STATUS "Info: Additional options:")
 
+# options for building membrane_potential_mapping
 option(MPMTestsuite "Build MPMTestsuite" ON)
 message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
@@ -23,7 +26,7 @@ message(STATUS "Info: MPMDefault:        "${MPMDefault}" (options are: ON, OFF)"
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
-# sources
+# set the sources 
 set(SOURCES_simple	 plugin_main.cpp
 			         vm2ug.cpp 
 			         bg_simple/bg.cpp
@@ -58,7 +61,7 @@ else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	include_directories(${ANNLIB}/include)		
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
-# decide if you want to build the boost testsuite
+# decide if you want to build the boost testsuite executable (MPMTestsuite)
 if(MPMTestsuite)
 	add_executable(MPMTestsuite ${SOURCES_TEST})
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
@@ -77,7 +80,8 @@ if(buildEmbeddedPlugins)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s)
 	endif(MPMTestsuite)
 else(buildEmbeddedPlugins)
-# decide which build of the plugin you want to build
+
+# decide which style of the plugin you want to build: note soon only one style will be available, BG channels will be put fully into either plasma_membrane or voltage_gated_channels.
     if(${MPMDefault} STREQUAL "ON")
         add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_default})
         add_definitions(-DMPMDEFAULT) 
