@@ -9,11 +9,15 @@
 // includes
 #include <boost/lexical_cast.hpp>
 #include <numeric> // needed for std::inner_product
-#include <common/log.h>
 #include <iostream>
 
 #include "mvec.h"
-#include "common_typedefs.h"
+
+#include <common/log.h>
+
+
+// using directives
+using namespace ug::membrane_potential_mapping;
 
 
 // default constructor

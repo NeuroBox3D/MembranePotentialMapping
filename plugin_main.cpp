@@ -16,6 +16,8 @@
 #include "bg_simple/bg.h"
 #endif
 
+#include <common/log.h>
+
 #include "registry/registry.h"
 #include "registry/error.h"
 #include "common/ug_config.h"
@@ -27,6 +29,7 @@
 // using directives
 using namespace ug;
 
+
 extern "C" UG_API void InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string parentGroup) {
 	try {
 	   // group membership of the membrane_potential_mapping plugin
@@ -35,7 +38,6 @@ extern "C" UG_API void InitUGPlugin_MembranePotentialMapping(ug::bridge::Registr
 	   // typedefs
 	   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 	   typedef membrane_potential_mapping::bg::BG TBG;
-
 
 	   /** registry Vm2uG (\see vm2ug) */
 	   reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)

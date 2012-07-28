@@ -11,7 +11,7 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
-// macros (TODO: let QDIM be set by CMake Option for maximum flexibility)
+// macros (TODO: let QDIM be set by CMake Option for maximum flexibility) -> set QDIM to MPMDim
 #ifndef QDIM
 #define QDIM 3
 #endif
@@ -168,7 +168,7 @@ namespace ug {
 			  uGPoint<T> vm_t(const T& timestep, const double node[]);
 
 			  /**
-			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP. TODO: CMake Option for setting parallelization OFF/ON for maximum flexibility.
+			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP. TODO: CMake Option for setting parallelization OFF/ON for maximum flexibility, add omp pragmas in implementation.
 			   *
 			   * \param[in] timestep the timestep for which a mmebrane potential shall be searched
 			   * \param[in] nodes the query points (cartesian coordinates for grid points from UG)

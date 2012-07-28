@@ -14,14 +14,32 @@ cmake_minimum_required(VERSION 2.6)
 # specify project name
 project(MEMBRANE_POTENTIAL_MAPPING)
 
+# default values
+set(MPMDimDefault 3)
+set(MPMTestsuiteDefault ON)
+set(MPMDefaultDefault ON)
+set(MPMParallelDefault OFF)
+
 message(STATUS "Info: Additional options:")
 
-# options for building membrane_potential_mapping
-option(MPMTestsuite "Build MPMTestsuite" ON)
-message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
+# options for building membrane_potential_mapping (e. g. -DMPMTestsuite=OFF)
+option(MPMTestsuite "Build MPMTestsuite" ${MPMTestsuiteDefault})
+message(STATUS "Info: MPMTestsuite:      "${MPMTestsuiteDefault}" (options are: ON, OFF)")
 
-option(MPMDefault "Build MPMDefault MPM" ON)
-message(STATUS "Info: MPMDefault:        "${MPMDefault}" (options are: ON, OFF)")
+option(MPMDefault "Build MPMDefault    " ${MPMDefaultDefault})
+message(STATUS "Info: MPMDefault:        "${MPMDefaultDefault}" (options are: ON, OFF)")
+
+option(MPMDim  "Build MPMDim:           " ${MPMDimDefault})
+message(STATUS "Info: MPMDim:            "${MPMDimDefault}" (options are: 1, 2, 3)") 
+
+option(MPMParallel "Build MPMParallel:  " ${MPMParallelDefault})
+message(STATUS "Info: MPMParallel:       " ${MPMParallelDefault}" (options are: ON, OFF)")
+
+# variables for control in CMake
+set(MPMDim ${MPMDimDefault})
+set(MPMDefault ${MPMDefaultDefault})
+set(MPMTestsuite ${MPMTestsuiteDefault})
+set(MPMParallel ${MPMParallelDefault})
  
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
@@ -67,6 +85,18 @@ if(MPMTestsuite)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
 endif(MPMTestsuite)
 
+# decide which dimension you want to build (currently only DIM=3 is supported!)
+if (${MPMDim} EQUAL 3)
+    add_definitions(-DMPMDIM=${MPMDim})
+else(${MPMDim} EQUAL 3)
+    message(FATAL_ERROR "ERROR: Can currently only build with dimension 3, not ${MPMDim}.")
+endif(${MPMDim} EQUAL 3)
+
+# decide if you want to build membrane_potential_mapping with OMP support
+if (${MPMParallel})
+    add_definitions(-DMPMOMP)
+endif(${MPMParallel})
+
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
 # decide which build of the plugin you want to build
@@ -81,6 +111,7 @@ if(buildEmbeddedPlugins)
 	endif(MPMTestsuite)
 else(buildEmbeddedPlugins)
 
+
 # decide which style of the plugin you want to build: note soon only one style will be available, BG channels will be put fully into either plasma_membrane or voltage_gated_channels.
     if(${MPMDefault} STREQUAL "ON")
         add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_default})
@@ -94,6 +125,8 @@ else(buildEmbeddedPlugins)
 	if(MPMTestsuite)
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
 	endif(MPMTestsuite)
+	
+	
 endif(buildEmbeddedPlugins)
 
 # ENDOF CMAKE

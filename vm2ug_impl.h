@@ -1,6 +1,20 @@
-#include "vm2ug.h"
+/*
+ * \file vm2ug_impl.h
+ * \brief implementation of vm2ug (\see vm2ug.h)
+ *
+ * \date Created on: Apr 27, 2012
+ * \author Stephan Grein
+ */
 
+// includes
+#include "vm2ug.h"
+#include "mvec.h"
+#include "common_typedefs.h"
+
+
+// using directives
 using namespace ug::membrane_potential_mapping;
+
 
 template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 		const double node[], const double cutoff, const int k) {
@@ -802,5 +816,4 @@ template <class T> ostream& operator<<(ostream& output, const uGPoint<T>& p) {
    for (i=0; i < p.nearestNeighbors.size(); i++) output << "nearest neighbor #" << i << ": " << p.nearestNeighbors[i] << endl;
    output << "****************************************************************************************" << endl;
    return output;
-   }
-
+}
