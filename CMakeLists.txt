@@ -15,31 +15,25 @@ cmake_minimum_required(VERSION 2.6)
 project(MEMBRANE_POTENTIAL_MAPPING)
 
 # default values
-set(MPMDimDefault 3)
-set(MPMTestsuiteDefault ON)
-set(MPMDefaultDefault ON)
-set(MPMParallelDefault OFF)
+set(MPMDim 3)
+set(MPMTestsuite ON)
+set(MPMDefault ON)
+set(MPMParallel OFF)
 
-message(STATUS "Info: Additional options:")
+message(STATUS "Info: Additional options for membrane_potential_mapping:")
 
 # options for building membrane_potential_mapping (e. g. -DMPMTestsuite=OFF)
-option(MPMTestsuite "Build MPMTestsuite" ${MPMTestsuiteDefault})
-message(STATUS "Info: MPMTestsuite:      "${MPMTestsuiteDefault}" (options are: ON, OFF)")
+option(MPMTestsuite "Build MPMTestsuite" ${MPMTestsuite})
+message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
 
-option(MPMDefault "Build MPMDefault    " ${MPMDefaultDefault})
-message(STATUS "Info: MPMDefault:        "${MPMDefaultDefault}" (options are: ON, OFF)")
+option(MPMDefault "Build MPMDefault    " ${MPMDefault})
+message(STATUS "Info: MPMDefault:        "${MPMDefault}" (options are: ON, OFF)")
 
-option(MPMDim  "Build MPMDim:           " ${MPMDimDefault})
-message(STATUS "Info: MPMDim:            "${MPMDimDefault}" (options are: 1, 2, 3)") 
+option(MPMDim  "Build MPMDim:           " ${MPMDim})
+message(STATUS "Info: MPMDim:            "${MPMDim}" (options are: 1, 2, 3)") 
 
-option(MPMParallel "Build MPMParallel:  " ${MPMParallelDefault})
-message(STATUS "Info: MPMParallel:       " ${MPMParallelDefault}" (options are: ON, OFF)")
-
-# variables for control in CMake
-set(MPMDim ${MPMDimDefault})
-set(MPMDefault ${MPMDefaultDefault})
-set(MPMTestsuite ${MPMTestsuiteDefault})
-set(MPMParallel ${MPMParallelDefault})
+option(MPMParallel "Build MPMParallel:  " ${MPMParallel})
+message(STATUS "Info: MPMParallel:       " ${MPMParallel}" (options are: ON, OFF)")
  
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
@@ -80,10 +74,10 @@ else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 # decide if you want to build the boost testsuite executable (MPMTestsuite)
-if(MPMTestsuite)
+if(${MPMTestsuite} STREQUAL "ON")
 	add_executable(MPMTestsuite ${SOURCES_TEST})
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
-endif(MPMTestsuite)
+endif(${MPMTestsuite} STREQUAL "ON")
 
 # decide which dimension you want to build (currently only DIM=3 is supported!)
 if (${MPMDim} EQUAL 3)
@@ -93,9 +87,9 @@ else(${MPMDim} EQUAL 3)
 endif(${MPMDim} EQUAL 3)
 
 # decide if you want to build membrane_potential_mapping with OMP support
-if (${MPMParallel})
+if (${MPMParallel} STREQUAL "ON")
     add_definitions(-DMPMOMP)
-endif(${MPMParallel})
+endif(${MPMParallel} STREQUAL "ON")
 
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
@@ -106,9 +100,9 @@ if(buildEmbeddedPlugins)
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
 	endif(${MPMDefault})
 	
-	if(MPMTestsuite)
+	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s)
-	endif(MPMTestsuite)
+	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
 
 
@@ -122,10 +116,9 @@ else(buildEmbeddedPlugins)
     
 	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS})
 	
-	if(MPMTestsuite)
+	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
-	endif(MPMTestsuite)
-	
+	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)
 
