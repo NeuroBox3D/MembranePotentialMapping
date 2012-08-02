@@ -1,21 +1,21 @@
 /**
  * \file vm2ug.h
- * \brief header for the membrane_potential_mapping suite
+ * \brief header for the membrane_potential_mapping
  * \see docs for additional information
  *
  * \author Stephan Grein
  * \date July, 2011
+ *
+ * Please note: migrate to UG's kd-tree on demand.
  */
-
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
-// macros (TODO: let QDIM be set by CMake Option for maximum flexibility) -> set QDIM to MPMDim
+// macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.)
 #ifndef QDIM
-#define QDIM 3
+#define QDIM 3 // MPMDIM:=3
 #endif
-
 
 // includes
 #include <vector>
@@ -168,7 +168,7 @@ namespace ug {
 			  uGPoint<T> vm_t(const T& timestep, const double node[]);
 
 			  /**
-			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP. TODO: CMake Option for setting parallelization OFF/ON for maximum flexibility, add omp pragmas in implementation.
+			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP.
 			   *
 			   * \param[in] timestep the timestep for which a mmebrane potential shall be searched
 			   * \param[in] nodes the query points (cartesian coordinates for grid points from UG)

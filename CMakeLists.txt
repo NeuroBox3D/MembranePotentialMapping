@@ -88,7 +88,12 @@ endif(${MPMDim} EQUAL 3)
 
 # decide if you want to build membrane_potential_mapping with OMP support
 if (${MPMParallel} STREQUAL "ON")
-    add_definitions(-DMPMOMP)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        message(FATAL_ERROR "ERROR: Clang currently does not support OpenMP.")
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        SET(CMAKE_CXX_FLAGS “${CMAKE_CXX_FLAGS} -fopenmp”)
+        SET(CMAKE_C_FLAGS “${CMAKE_C_FLAGS} -fopenmp”)
+    endif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif(${MPMParallel} STREQUAL "ON")
 
 # create a shared library from the sources and link it against ug4.

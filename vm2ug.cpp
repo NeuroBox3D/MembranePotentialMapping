@@ -1,3 +1,12 @@
+/**
+ * \file vm2ug.cpp
+ * \brief forward declarations for vm2ug
+ * \see vm2ug.h
+ *
+ * \date Created on July, 2011
+ * \author Stephan Grein
+ */
+
 // includes
 #include <cstdlib>
 #include <cstring>

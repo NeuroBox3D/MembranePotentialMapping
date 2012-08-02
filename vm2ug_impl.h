@@ -281,7 +281,6 @@ template<class T> const double Vm2uG<T>::interp_lin_vms(const T& timestep,
 	return Vm_intp;
 }
 
-/* Vm2uG {{{ */
 template <class T> Vm2uG<T>::Vm2uG(string dataFileBaseName_, string dataFileExt_, const bool promise_) {
    dim = 3;
    timestep = 0;
@@ -469,15 +468,31 @@ template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timeste
    }
 
    if (timestep == this->timestep) {
+   	  #ifdef _OPENMP
+	  #pragma omp parallel
+	  {
+	  #pragma omp for private(i)
+	  #endif
          for (int i=0; i < size; i++) {
             this->kdTree->annkSearch(queryPts[i], this->k, annQueryPtsIdxArray[i], this->annQueryPtsDistsArray[i], this->eps);
          }  
+   	  #ifdef _OPENMP
+	  }
+	  #endif
    } else {
       this->timestep = timestep;
       rebuildTree(timestep);
+      #ifdef _OPENMP
+	  #pragma omp parallel
+      {
+      #pragma omp for private(i)
+      #endif
          for (int i=0; i < size; i++) {
             this->kdTree->annkSearch(queryPts[i], this->k, annQueryPtsIdxArray[i], this->annQueryPtsDistsArray[i], this->eps);
+         }
+      #ifdef _OPENMP
       }
+	  #endif
    }
    
    std::vector<uGPoint<T> > uGs;

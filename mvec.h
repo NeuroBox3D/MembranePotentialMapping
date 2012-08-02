@@ -1,9 +1,11 @@
 /**
  * \file mvec.h
- * \brief vector functionalities for linear and bilinear interpolation of membrane potentials. TODO: migrate to UG vector class on demand
+ * \brief vector functionalities for linear and bilinear interpolation of membrane potentials.
  *
- *  \author: Stephan Grein
- *  \date Created on: Apr 07, 2012
+ * \author: Stephan Grein
+ * \date Created on: Apr 07, 2012
+ *
+ * Please note: migrate to UG's vector class on demand
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
