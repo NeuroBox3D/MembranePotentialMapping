@@ -38,9 +38,15 @@ message(STATUS "Info: MPMParallel:       " ${MPMParallel}" (options are: ON, OFF
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
+# python includes
+include(FindPythonLibs   REQUIRED)
+include(FindPythonInterp REQUIRED)
+include_directories(${PYTHON_INCLUDE_DIRS})
+
 # set the sources 
 set(SOURCES_simple	 plugin_main.cpp
-			         vm2ug.cpp 
+			         vm2ug.cpp
+			         transform.cpp
 			         bg_simple/bg.cpp
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
@@ -49,6 +55,7 @@ set(SOURCES_simple	 plugin_main.cpp
 
 set(SOURCES_default  plugin_main.cpp
                      vm2ug.cpp 
+                     transform.cpp
                      bg_default/spannung.cpp
                      bg_default/my_commands.cpp
                      bg_default/bg.cpp
@@ -106,7 +113,7 @@ if(buildEmbeddedPlugins)
 	endif(${MPMDefault})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s)
+		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s ${PYTHON_LIBRARIES})
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
 
@@ -119,10 +126,10 @@ else(buildEmbeddedPlugins)
         add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_simple})
     endif(${MPMDefault} STREQUAL "ON")
     
-	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS})
+	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4)
+		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4 ${PYTHON_LIBRARIES})
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)

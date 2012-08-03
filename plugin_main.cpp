@@ -15,9 +15,9 @@
 #else
 #include "bg_simple/bg.h"
 #endif
+#include "transform.h"
 
 #include <common/log.h>
-
 #include "registry/registry.h"
 #include "registry/error.h"
 #include "common/ug_config.h"
@@ -38,6 +38,7 @@ extern "C" UG_API void InitUGPlugin_MembranePotentialMapping(ug::bridge::Registr
 	   // typedefs
 	   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 	   typedef membrane_potential_mapping::bg::BG TBG;
+	   typedef membrane_potential_mapping::Transform TTransform;
 
 	   /** registry Vm2uG (\see vm2ug) */
 	   reg->add_class_<TVm2uG>("MembranePotentialMapper", grp)
@@ -53,6 +54,17 @@ extern "C" UG_API void InitUGPlugin_MembranePotentialMapping(ug::bridge::Registr
 		   .add_method("install_can_gates", &TBG::install_can_gates, grp)
 		   .add_method("calc_current_at_start", &TBG::calc_current_at_start, grp)
 		   .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp);
+
+	   /** registry Transform (\see Transform.h) */
+	   	reg->add_class_<TTransform>("Transform", grp)
+	   		.add_constructor<void (*)(std::string)>("hocfile#Delta t|default#steps|default#initial membrane potential|default")
+	   		.add_method("get_hocfile", &TTransform::get_hocfile, "hocfile|default", "", grp)
+	   		.add_method("get_objfile", &TTransform::get_objfile, "objfile|default", "", grp)
+	   	    .add_method("get_xmlfile", &TTransform::get_xmlfile, "xmlfile|default", "", grp)
+	   	    .add_method("get_timestepfile", &TTransform::get_timestepfile, "timestepfile|default", "", grp)
+	   	    .add_method("get_dt", &TTransform::get_dt, "Delta t", "", grp);
+
+
 		} catch (const ug::bridge::UGRegistryError& error) {
 			UG_LOG("### ERROR in UGRegistry: InitUGPlugin_MembranePotentialMappingPlugin failed registering with message: " << error.name << "" << std::endl);
 		}
