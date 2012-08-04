@@ -48,6 +48,11 @@ namespace ug {
 				/**
 				 * \brief extracts the timesteps and the object file (.obj)
 				 *
+				 * \param[in] gen_objfile perform second optional step iff True
+				 *
+				 * first step: extract membrane potentials associated with every timestep in the simulation setup
+				 * second (optional) step: generate .obj file out of .hoc file iff gen_objfile iff True
+				 *
 				 * \return \c return the path to the .obj file
 				 */
 				void extract_timesteps_and_obj(const bool gen_objfile=false);
