@@ -43,6 +43,11 @@ include(FindPythonLibs   REQUIRED)
 include(FindPythonInterp REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
+# boost includes
+find_package(Boost COMPONENTS filesystem REQUIRED)
+find_package(Boost COMPONENTS system REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 # set the sources 
 set(SOURCES_simple	 plugin_main.cpp
 			         vm2ug.cpp
@@ -113,23 +118,23 @@ if(buildEmbeddedPlugins)
 	endif(${MPMDefault})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4_s ${PYTHON_LIBRARIES})
+		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4_s ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES})
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
 
 
 # decide which style of the plugin you want to build: note soon only one style will be available, BG channels will be put fully into either plasma_membrane or voltage_gated_channels.
     if(${MPMDefault} STREQUAL "ON")
-        add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_default})
+        add_library(MembranePotentialMapping SHARED ${SOURCES_default})
         add_definitions(-DMPMDEFAULT) 
     else(${MPMDefault} STREQUAL "ON")
-        add_library(MembranePotentialMappingPlugin SHARED ${SOURCES_simple})
+        add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMDefault} STREQUAL "ON")
     
-	target_link_libraries(MembranePotentialMappingPlugin ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES})
+	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMappingPlugin ug4 ${PYTHON_LIBRARIES})
+		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES})
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)

@@ -49,13 +49,15 @@ namespace ug {
 				 * \brief extracts the timesteps and the object file (.obj)
 				 *
 				 * \param[in] gen_objfile perform second optional step iff True
+				 * \param[in] neugen_executable the location of the neugen executable
+				 * \param[in] neutria_executable the location of the neutria executable
 				 *
 				 * first step: extract membrane potentials associated with every timestep in the simulation setup
 				 * second (optional) step: generate .obj file out of .hoc file iff gen_objfile iff True
 				 *
 				 * \return \c return the path to the .obj file
 				 */
-				void extract_timesteps_and_obj(const bool gen_objfile=false);
+				void extract_timesteps_and_obj(const bool gen_objfile=false, const std::string neugen_executable="NeuGen3D", const std::string neutria_executable="neutria");
 
 				// getter
 				inline std::string& get_hocfile() {

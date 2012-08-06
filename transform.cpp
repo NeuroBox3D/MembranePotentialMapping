@@ -13,6 +13,7 @@
 extern "C" {
 #include "Python.h"
 }
+#include <boost/python.hpp>
 
 #include <exception>
 #include <sstream>
@@ -28,14 +29,32 @@ extern "C" {
 using namespace ug::membrane_potential_mapping;
 
 
-void Transform::extract_timesteps_and_obj(const bool gen_objfile) {
+void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::string neugen_executable, const std::string neutria_executable) {
 	try {
+
+		system("python foo.py");
+
 		// initializes the Python interpreter
 		Py_Initialize();
+		/*PyRun_SimpleString("from time import ctime");
+		PyRun_SimpleString("import sys");*/
 
-		// import statements for python interface to NEURON (TODO: make sure neuron is in the user's path somehow...)
-		PyRun_SimpleString("from neuron import h");
-		PyRun_SimpleString("from neuron import hoc");
+		PyObject * mainModule = PyImport_AddModule("__main__");
+		PyObject * hashlibModule = PyImport_ImportModule("neuron");
+		PyModule_AddObject(mainModule, "neuron", hashlibModule);
+		// fails because we compile with clang, whereas python modules are compiled with gcc!
+		PyRun_SimpleString("print neuron");
+
+		// import statements for python interface to NEURON (TODO: make sure neuron is in the user's path somehow...), check return value of PyRun_SimpleString!
+
+		/*if (PyRun_SimpleString("from neuron import h") == -1)
+			throw;
+
+		if (PyRun_SimpleString("from neuron import hoc") == -1)
+			throw;
+
+
+		// TODO: use PyRun_SimpleFile for whole script (first create file into tmp dir with boost!)
 
 		// command string buffer
 		std::stringstream command;
@@ -106,8 +125,30 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile) {
 		Py_Finalize();
 
 		if (gen_objfile) {
-			// TODO: implement .obj generation with NeuGen and NeuTria
-		}
+			#ifdef __linux__
+				command << "java -jar " << neugen_executable << " " << m_xmlfile << std::endl;
+				system(command.str().c_str());
+				command.clear();
+				// TODO: use boost to create files and a temporary directory! write to file content with ofstream out("file")!
+				command << "cat > neutria.lua <<NEUTRIA" << std::endl
+						<< "neutria.set_hoc_params_low()" << std::endl
+						<< "neutria.open_simple_hoc('test.shoc')" << std::endl
+						<< "neutria.create_grid_hoc_spline()" << std::endl
+						<< "neutria.save_grid_to_file('" << m_objfile << "')" << std::endl
+						<< "NEUTRIA" << std::endl;
+				system(command.str().c_str());
+				command.clear();
+
+				command << neutria_executable << " neutria.lua" << std::endl;
+				system(command.str().c_str());
+				command.clear();
+			#elif __APPLE__
+				std::cout << "APPLE" << std::endl;
+			#elif __WIN32__
+				std::cout << "WIN32" << std::endl;
+			#endif
+ 			// TODO: implement .obj generation with NeuGen and NeuTria
+		}*/
 	} catch (const std::exception& exception) {
 		UG_THROW("Fatal error in Transform::extract_timesteps_and_obj occured. Stopping execution.");
 	}
