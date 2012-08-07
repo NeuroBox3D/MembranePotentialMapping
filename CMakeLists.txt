@@ -5,6 +5,9 @@
 # created by: Stephan Grein, adopted by Sebastian Reiter and Martin Scherer
 # on 02. Feb, 2012
 # see: docs for additional informations
+# prerequisites for usage with VRL/ugshell: 
+#      a working NEURON, NeuGen and NeuTria installation, additional make sure
+#      that ugshell is linked against libpython.so (see ldd ugshell for further)
 #
 ################################################################################
 
@@ -39,8 +42,8 @@ message(STATUS "Info: MPMParallel:       " ${MPMParallel}" (options are: ON, OFF
 include("../../../ug_plugin_cmake_includes.txt")
 
 # python includes
-include(FindPythonLibs   REQUIRED)
-include(FindPythonInterp REQUIRED)
+include(FindPythonLibs  REQUIRED)
+include(FindPythonInterp  REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
 # boost includes
@@ -118,7 +121,7 @@ if(buildEmbeddedPlugins)
 	endif(${MPMDefault})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4_s ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES})
+		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4_s ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
 
@@ -131,10 +134,10 @@ else(buildEmbeddedPlugins)
         add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMDefault} STREQUAL "ON")
     
-	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES})
+	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${PYTHON_LIBRARIES}  ${Boost_LIBRARIES})
+		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)

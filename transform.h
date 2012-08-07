@@ -1,6 +1,6 @@
 /**
  * \file transform.h
- * \brief TODO: preprocessing: transform (.hoc -> .obj) and extract timesteps
+ * \brief header for the preprocessing step: transform (.hoc -> .obj) and extract timesteps
  *
  * \date created on Aug 3, 2012
  * \author Stephan Grein
@@ -11,6 +11,7 @@
 
 // includes
 #include <string>
+#include <boost/filesystem.hpp>
 
 
 // begin namespace ug (ug)
@@ -22,12 +23,14 @@ namespace ug {
 				/**
 				 * \brief default constructor for the Transform class
 				 *
+				 * \param[in] the hoc file which shall be transformed
+				 * \param[in] timestep_directory location to which the timesteps should be written
 				 * \param[in] dt the delta_t (0.1) [ms]
 				 * \param[in] number of steps (100) [#]
 				 * \param[in] vinit the initial membrane potential (= resting potential) (-75.0) [mV]
 				 *
 				 */
-				Transform(const std::string hocfile, const double dt=0.1, const long steps=100, const double vinit=-75.0) : m_hocfile(hocfile), m_objfile(""), m_xmlfile(""), m_timestepfile(""), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
+				Transform(const std::string& hocfile, const std::string& timestep_directory, const double dt=0.1, const long steps=100, const double vinit=-75.0) : m_hocfile(hocfile), m_objfile(boost::filesystem::path(hocfile).replace_extension(".obj").string()), m_xmlfile(boost::filesystem::path(hocfile).replace_extension(".xml").string()), m_timestepdirectory(timestep_directory), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
 				~Transform() { };
 
 				/**
@@ -39,11 +42,7 @@ namespace ug {
 				 *
 				 * \return \c bool true if preparation succeeded
 				 */
-				inline void modify_hoc_setup(const double dt, const long steps, const double vinit)  {
-					m_dt = dt;
-					m_steps = steps;
-					m_vinit = vinit;
-				}
+				void modify_hoc_setup(const double dt, const long steps, const double vinit);
 
 				/**
 				 * \brief extracts the timesteps and the object file (.obj)
@@ -57,26 +56,26 @@ namespace ug {
 				 *
 				 * \return \c return the path to the .obj file
 				 */
-				void extract_timesteps_and_obj(const bool gen_objfile=false, const std::string neugen_executable="NeuGen3D", const std::string neutria_executable="neutria");
+				void extract_timesteps_and_obj(const bool gen_objfile=false, const std::string& neugen_executable="NeuGen3D", const std::string& neutria_executable="neutria");
 
 				// getter
-				inline std::string& get_hocfile() {
+				inline const std::string& get_hocfile() const {
 					return m_hocfile;
 				}
 
-				inline std::string& get_objfile() {
+				inline const std::string& get_objfile() const {
 					return m_objfile;
 				}
 
-				inline std::string& get_xmlfile() {
+				inline const std::string& get_xmlfile() const {
 					return m_xmlfile;
 				}
 
-				inline std::string& get_timestepfile() {
-					return m_timestepfile;
+				inline const std::string& get_timestepdirectory() const {
+					return m_timestepdirectory;
 				}
 
-				inline double get_dt() {
+				inline double get_dt() const {
 					return m_dt;
 				}
 
@@ -85,7 +84,7 @@ namespace ug {
 				std::string m_hocfile;
 				std::string m_objfile;
 				std::string m_xmlfile;
-				std::string m_timestepfile;
+				std::string m_timestepdirectory;
 
 				double m_dt;
 				long m_steps;

@@ -9,6 +9,10 @@
 #define BOOST_TEST_MODULE __CPP__UNIT_TESTS__UG__PLASMA_MEMBRANE__
 
 // includes
+extern "C" {
+#include "Python.h"
+}
+
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
 #include <cmath>
@@ -25,7 +29,7 @@
 #include "../../vm2ug.h"
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
-
+#include "../../transform.h"
 
 // using directives
 using namespace boost::unit_test;
@@ -435,6 +439,14 @@ BOOST_AUTO_TEST_CASE(check_fluxes) {
 // to avoid warning ...
 BOOST_AUTO_TEST_CASE(dummy) {
 	BOOST_CHECK_SMALL(0.0, SMALL);
+
 }
+
+BOOST_AUTO_TEST_CASE(transform) {
+	Py_Initialize();
+    BOOST_REQUIRE_EQUAL(PyRun_SimpleString("from neuron import h"), 0);
+    Py_Finalize();
+}
+
 
 BOOST_AUTO_TEST_SUITE_END();

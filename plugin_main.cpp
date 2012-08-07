@@ -58,13 +58,13 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 
 	   /** registry Transform (\see Transform.h) */
 	   	reg->add_class_<TTransform>("TransformHocToObj", grp)
-	   		.add_constructor<void (*)(std::string)>("hocfile#Delta t|default#steps|default#initial membrane potential|default")
+	   		.add_constructor<void (*)(std::string, std::string)>("hocfile|load-dialog|endings=[\"hoc\"];description=\"Hoc file for transformation\"#timestep directory|load-dialog;description=\"Location to store extracted timesteps\"#Delta t|default#steps|default#initial membrane potential|default")
 	   		.add_method("get_hocfile", &TTransform::get_hocfile, "hocfile|default", "", grp)
 	   		.add_method("get_objfile", &TTransform::get_objfile, "objfile|default", "", grp)
 	   	    .add_method("get_xmlfile", &TTransform::get_xmlfile, "xmlfile|default", "", grp)
-	   	    .add_method("get_timestepfile", &TTransform::get_timestepfile, "timestepfile|default", "", grp)
+	   	    .add_method("get_timestepdirectory", &TTransform::get_timestepdirectory, "timestep directory|default", "", grp)
 	   	    .add_method("get_dt", &TTransform::get_dt, "Delta t", "", grp)
-	   	    .add_method("extract_timesteps_and_obj", &TTransform::extract_timesteps_and_obj, "", "generate object|default#neugen exe|load-dialog|endings=[\"jar\"];description=\"Neugen executable\"#neutria exe|load-dialog;description=\"Neutria executable\"", grp);
+	   	    .add_method("extract_timesteps_and_obj", (void (TTransform::*)(bool, std::string, std::string)) &TTransform::extract_timesteps_and_obj, "", "generate object|default#neugen exe|load-dialog|endings=[\"jar\"];description=\"Neugen executable\"#neutria exe|load-dialog;description=\"Neutria executable\"", grp);
 
 		} catch (const ug::bridge::UGRegistryError& error) {
 			UG_LOG("### ERROR in UGRegistry: InitUGPlugin_MembranePotentialMappingPlugin failed registering with message: " << error.name << "" << std::endl);
