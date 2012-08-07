@@ -6,8 +6,9 @@
 # on 02. Feb, 2012
 # see: docs for additional informations
 # prerequisites for usage with VRL/ugshell: 
-#      a working NEURON, NeuGen and NeuTria installation, additional make sure
-#      that ugshell is linked against libpython.so (see ldd ugshell for further)
+#      a working NEURON, NeuGen and NeuTria installation is needed on runtime,
+#      additional make sure that ugshell is linked against libpython.so 
+#      (see ldd ugshell for further)
 #
 ################################################################################
 
