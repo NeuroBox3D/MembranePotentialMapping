@@ -53,18 +53,18 @@ find_package(Boost COMPONENTS system REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # set the sources 
-set(SOURCES_simple	 plugin_main.cpp
+set(SOURCES_simple	 transform.cpp
 			         vm2ug.cpp
-			         transform.cpp
+			         plugin_main.cpp
 			         bg_simple/bg.cpp
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
                      bg_simple/spannung.cpp)
 
-set(SOURCES_default  plugin_main.cpp
+set(SOURCES_default  transform.cpp
                      vm2ug.cpp 
-                     transform.cpp
+                     plugin_main.cpp
                      bg_default/spannung.cpp
                      bg_default/my_commands.cpp
                      bg_default/bg.cpp
@@ -116,21 +116,21 @@ endif(${MPMParallel} STREQUAL "ON")
 if(buildEmbeddedPlugins)
 # decide which build of the plugin you want to build
     if(${MPMDefault} STREQUAL "ON")
-	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_MPMDefault})
+	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
 	else(${MPMDefault} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
 	endif(${MPMDefault})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4_s ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+		target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
 
 
 # decide which style of the plugin you want to build: note soon only one style will be available, BG channels will be put fully into either plasma_membrane or voltage_gated_channels.
     if(${MPMDefault} STREQUAL "ON")
-        add_library(MembranePotentialMapping SHARED ${SOURCES_default})
-        add_definitions(-DMPMDEFAULT) 
+       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
+       add_definitions(-DMPMDEFAULT) 
     else(${MPMDefault} STREQUAL "ON")
         add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMDefault} STREQUAL "ON")
