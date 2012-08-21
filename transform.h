@@ -1,6 +1,8 @@
 /**
  * \file transform.h
- * \brief header for the preprocessing step: transform (.hoc -> .obj) and extract timesteps
+ * \brief header for the preprocessing step: transform (.hoc -> .obj) and
+ *        extract the associated membrane potential for each timestep
+ *        of the NEURON simulation setup (specified in .hoc).
  *
  * \date created on Aug 3, 2012
  * \author Stephan Grein

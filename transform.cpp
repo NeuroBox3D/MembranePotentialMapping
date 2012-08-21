@@ -44,9 +44,7 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::str
 		// initializes the Python interpreter
 		Py_Initialize();
 
-		// TODO: may fail iff ugshell will not be linked to libpython.so (see ldd ugshell, please?).
 		if (PyRun_SimpleString("from neuron import h") == -1) throw;
-
 		if (PyRun_SimpleString("from neuron import hoc") == -1) throw;
 
 		// command string buffer
@@ -145,5 +143,4 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::str
 	} catch (const std::exception& exception) {
 		UG_THROW("Fatal error in Transform::extract_timesteps_and_obj occured. Stopping execution with:" << exception.what() << std::endl);
 	}
-	// TODO: cleanup temporary files
 }
