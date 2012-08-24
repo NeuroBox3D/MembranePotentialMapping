@@ -119,7 +119,7 @@ if(buildEmbeddedPlugins)
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
 	else(${MPMDefault} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
-	endif(${MPMDefault})
+	endif(${MPMDefault} STREQUAL "ON")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
