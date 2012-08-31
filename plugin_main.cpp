@@ -50,11 +50,17 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 		   .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default");
 
 	   /** registry BG (\see bg.h), but soon obsolete. TODO: remove BG (see meeting.pdf) */
-	   reg->add_class_<TBG>("BorgGraham", grp)
+	   	   reg->add_class_<TBG>("BorgGraham", grp)
 		   .add_constructor()
 		   .add_method("install_can_gates", &TBG::install_can_gates, grp)
+			#ifdef MPMDEFAULT
+		   .add_method("get_current", (double (TBG::*)(const double, const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default#custom membrane potential [mV]|default",  grp)
+			#else
+		   .add_method("get_current", (double (TBG::*)(const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default",  grp)
+			#endif
 		   .add_method("calc_current_at_start", &TBG::calc_current_at_start, grp)
 		   .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp);
+
 
 	   /** registry Transform (\see Transform.h) */
 	   	reg->add_class_<TTransform>("TransformHocToObj", grp)
