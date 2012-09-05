@@ -39,13 +39,15 @@ message(STATUS "Info: MPMDim:            "${MPMDim}" (options are: 1, 2, 3)")
 option(MPMParallel "Build MPMParallel:  " ${MPMParallel})
 message(STATUS "Info: MPMParallel:       " ${MPMParallel}" (options are: ON, OFF)")
  
+message(STATUS "Info: Please build with -DINTERNAL_BOOST=OFF because some functionality isn't provided in the INTERNAL_BOOST revision!")
 # include the definitions and dependencies for ug-plugins.
 include("../../../ug_plugin_cmake_includes.txt")
 
-# python includes
 include(FindPythonLibs  REQUIRED)
 include(FindPythonInterp  REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
+# fixes include issue (Python.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
+include_directories(${PYTHON_INCLUDE_PATH})
 
 # boost includes
 find_package(Boost COMPONENTS filesystem REQUIRED)
@@ -82,6 +84,8 @@ if(NOT ANNLIB)
 endif(NOT ANNLIB)
 
 find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
+# fixes include issue (ANN.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
+include_directories(${ANNLIB}/include)
 
 if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)

@@ -47,7 +47,7 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 		   .add_method("get_potential", &TVm2uG::get_potential, "Potential|default", "x|default#y|default#z|default#Timestep|default")
 		   .add_method("build_tree", &TVm2uG::buildTree, grp)
 		   .add_method("get_potential_lin", &TVm2uG::get_potential_lin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
-		   .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default");
+		   .add_method("get_potential_bililn", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default");
 
 	   /** registry BG (\see bg.h), but soon obsolete. TODO: remove BG (see meeting.pdf) */
 	   	   reg->add_class_<TBG>("BorgGraham", grp)
