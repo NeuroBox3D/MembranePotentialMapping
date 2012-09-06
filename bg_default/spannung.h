@@ -18,10 +18,9 @@
 /*                                                                          */
 /****************************************************************************/
 
-
-#ifndef __spannung_h__
-#define __spannung_h__
+#ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__SPANNUNG__
+#define __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__SPANNUNG__
 
 double Voltage(double myVm);
 
-#endif
+#endif // __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__SPANNUNG__

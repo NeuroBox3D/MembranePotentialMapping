@@ -18,9 +18,8 @@
 /*                                                                          */
 /****************************************************************************/
 
-
-#ifndef __globals_h__
-#define __globals_h__
+#ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__GLOBALS__
+#define __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__GLOBALS__
 
 /* system includes */
 #include <stddef.h>
@@ -95,5 +94,5 @@ private:
 }
 }
 
-#endif
+#endif // __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__GLOBALS__
 

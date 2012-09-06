@@ -21,7 +21,6 @@
 #include "bg.h"
 
 using namespace ug::membrane_potential_mapping::bg;
-//int BG::ap_interval_duration_in_ms = 10;
 /////////////////////////////////////////////////////////////////////////////
 
 void BG::install_cal_gates_cfp(double permeability) {
@@ -130,7 +129,6 @@ BG::BG() {
    conductivity = 1000;
    permeability = 0;
    Neumann_flux = 0;
-  // output_file_current = string("calculated_values.gdt" );
    inst_can_gates = false;
    inst_cal_gates = false;
    inst_cat_gates = false;

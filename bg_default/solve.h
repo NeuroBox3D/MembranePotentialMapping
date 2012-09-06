@@ -18,9 +18,8 @@
 /*                                                                          */
 /****************************************************************************/
 
-
-#ifndef __solve_h__
-#define __solve_h__
+#ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__SOLVE__
+#define __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__SOLVE__
 
 #include "gating.h"
 #include "spannung.h"
@@ -81,4 +80,4 @@ private:
 
 
 
-#endif
+#endif // __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__SOLVE__
