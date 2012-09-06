@@ -53,13 +53,17 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 	   	   reg->add_class_<TBG>("BorgGraham", grp)
 		   .add_constructor()
 		   .add_method("install_can_gates", &TBG::install_can_gates, grp)
+		   .add_method("install_can_gates_cfp", &TBG::install_can_gates_cfp, grp)
 			#ifdef MPMDEFAULT
 		   .add_method("get_current", (double (TBG::*)(const double, const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default#custom membrane potential [mV]|default",  grp)
+		   .add_method("get_current", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default#custom membrane potential [mV]|default#IC Calcium [Mol]|default#EC Calcium [Mol]|default",  grp)
 			#else
 		   .add_method("get_current", (double (TBG::*)(const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default",  grp)
 			#endif
-		   .add_method("calc_current_at_start", &TBG::calc_current_at_start, grp)
-		   .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp);
+		   .add_method("calc_current_at_start", (double (TBG::*)(const double)) (&TBG::calc_current_at_start), grp)
+		   .add_method("calc_current_at_start", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::calc_current_at_start), grp)
+		   .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp)
+	   	   .add_method("get_Flux_As_Concentration", &TBG::get_Flux_As_Concentration, grp);
 
 
 	   /** registry Transform (\see Transform.h) */

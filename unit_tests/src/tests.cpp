@@ -388,7 +388,7 @@ BOOST_AUTO_TEST_CASE(get_potential) {
 BOOST_AUTO_TEST_SUITE_END();
 
 /**
- * BOOST Test Suite for testing of bg class
+ * BOOST Test Suite for testing of bg class (ohmic case)
  */
 BOOST_FIXTURE_TEST_SUITE(bg, FixtureBG);
 
@@ -436,17 +436,32 @@ BOOST_AUTO_TEST_CASE(check_fluxes) {
 }
 #endif
 
-// to avoid warning ...
-BOOST_AUTO_TEST_CASE(dummy) {
-	BOOST_CHECK_SMALL(0.0, SMALL);
+BOOST_AUTO_TEST_SUITE_END();
 
-}
+
+/**
+  * BOOST Test Suite for testing of bg class (cfp case)
+  */
+BOOST_FIXTURE_TEST_SUITE(bg_cfp, FixtureBG);
+
+BOOST_AUTO_TEST_SUITE_END();
+
+BOOST_AUTO_TEST_SUITE(transform);
 
 BOOST_AUTO_TEST_CASE(transform) {
 	Py_Initialize();
     BOOST_REQUIRE_EQUAL(PyRun_SimpleString("from neuron import h"), 0);
     Py_Finalize();
 }
+// TODO: extended testing
+
+
+// to avoid warning ...
+BOOST_AUTO_TEST_CASE(dummy) {
+	BOOST_CHECK_SMALL(0.0, SMALL);
+
+}
+
 
 
 BOOST_AUTO_TEST_SUITE_END();

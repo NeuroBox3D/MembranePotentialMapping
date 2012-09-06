@@ -32,6 +32,14 @@ using namespace std;
 using namespace ug::membrane_potential_mapping::bg;
 /////////////////////////////////////////////////////////////////////////////
 
+double BG::timestepping_of_gates_and_calc_current( double time, double delta_t, double myVm, double Ca_i, double Ca_o) {
+	 double time_in_ms = time * 1000.;
+    double delta_t_in_ms = delta_t * 1000.;
+
+      Neumann_flux = solgat.calculate_current_expli_next_timestep( time_in_ms, delta_t_in_ms, myVm, Ca_i, Ca_o);
+      return solgat.Current_current(time_in_ms, myVm, Ca_i, Ca_o);
+}
+
 double BG::timestepping_of_gates_and_calc_current( double time, double delta_t, double myVm )
 {
     double time_in_ms = time * 1000.;
@@ -76,6 +84,11 @@ double BG::calc_current_at_start( double time )
     return Neumann_flux;
 }
 
+
+double BG::calc_current_at_start(double time, double basic_voltage, double myVm, double Ca_i, double Ca_o) {
+	 Neumann_flux = solgat.initial_value_for_current(basic_voltage, myVm, Ca_i, Ca_o);
+	return Neumann_flux;
+}
 /////////////////////////////////////////////////////////////////////////////
 
 

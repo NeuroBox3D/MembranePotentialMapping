@@ -24,7 +24,9 @@
 
 
 double timestepping_of_gates_and_calc_current( double time, double delta_t, double myVm );
+double timestepping_of_gates_and_calc_current( double time, double delta_t, double myVm, double Ca_i, double Ca_o);
 
 double calc_current_at_start( double time = 0 );
+double calc_current_at_start(double time, double basic_voltage, double myVm, double Ca_i, double Ca_o);
 
 #endif
