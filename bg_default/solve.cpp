@@ -35,8 +35,8 @@ double solve_gating::I( double x, double y, double t, double myVm)
 }
 
 double solve_gating::I(double x, double y, double t, double myVm, double Ca_i, double Ca_o) {
-	d_CadCa_o = -(BG::BG::F^2*myVm*pow(x,xp)*pow(y,yp)*permeability*pow(valency,2.0))/(BG::R*BG::T*(std::exp((BG::F*myVm*valency)/(BG::R*BG::T)) - 1));
-	d_CadCa_i = -(BG::F^2*myVm*pow(x,xp)*pow(y,yp)*permeability*pow(valency,2.0))/(BG::R*BG::T*(1/std::exp((BG::F*myVm*valency)/(BG::R*BG::T)) - 1));
+	d_CadCa_o = -(pow(BG::F, 2.0)*myVm*pow(x,xp)*pow(y,yp)*permeability*pow(valency,2.0))/(BG::R*BG::T*(std::exp((BG::F*myVm*valency)/(BG::R*BG::T)) - 1));
+	d_CadCa_i = -(pow(BG::F,2.0)*myVm*pow(x,xp)*pow(y,yp)*permeability*pow(valency,2.0))/(BG::R*BG::T*(1/std::exp((BG::F*myVm*valency)/(BG::R*BG::T)) - 1));
 
 	return pow( x, xp) * pow(y, yp) * permeability * valency*valency * BG::F*BG::F * myVm / BG::R / BG::T * ( Ca_i - Ca_o * std::exp( -valency * BG::F * myVm / (BG::R*BG::T) ) ) / ( 1 - std::exp( - valency * BG::F * myVm / (BG::R*BG::T) ) ) * 1e3;
 }
