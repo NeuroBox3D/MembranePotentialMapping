@@ -7,7 +7,7 @@
 /*                                                                          */
 /* Author:	  Markus M. Knodel                                              */
 /*            Goethe Center for Scientific Computing GCSC                   */
-/*              Kettenhofweg 139                                            */ 
+/*              Kettenhofweg 139                                            */
 /*              University Frankfurt                                        */
 /*              Frankfurt, Germany                                          */
 /*              email: markus.knodel@gcsc.uni-frankfurt.de                  */
@@ -18,10 +18,8 @@
 /*                                                                          */
 /****************************************************************************/
 
-
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__GATING__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__GATING__
-
 
 #include <iostream>
 
@@ -29,41 +27,43 @@
 
 #include "spannung.h"
 
-class gating_parameter
-{
+class gating_parameter {
 public:
-    
-	gating_parameter( double V_12_, double z_, double gamma_, double K_, double tau_0_ )
-		: K( K_), z(z_), gamma(gamma_), V_12(V_12_), tau_0( tau_0_),
-		F(9.648 * 10000), R(  8.314 * 1000 ), T( 300 ), simple(false)
-	{};
 
+	gating_parameter(double V_12_, double z_, double gamma_, double K_,
+			double tau_0_) :
+			K(K_), z(z_), gamma(gamma_), V_12(V_12_), tau_0(tau_0_), F(
+					9.648 * 10000), R(8.314 * 1000), T(300), simple(false) {
+	}
+	;
 
-    gating_parameter( double z_, double V_12_, double tau_0_ )
-                : z(z_), V_12(V_12_), tau_0( tau_0_),
-			F(9.648 * 10000), R(  8.314 * 1000 ), T( 300 ), simple(true)
-    {};
+	gating_parameter(double z_, double V_12_, double tau_0_) :
+			z(z_), V_12(V_12_), tau_0(tau_0_), F(9.648 * 10000), R(
+					8.314 * 1000), T(300), simple(true) {
+	}
+	;
 
-	gating_parameter() {};
-	
-	double defect( double x_ip1_k, double x_i, double V,  double Delta_i );
- 
-	double tau_x ( double V );
+	gating_parameter() {
+	}
+	;
 
-	double x_infty( double V );
+	double defect(double x_ip1_k, double x_i, double V, double Delta_i);
 
-	double alpha_prime_x( double V );
+	double tau_x(double V);
 
-	double beta_prime_x( double V ); 
+	double x_infty(double V);
 
-  double x_1( double t, double x_0, double tau, double myVm );
+	double alpha_prime_x(double V);
+
+	double beta_prime_x(double V);
+
+	double x_1(double t, double x_0, double tau, double myVm);
 
 private:
 
 	double K, z, gamma, V_12, tau_0, F, R, T;
 	bool simple;
-							 
+
 };
 
 #endif // __H__UG__MEMBRANE_POTENTIAL_MAPPING__BG__GATING__
-

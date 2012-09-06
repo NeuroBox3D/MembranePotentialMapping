@@ -7,7 +7,7 @@
 /*                                                                          */
 /* Author:	  Markus M. Knodel                                              */
 /*            Goethe Center for Scientific Computing GCSC                   */
-/*              Kettenhofweg 139                                            */ 
+/*              Kettenhofweg 139                                            */
 /*              University Frankfurt                                        */
 /*              Frankfurt, Germany                                          */
 /*              email: markus.knodel@gcsc.uni-frankfurt.de                  */
