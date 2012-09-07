@@ -388,7 +388,7 @@ BOOST_AUTO_TEST_CASE(get_potential) {
 BOOST_AUTO_TEST_SUITE_END();
 
 /**
- * BOOST Test Suite for testing of bg class (ohmic case)
+ * BOOST Test Suite for testing of bg class
  */
 BOOST_FIXTURE_TEST_SUITE(bg, FixtureBG);
 
@@ -410,10 +410,9 @@ BOOST_AUTO_TEST_CASE(install_gates) {
 	BOOST_MESSAGE("End test >>install_gates<<");
 }
 
-// test check_fluxes only if simple case of fluxes is used and hence we know the outcome
 #ifndef MPMDEFAULT
-BOOST_AUTO_TEST_CASE(check_fluxes) {
-	BOOST_MESSAGE("Starting test >>flux<<");
+BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
+	BOOST_MESSAGE("Starting test >>check_fluxes_ohmic<<");
 	BG* b = new BG();
 	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
 	b->install_can_gates(1000.0);
@@ -431,37 +430,54 @@ BOOST_AUTO_TEST_CASE(check_fluxes) {
 	for (size_t i = 0; i < results.size(); i++) {
 		double d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t);
 		BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
-		BOOST_MESSAGE("End test >>check_fluxes<<");
 	}
+	BOOST_MESSAGE("End test >>check_fluxes_ohmic<<");
+}
+#else
+BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
+	BOOST_MESSAGE("Starting test >>check_fluxes_cfp<<");
+	BG* b = new BG();
+	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
+	b->install_can_gates_cfp();
+	b->calc_current_at_start(0.0);
+	std::vector<double> results;
+	results.push_back(3.70861628e-09);
+	results.push_back(4.48751466e-09);
+	results.push_back(4.73544e-09);
+	results.push_back(4.80714e-09);
+	results.push_back(4.820455125e-09);
+	results.push_back(4.81453e-09);
+	results.push_back(4.802373071129e-09);
+	results.push_back(4.788292607170e-09);
+	results.push_back(4.773723314275e-09);
+	double delta_t = 0.001;
+	for (size_t i = 0; i < results.size(); i++) {
+		double d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t, -55.0);
+		BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
+	}
+	BOOST_MESSAGE("End test >>check_fluxes_cfp<<");
 }
 #endif
 
 BOOST_AUTO_TEST_SUITE_END();
 
-
-/**
-  * BOOST Test Suite for testing of bg class (cfp case)
-  */
-BOOST_FIXTURE_TEST_SUITE(bg_cfp, FixtureBG);
-
-BOOST_AUTO_TEST_SUITE_END();
-
 BOOST_AUTO_TEST_SUITE(transform);
+
+// TODO: extended testing of the transform class
 
 BOOST_AUTO_TEST_CASE(transform) {
 	Py_Initialize();
     BOOST_REQUIRE_EQUAL(PyRun_SimpleString("from neuron import h"), 0);
     Py_Finalize();
 }
-// TODO: extended testing
 
+BOOST_AUTO_TEST_SUITE(dummy);
 
-// to avoid warning ...
+// to avoid a warning
 BOOST_AUTO_TEST_CASE(dummy) {
 	BOOST_CHECK_SMALL(0.0, SMALL);
-
 }
 
-
+BOOST_AUTO_TEST_SUITE_END();
 
 BOOST_AUTO_TEST_SUITE_END();
