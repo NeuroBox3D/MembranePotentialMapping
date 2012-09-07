@@ -65,8 +65,8 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 		   .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp)
 	   	   .add_method("get_Flux_As_Concentration", &TBG::get_Flux_As_Concentration, grp)
 	   	   .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
-	   	   .add_method("dCa_dCa_i", &TBG::dCa_dCa_i, "derivative w.r.t. internal calcium concentration|default", "", grp)
-	   	   .add_method("dCa_dCa_o", &TBG::dCa_dCa_i, "derivative w.r.t. external calcium concentration|default", "", grp);
+	   	   .add_method("dCadCa_i", &TBG::dCa_dCa_i, "derivative w.r.t. internal calcium concentration|default", "", grp)
+	   	   .add_method("dCadCa_o", &TBG::dCa_dCa_i, "derivative w.r.t. external calcium concentration|default", "", grp);
 
 
 	   /** registry Transform (\see Transform.h) */
