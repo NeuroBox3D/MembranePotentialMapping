@@ -66,13 +66,4 @@ double BG::calc_current_at_start(double time, double basic_voltage, double myVm,
 	return Neumann_flux;
 }
 /////////////////////////////////////////////////////////////////////////////
-double BG::dCa() const {
-	return solgat.dCa();
-}
-double BG::dCa_dCa_i() const {
-	return solgat.dCadCa_i();
-}
-double BG::dCa_dCa_o() const {
-	return solgat.dCadCa_o();
-}
 

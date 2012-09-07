@@ -41,8 +41,6 @@ namespace bg {
 
 class BG {
 public:
-
-	//  static int ap_interval_duration_in_ms; // which stimulation transformation should be choosen
 	void install_can_gates(double cond = 1000);
 	bool installed_can_gates();
 	void install_cal_gates(double cond = 0.3 * 0.6);
@@ -57,14 +55,10 @@ public:
 
 	double Neumann_flux;
 
-// string output_file_current;
-
-	double conductivity; // assumed as 1000 mA / mV !
+	double conductivity; /* [mA/mV] */
 	double permeability;
 
-	static double Voltage(double myVm); // returns the voltage ( time in milliseconds here: if trivial case, i. e. typical AP given)
-
-// static double ttrafo_into_ap( double time ); // 100 Hz trafo; time in ms here
+	static double Voltage(double myVm);
 
 	static double F;
 	static double R;
@@ -83,14 +77,20 @@ public:
 	double get_Flux_As_Concentration(double delta_t,
 			double valency = 2.0) const;
 
-	inline double dCa_dCa_o() const;
-	inline double dCa_dCa_i() const;
-	inline double dCa() const;
+	inline double dCa_dCa_o() const {
+		return solgat.dCadCa_o();
+	}
+	inline double dCa_dCa_i() const {
+		return solgat.dCadCa_i();
+	}
+	inline double dCa() const {
+		return solgat.dCa();
+	}
 
-	double get_permeability() const {
+	inline double get_permeability() const {
 		return permeability;
 	}
-	double get_conductivity() const {
+	inline double get_conductivity() const {
 		return conductivity;
 	}
 	BG();
