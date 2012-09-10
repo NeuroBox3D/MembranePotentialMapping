@@ -66,4 +66,3 @@ double BG::calc_current_at_start(double time, double basic_voltage, double myVm,
 	return Neumann_flux;
 }
 /////////////////////////////////////////////////////////////////////////////
-
