@@ -49,7 +49,7 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 		   .add_method("get_potential_lin", &TVm2uG::get_potential_lin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
 		   .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default");
 
-	   /** registry BG (\see bg.h), but soon obsolete. TODO: remove BG (see meeting.pdf) */
+	   /** registry BG (\see bg.h) */
 	   	   reg->add_class_<TBG>("BorgGraham", grp)
 		   .add_constructor()
 		   .add_method("install_can_gates", &TBG::install_can_gates, grp)
@@ -61,7 +61,6 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 		   .add_method("get_current", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default#custom membrane potential [mV]|default#IC Calcium [Mol]|default#EC Calcium [Mol]|default",  grp)
 			#else
 		   .add_method("get_current", (double (TBG::*)(const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default",  grp)
-	   	   .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
 		    #endif
 		   .add_method("calc_current_at_start", (double (TBG::*)(const double)) (&TBG::calc_current_at_start), grp)
 		   .add_method("calc_current_at_start", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::calc_current_at_start), grp)
@@ -74,6 +73,7 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 	   	    .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
 			#endif
 	   	    ;
+
 	   /** registry Transform (\see Transform.h) */
 	   	reg->add_class_<TTransform>("TransformHocToObj", grp)
 	   		.add_constructor<void (*)(std::string, std::string)>("hocfile|load-dialog|endings=[\"hoc\"];description=\"Hoc file for transformation\"#timestep directory|load-dialog;description=\"Location to store extracted timesteps\"#Delta t|default#steps|default#initial membrane potential|default")
