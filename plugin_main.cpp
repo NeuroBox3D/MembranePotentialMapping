@@ -62,20 +62,18 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 			#else
 		   .add_method("get_current", (double (TBG::*)(const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default",  grp)
 	   	   .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
-		   #endif
+		    #endif
 		   .add_method("calc_current_at_start", (double (TBG::*)(const double)) (&TBG::calc_current_at_start), grp)
 		   .add_method("calc_current_at_start", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::calc_current_at_start), grp)
 		   .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp)
 			#ifdef MPMDEFAULT
 	   	   .add_method("get_Flux_As_Concentration", &TBG::get_Flux_As_Concentration, grp)
-	   	   //.add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
 	   	   .add_method("dCadCa_i", &TBG::dCa_dCa_i, "derivative w.r.t. internal calcium concentration|default", "", grp)
-	   	   .add_method("dCadCa_o", &TBG::dCa_dCa_i, "derivative w.r.t. external calcium concentration|default", "", grp);
+	   	   .add_method("dCadCa_o", &TBG::dCa_dCa_i, "derivative w.r.t. external calcium concentration|default", "", grp)
 			#else
-	   	   ;
+	   	    .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
 			#endif
-
-
+	   	    ;
 	   /** registry Transform (\see Transform.h) */
 	   	reg->add_class_<TTransform>("TransformHocToObj", grp)
 	   		.add_constructor<void (*)(std::string, std::string)>("hocfile|load-dialog|endings=[\"hoc\"];description=\"Hoc file for transformation\"#timestep directory|load-dialog;description=\"Location to store extracted timesteps\"#Delta t|default#steps|default#initial membrane potential|default")
