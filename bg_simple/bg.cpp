@@ -95,4 +95,9 @@ double BG::get_Neumann_Flux() {
    return Neumann_flux;
 }
 
+
+double BG::dCa() const {
+	return Neumann_flux;
+}
+
 /////////////////////////////////////////////////////////////////////////////

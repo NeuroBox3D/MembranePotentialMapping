@@ -68,6 +68,7 @@ public:
    double timestepping_of_gates_and_calc_current( double time, double delta_t );
    double calc_current_at_start( double time );
    double get_Neumann_Flux();
+   double dCa() const;
    BG();
 private:
    bool inst_can_gates;
