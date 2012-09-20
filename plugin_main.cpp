@@ -71,6 +71,7 @@ InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry* reg, std::string par
 	   	   .add_method("dCadCa_o", &TBG::dCa_dCa_i, "derivative w.r.t. external calcium concentration|default", "", grp)
 			#else
 	   	    .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
+	   	    .add_method("get_Neumann_Flux_as_Concentration", &TBG::get_Neumann_Flux_as_Concentration, "", "", grp)
 			#endif
 	   	    ;
 

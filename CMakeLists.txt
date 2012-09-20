@@ -131,7 +131,7 @@ if(buildEmbeddedPlugins)
 else(buildEmbeddedPlugins)
 
 
-# decide which style of the plugin you want to build: note soon only one style will be available, BG channels will be put fully into either plasma_membrane or voltage_gated_channels.
+# decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
     if(${MPMDefault} STREQUAL "ON")
        add_library(MembranePotentialMapping SHARED ${SOURCES_default})
        add_definitions(-DMPMDEFAULT) 

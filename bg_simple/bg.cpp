@@ -100,4 +100,8 @@ double BG::dCa() const {
 	return Neumann_flux;
 }
 
+double BG::get_Neumann_Flux_as_Concentration() {
+	return 1e-9 * Neumann_flux;
+}
+
 /////////////////////////////////////////////////////////////////////////////
