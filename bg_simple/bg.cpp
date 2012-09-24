@@ -97,11 +97,12 @@ double BG::get_Neumann_Flux() {
 
 
 double BG::dCa() const {
-	return Neumann_flux;
+	return 0.0; //Neumann_flux;
 }
 
-double BG::get_Neumann_Flux_as_Concentration() {
-	return 1e-9 * Neumann_flux;
+// TODO: maybe a factor of 1e-9 is missing!
+double BG::get_Neumann_Flux_as_Concentration(const double dt, const double valency) { // dt [s]
+	return 1e3 * (dt * Neumann_flux * 6.24e18) / (6.022e23 * valency); // Flux [mMol*dt]
 }
 
 /////////////////////////////////////////////////////////////////////////////
