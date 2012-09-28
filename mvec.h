@@ -5,7 +5,7 @@
  * \author: Stephan Grein
  * \date Created on: Apr 07, 2012
  *
- * Please note: migrate to UG's vector class on demand
+ * TODO: migrate to UG's vector class on demand
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__

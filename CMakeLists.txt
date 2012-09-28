@@ -1,6 +1,6 @@
 ################################################################################
 # CMake for the membrane_potential_mapping ug plugin 
-#
+# Please note: to activate use -DMembranePotentialMapping=ON during CMake config
 #
 # created by: Stephan Grein, adopted by Sebastian Reiter and Martin Scherer
 # on 02. Feb, 2012

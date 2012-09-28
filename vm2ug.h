@@ -6,7 +6,7 @@
  * \author Stephan Grein
  * \date July, 2011
  *
- * Please note: migrate to UG's kd-tree on demand.
+ * TODO: migrate to UG's kd-tree on demand.
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__

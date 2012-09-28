@@ -4,6 +4,8 @@
  *
  * \see http://docs.python.org/extending/embedding.html
  *
+ * TODO: integrate into VRL
+ *
  * \date created on Aug 3, 2012
  * \author Stephan Grein
  */
