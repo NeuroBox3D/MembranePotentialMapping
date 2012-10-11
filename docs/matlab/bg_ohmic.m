@@ -3,9 +3,10 @@
 clear
 
 syms g x xp y yp Voltage
-syms V_ret Ca
+syms V_ret Ca dt valency
 
-BG = - g * x^xp * y^yp * Voltage - V_ret
+%BG = - g * x^xp * y^yp * Voltage - V_ret
+BG = (1e3 * (dt * -g * x^xp * y^yp * Voltage - V_ret * 6.24e18)) / (6.022e23* valency)
 
 simplify(BG)
 

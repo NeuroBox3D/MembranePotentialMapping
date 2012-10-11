@@ -47,6 +47,7 @@ double BG::timestepping_of_gates_and_calc_current(double time, double delta_t,
 
 	Neumann_flux = solgat.calculate_current_expli_next_timestep(time_in_ms,
 			delta_t_in_ms, myVm);
+
 	return solgat.Current_current(time_in_ms, myVm);
 }
 

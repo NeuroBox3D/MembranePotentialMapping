@@ -9,7 +9,7 @@ Open To-dos?
 FAQ #2:
 Which models are verified for now?
 => BG ohmic - yes (bg_simple and bg_default)
-=> BG cfp - no (none of both!)
+=> BG cfp - yes (bg_default)
 --------------------------------------------------------------------------------
 FAQ #3:
 Where to find verification of the partial derivatives for the BG models?

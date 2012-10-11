@@ -74,17 +74,17 @@ public:
 	double calc_current_at_start(double time, double basic_voltage, double myVm,
 			double Ca_i, double Ca_o);
 	double get_Neumann_Flux();
-	double get_Flux_As_Concentration(double delta_t,
-			double valency = 2.0) const;
+	double get_Neumann_Flux_as_Concentration(const double delta_t=1e-4,
+			const double valency = 2.0) const;
 
-	inline double dCa_dCa_o() const {
-		return solgat.dCadCa_o();
+	inline double dCa_dCa_o(double delta_t=1e-4) const {
+		return delta_t * 1e3 * solgat.dCadCa_o();
 	}
-	inline double dCa_dCa_i() const {
-		return solgat.dCadCa_i();
+	inline double dCa_dCa_i(double delta_t=1e-4) const {
+		return delta_t * 1e3 * solgat.dCadCa_i();
 	}
-	inline double dCa() const {
-		return solgat.dCa();
+	inline double dCa(double delta_t=1e-4) const {
+		return delta_t * 1e3 * solgat.dCa();
 	}
 
 	inline double get_permeability() const {

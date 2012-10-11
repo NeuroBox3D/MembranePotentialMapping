@@ -49,6 +49,10 @@ public:
 
         double Current_current( double time ) { return I(  current_x_0, current_y_0, time ); }
 
+        double dCa() const {
+        		return 0.0; // since no calcium concenctration considered then partial derivative w.r.t zo calcium concentration is zero!
+        	}
+
 private:
 
 	double I( double x, double y, double t );

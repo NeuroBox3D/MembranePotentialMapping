@@ -68,8 +68,10 @@ public:
    double timestepping_of_gates_and_calc_current( double time, double delta_t );
    double calc_current_at_start( double time );
    double get_Neumann_Flux();
-   double get_Neumann_Flux_as_Concentration(const double dt=1e-4, const double valency=2.0);
-   double dCa() const;
+   double get_Neumann_Flux_as_Concentration(const double dt=1e-4, const double valency=2.0) const;
+   inline double dCa(double delta_t=1e-4) const {
+   		return delta_t * 1e3 * solgat.dCa();
+   	}
    BG();
 private:
    bool inst_can_gates;

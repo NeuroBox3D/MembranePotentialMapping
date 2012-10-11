@@ -433,6 +433,25 @@ BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
 	}
 	BOOST_MESSAGE("End test >>check_fluxes_ohmic<<");
 }
+
+BOOST_AUTO_TEST_CASE(check_molar_fluxes_ohmic) {
+	BOOST_MESSAGE("Starting test >>check_molar_fluxes_ohmic<<");
+	BG* b = new BG();
+	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
+	b->install_can_gates(1000.0);
+	b->calc_current_at_start(0);
+	std::vector<double> results;
+	results.push_back(8.4684798976316203e-06);
+	results.push_back(8.4684798976316203e-06);
+	results.push_back(4.0437351365245749e-05);
+	double delta_t = 0.001;
+	for (size_t i = 0; i < results.size(); i++) {
+		b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t);
+		double d = b->get_Neumann_Flux_as_Concentration(delta_t);
+	    BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
+	}
+	BOOST_MESSAGE("End test >>check_molar_fluxes_ohmic<<");
+}
 #else
 BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
 	BOOST_MESSAGE("Starting test >>check_fluxes_cfp<<");
@@ -457,14 +476,35 @@ BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
 	}
 	BOOST_MESSAGE("End test >>check_fluxes_cfp<<");
 }
+
+BOOST_AUTO_TEST_CASE(check_molar_fluxes_cfp) {
+	BOOST_MESSAGE("Starting test >>check_molar_fluxes_cfp<<");
+	BG* b = new BG();
+    BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
+	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
+	b->install_can_gates_cfp();
+	b->calc_current_at_start(0.0);
+	std::vector<double> results;
+	results.push_back(1.9214352053711674e-14);
+	results.push_back(2.3249826893955825e-14);
+	results.push_back(2.4534319739280018e-14);
+	double delta_t = 0.001;
+	for (size_t i = 0; i < results.size(); i++) {
+		b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t, -55.0);
+		double d = b->get_Neumann_Flux_as_Concentration(delta_t);
+		BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
+	}
+	BOOST_MESSAGE("End test >>check_molar_fluxes_cfp<<");
+}
 #endif
+
+// TODO check dervivatives of cfp and ohmic model!
 
 BOOST_AUTO_TEST_SUITE_END();
 
 BOOST_AUTO_TEST_SUITE(transform);
 
 // TODO: extended testing of the transform class
-
 BOOST_AUTO_TEST_CASE(transform) {
 	Py_Initialize();
     BOOST_REQUIRE_EQUAL(PyRun_SimpleString("from neuron import h"), 0);
