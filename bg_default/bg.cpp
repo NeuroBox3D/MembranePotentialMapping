@@ -122,9 +122,8 @@ double BG::get_Neumann_Flux() {
 	return Neumann_flux;
 }
 
-// TODO: maybe a factor of 1e-9 is missing!
 double BG::get_Neumann_Flux_as_Concentration(const double dt, const double valency) const { // dt [s]
-	return 1e3 * (dt * Neumann_flux * 6.24e18) / (6.022e23 * valency); // Flux [mMol*dt]
+	return 1e3 * (dt * Neumann_flux * 6.24e18) / (6.022e23 * valency); // Flux [mM] * [s] = [mM * s]
 }
 
 double BG::F = 9.648 * 10000;
