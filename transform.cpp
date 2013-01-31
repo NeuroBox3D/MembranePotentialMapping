@@ -12,9 +12,8 @@
 
 
 // includes
-extern "C" {
+//#include "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/Python.h"
 #include "Python.h"
-}
 #include <exception>
 #include <sstream>
 #include <string>

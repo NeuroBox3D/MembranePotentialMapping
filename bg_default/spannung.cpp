@@ -20,7 +20,6 @@
 
 #include "spannung.h"
 #include "bg.h"
-
 using namespace ug::membrane_potential_mapping::bg;
 /////////////////////////////////////////////////////////////////////////////
 
