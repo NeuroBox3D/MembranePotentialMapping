@@ -6,15 +6,19 @@
  * \author Stephan Grein
  */
 
+#ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_IMPL__
+#define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_IMPL__
+
 // includes
 #include "vm2ug.h"
 #include "mvec.h"
 #include "common_typedefs.h"
 
 
-// using directives
-using namespace ug::membrane_potential_mapping;
-
+// start namespace ug (ug)
+namespace ug {
+	// start namespace membrane_potential_mapping (mpm)
+	namespace membrane_potential_mapping {
 
 template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
 		const double node[], const double cutoff, const int k) {
@@ -281,19 +285,19 @@ template<class T> const double Vm2uG<T>::interp_lin_vms(const T& timestep,
 	return Vm_intp;
 }
 
-template <class T> Vm2uG<T>::Vm2uG(string dataFileBaseName_, string dataFileExt_, const bool promise_) {
+template <class T> Vm2uG<T>::Vm2uG(std::string dataFileBaseName_, std::string dataFileExt_, const bool promise_) {
    dim = 3;
    timestep = 0;
    maxPts = 100000;
    k = 1;
    eps = 0.0;
    isTreeBuild = false;
-   this->dataFileBaseName = dataFileBaseName;
+   dataFileBaseName = dataFileBaseName_;
    dataFileExt = dataFileExt_;
    promise = promise_;
 }
 
-template <class T> Vm2uG<T>::Vm2uG (string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k) {
+template <class T> Vm2uG<T>::Vm2uG (std::string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k) {
    this->dataFileBaseName = dataFileBaseName;
    this->dim = dim;
    this->maxPts = maxPts;
@@ -310,32 +314,34 @@ template <class T> Vm2uG<T>::~Vm2uG () {
    }
 }
 
-template <class T> void Vm2uG<T>::printPt(ostream &out, const ANNpoint& p, const bool newline) const {
+template <class T> void Vm2uG<T>::printPt(std::ostream &out, const ANNpoint& p, const bool newline) const {
    out << "(" << p[0];
    for (int i = 1; i < this->dim; i++) out << ", " << p[i];
-   if (newline) out << ")" << endl;
+   if (newline) out << ")" << std::endl;
 }
 
 template <class T> void Vm2uG<T>::readPt(const double node[]) {
    for (int i=0; i < dim; i++) queryPt[i] = node[i];
 }
 
+// removed, since it produces duplicate symbol for T == double (cf. below)		 -mbreit
+/*
 template <> void Vm2uG<double>::buildTree(const double& timestep) {
    if (this->isTreeBuild) {
       rebuildTree(timestep);
    }
 
-   static ifstream dataStream;
+   static std::ifstream dataStream;
 
-   ostringstream s;
+   std::ostringstream s;
    
    s << timestep;
 
   // cout << timestep;
 
-   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
+   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), std::ios::in);
    if (!dataStream) {
-      cerr << "Cannot open data file" << endl;
+      std::cerr << "Cannot open data file" << std::endl;
       exit(1);
    } else {
       dataIn =& dataStream;
@@ -364,18 +370,20 @@ template <> void Vm2uG<double>::buildTree(const double& timestep) {
    this->isTreeBuild = true;
 
 }
-
-template <> void Vm2uG<string>::buildTree(const string& timestep) {
+*/
+// removed, since it produces duplicate symbol for T == std::string (cf. directly below)	 -mbreit
+/*
+template <> void Vm2uG<std::string>::buildTree(const std::string& timestep) {
    //cout << timestep << endl;
    if (this->isTreeBuild) {
       rebuildTree(timestep);
    }
 
-   static ifstream dataStream;
+   static std::ifstream dataStream;
 
-   dataStream.open((dataFileBaseName+timestep+this->dataFileExt).c_str(), ios::in);
+   dataStream.open((dataFileBaseName+timestep+this->dataFileExt).c_str(), std::ios::in);
    if (!dataStream) {
-      cerr << "Cannot open data file" << dataFileBaseName+timestep+this->dataFileExt << endl;
+      std::cerr << "Cannot open data file" << dataFileBaseName+timestep+this->dataFileExt << std::endl;
       exit(1);
    } else {
       dataIn =& dataStream;
@@ -403,6 +411,7 @@ template <> void Vm2uG<string>::buildTree(const string& timestep) {
    this->timestep = genHash(timestep);
    this->isTreeBuild = true;
 }
+*/
 
 template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
 
@@ -410,18 +419,14 @@ template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
       rebuildTree(timestep);
    }
 
-   static ifstream dataStream;
-   ostringstream s;
+   static std::ifstream dataStream;
+   std::ostringstream s;
    s << timestep; 
 
    //cout << timestep;
-   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
-   if (!dataStream) {
-      cerr << "Cannot open data file" << endl;
-      exit(1);
-   } else {
-      dataIn =& dataStream;
-   }
+   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), std::ios::in);
+   if (!dataStream) {UG_THROW("Can not open data file \"" << dataFileBaseName+s.str()+this->dataFileExt << "\".");}
+   else dataIn =& dataStream;
    
    nPts = 0;
    queryPt = annAllocPt(dim); // allocate initially queryPt (and deallocate it on destruction)
@@ -527,7 +532,9 @@ template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timeste
    return uGs;
 }
 
-template <> uGPoint<string> Vm2uG<string>::vm_t(const string& timestep, const double node[]) {
+// removed, since it produces duplicate symbol for T == std::string (cf. directly below)	 -mbreit
+/*
+template <> uGPoint<std::string> Vm2uG<std::string>::vm_t(const std::string& timestep, const double node[]) {
    if (!this->isTreeBuild) buildTree(timestep);
    if (genHash(timestep) == this->timestep) { // timestep
    
@@ -543,7 +550,7 @@ template <> uGPoint<string> Vm2uG<string>::vm_t(const string& timestep, const do
 
    std::vector<double> dataP;
    std::vector<double> queryP;
-   std::vector<sPoint<string> > sP;
+   std::vector<sPoint<std::string> > sP;
 
    int i;
    int j;
@@ -554,14 +561,15 @@ template <> uGPoint<string> Vm2uG<string>::vm_t(const string& timestep, const do
 
       for (i=0; i<dim; i++) dataP.push_back(dataPts[nnIdx[j]][i]);
 
-      sP.push_back(sPoint<string>(dataP, sqrt(dists[j]), dataPts[nnIdx[j]][dim], nnIdx[j], genHash(timestep), timestep)); //timestep und string
+      sP.push_back(sPoint<std::string>(dataP, sqrt(dists[j]), dataPts[nnIdx[j]][dim], nnIdx[j], genHash(timestep), timestep)); //timestep und string
       
       dataP.clear();
    }
 
-   return uGPoint<string>(queryP, sP);
+   return uGPoint<std::string>(queryP, sP);
 
 }
+*/
 
 template <class T> uGPoint<T> Vm2uG<T>::vm_t(const T& timestep, const double node[]) { // BOUNDARY NODE from uG
 if (!this->isTreeBuild) buildTree(timestep);
@@ -625,8 +633,8 @@ template <class T> void Vm2uG<T>::setDim(const short int& dim) {
 }
 
 template <class T> void Vm2uG<T>::setTimestep(const T& timestep) {
-   this->timestep = timestep;
-   rebuildTree(this->timestep);
+   this->timestep = genHash(timestep);
+   rebuildTree(timestep);
 }
   
 template <class T> void Vm2uG<T>::setMaxPts(const int& maxPts) {
@@ -642,12 +650,12 @@ template <class T> void Vm2uG<T>::setPromise(const bool& promise) {
    this->promise = promise;
 }
 
-template <class T> void Vm2uG<T>::setdataFileBaseName(string dataFile) {
+template <class T> void Vm2uG<T>::setdataFileBaseName(std::string dataFile) {
    this->dataFileBaseName = dataFile;
    rebuildTree(this->timestep);
 }
 
-template <class T> void Vm2uG<T>::setdataFileExt(string dataFileExt) {
+template <class T> void Vm2uG<T>::setdataFileExt(std::string dataFileExt) {
    this->dataFileExt = dataFileExt;
    rebuildTree(this->timestep);
 }
@@ -658,16 +666,16 @@ template <class T> bool Vm2uG<T>::areSame(const double& a, const double& b) {
 }
 
 template <class T> long Vm2uG<T>::genHash(const T& timestep) {
-   locale loc;
-   const collate<char>& coll = use_facet<collate<char> >(loc);
-   ostringstream s;
-   s << timestep; 
-   string tmp = (this->dataFileBaseName+s.str()+this->dataFileExt).c_str();
-   return coll.hash(tmp.data(),tmp.data()+tmp.length());
+	std::locale loc;
+	const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
+	std::ostringstream s;
+	s << timestep;
+	std::string tmp = (this->dataFileBaseName+s.str()+this->dataFileExt).c_str();
+	return coll.hash(tmp.data(),tmp.data()+tmp.length());
 }
 
 template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
-      cout << "tree needs rebuild!" << endl;
+   //std::cout << "tree needs rebuild!" << std::endl;
    // tree needs to be rebuild if indices and or datapoints vary during timestepping (default: promise=false, i.e. we need to rebuild all)
    if (!promise) {
       delete [] nnIdx;
@@ -675,18 +683,15 @@ template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
       delete kdTree; // note: deletes also dataPts memory (hopefully)
    }
 
-   static ifstream dataStream;
-   ostringstream s;
+   static std::ifstream dataStream;
+   std::ostringstream s;
    s << timestep;
 //   cout << timestep;
 
-   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), ios::in);
-   if (!dataStream) {
-      cerr << "Cannot open data file" << endl;
-      exit(1);
-   } else {
-      dataIn =& dataStream;
-   }
+   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), std::ios::in);
+   if (!dataStream) {UG_THROW("Can not open data file \"" << dataFileBaseName+s.str()+this->dataFileExt << "\".");}
+   else dataIn =& dataStream;
+
    
    nPts = 0;
    //queryPt = annAllocPt(dim); // let queryPt allocated, because queryPt dimension will not change
@@ -713,16 +718,16 @@ template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
    this->timestep=genHash(timestep);
 }
 
-template <class T> ostream& operator<<(ostream& output, const Vm2uG<T>& p) {
-   output << "current instance of Vm2uG holds the properties:" << endl;
-   output << "|" << "        dim: " << p.dim << " (dimension of query points)" << endl;
-   output << "|" << "          k: " << p.k << " (k nearest neihbors)" << endl;
-   output << "|" << "        eps: " << p.eps << " (approximation factor)" << endl;
-   output << "|" << "   BaseName: " << p.dataFileBaseName << " (current basename of files which hold timestep data)" << endl;
-   output << "|" << "  Extension: " << p.dataFileExt << " (current extension for those files)" << endl;
-   output << "|" << "   timestep: " << p.timestep << " (initial timestep for building the tree)" << endl;
-   output << "|" << "     maxPts: " << p.maxPts << " (maximum number of points the tree can hold)" << endl;
-   output << "|" << "    promise: " << (p.promise ? "true" : "false") << " (indicates if indices between dataFileBaseNames with timestep data do notvary)" << endl << endl;
+template <class T> std::ostream& operator<<(std::ostream& output, const Vm2uG<T>& p) {
+   output << "current instance of Vm2uG holds the properties:" << std::endl;
+   output << "|" << "        dim: " << p.dim << " (dimension of query points)" << std::endl;
+   output << "|" << "          k: " << p.k << " (k nearest neihbors)" << std::endl;
+   output << "|" << "        eps: " << p.eps << " (approximation factor)" << std::endl;
+   output << "|" << "   BaseName: " << p.dataFileBaseName << " (current basename of files which hold timestep data)" << std::endl;
+   output << "|" << "  Extension: " << p.dataFileExt << " (current extension for those files)" << std::endl;
+   output << "|" << "   timestep: " << p.timestep << " (initial timestep for building the tree)" << std::endl;
+   output << "|" << "     maxPts: " << p.maxPts << " (maximum number of points the tree can hold)" << std::endl;
+   output << "|" << "    promise: " << (p.promise ? "true" : "false") << " (indicates if indices between dataFileBaseNames with timestep data do notvary)" << std::endl << std::endl;
    return output;
 }
 /* }}} */
@@ -739,11 +744,11 @@ template <class T> sPoint<T>::sPoint(const std::vector<double>& coordinates, con
          this->timestep = timestep; // was: timestep
          this->realfilename = realfilename;
       } catch (const char* const str) {
-      cout << "Initialization failed: " << str << endl;
+    	  std::cout << "Initialization failed: " << str << std::endl;
       }
    }
    else {
-      cout << "You created an EMPTY point (no coords). Check?!" << endl;
+	   std::cout << "You created an EMPTY point (no coords). Check?!" << std::endl;
    }
 }
 
@@ -771,15 +776,15 @@ template <class T> const std::vector<double> sPoint<T>::getCoordinates() const {
    return this->coordinates;
 }
 
-template <class T> ostream& operator<<(ostream& output, const sPoint<T>& p) {
+template <class T> std::ostream& operator<<(std::ostream& output, const sPoint<T>& p) {
     output << "{hoc} (";
     unsigned int i;
     for (i=0; i < p.coordinates.size()-1; i++) output << p.coordinates[i] << ",";
-    output << p.coordinates[i] << ")" << endl;
-    output << "\tVm: " << p.Vm << " (mV)" << endl;
-    output << "\tDist to query Point {uG}: " << p.dist << endl;
-    output << "\tIndex {in timestep (Hashcode=" << p.timestep << ") file}: " << p.index << endl;
-    output << "\tFilename (short): " << p.realfilename << endl;
+    output << p.coordinates[i] << ")" << std::endl;
+    output << "\tVm: " << p.Vm << " (mV)" << std::endl;
+    output << "\tDist to query Point {uG}: " << p.dist << std::endl;
+    output << "\tIndex {in timestep (Hashcode=" << p.timestep << ") file}: " << p.index << std::endl;
+    output << "\tFilename (short): " << p.realfilename << std::endl;
     return output;  
 }
 
@@ -792,11 +797,11 @@ template <class T> uGPoint<T>::uGPoint(const std::vector<double>& coordinates, c
          this->coordinates = coordinates;
          this->nearestNeighbors = nearestNeighbors;
       } catch (const char* const str) {
-      cout << "Initialization failed: " << str << endl;
+    	  std::cout << "Initialization failed: " << str << std::endl;
       }
    }
    else {
-      cout << "You created an EMPTY point (no coords). Check?!" << endl;
+	   std::cout << "You created an EMPTY point (no coords). Check?!" << std::endl;
    }
 }
 
@@ -821,14 +826,21 @@ template <class T> const std::vector<sPoint<T> > uGPoint<T>::getNearestNeighbors
    return this->nearestNeighbors;
 }
 
-template <class T> ostream& operator<<(ostream& output, const uGPoint<T>& p) {
-   output << "----------------------------------------------------------------------------------------" << endl;
+template <class T> std::ostream& operator<<(std::ostream& output, const uGPoint<T>& p) {
+   output << "----------------------------------------------------------------------------------------" << std::endl;
    output << "query Point {uG} (";
    unsigned int i;
    for (i=0; i < p.coordinates.size()-1; i++) output << p.coordinates[i] << ", ";
-   output << p.coordinates[i] << ")" << endl;
-   output << "----------------------------------------------------------------------------------------" << endl;
-   for (i=0; i < p.nearestNeighbors.size(); i++) output << "nearest neighbor #" << i << ": " << p.nearestNeighbors[i] << endl;
-   output << "****************************************************************************************" << endl;
+   output << p.coordinates[i] << ")" << std::endl;
+   output << "----------------------------------------------------------------------------------------" << std::endl;
+   for (i=0; i < p.nearestNeighbors.size(); i++) output << "nearest neighbor #" << i << ": " << p.nearestNeighbors[i] << std::endl;
+   output << "****************************************************************************************" << std::endl;
    return output;
 }
+
+// end namespace membrane_potential_mapping (mpm)
+}
+// end namespace ug (ug)
+}
+
+#endif /*__H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_IMPL__*/

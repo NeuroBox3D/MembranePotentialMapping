@@ -32,7 +32,7 @@ namespace ug {
 	// start namespace membrane_potential_mapping (mpm)
 	namespace membrane_potential_mapping {
 		// template declarations for Vm2ug
-		#include "vm2ug_impl.h"
+		//#include "vm2ug_impl.h"
 
 		template Vm2uG<int>::~Vm2uG();
 		template Vm2uG<double>::~Vm2uG();

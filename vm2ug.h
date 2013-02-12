@@ -26,6 +26,7 @@
 
 #include <ANN/ANN.h>
 
+#include "common/common.h"
 #include "common_typedefs.h"
 #include "mvec.h"
 
@@ -408,4 +409,7 @@ namespace ug {
 	}
 // end namespace ug (ug)
 }
+
+#include "vm2ug_impl.h"
+
 #endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__ */
