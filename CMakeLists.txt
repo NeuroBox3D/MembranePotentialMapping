@@ -41,7 +41,7 @@ message(STATUS "Info: MPMParallel:       " ${MPMParallel}" (options are: ON, OFF
  
 message(STATUS "Info: Please build with -DINTERNAL_BOOST=OFF because some functionality isn't provided in the INTERNAL_BOOST revision!")
 # include the definitions and dependencies for ug-plugins.
-include("../../../ug_plugin_cmake_includes.txt")
+include("../../../cmake/ug_plugin_includes.cmake")
 
 include(FindPythonLibs  REQUIRED)
 include(FindPythonInterp  REQUIRED)
