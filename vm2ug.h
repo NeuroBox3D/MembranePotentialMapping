@@ -7,6 +7,8 @@
  * \date July, 2011
  *
  * TODO: migrate to UG's kd-tree on demand.
+ * TODO: code could be optimized, lesser cctor calls!
+ * TODO: cleanup code
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__

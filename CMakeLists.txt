@@ -62,7 +62,9 @@ set(SOURCES_simple	 transform.cpp
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
-                     bg_simple/spannung.cpp)
+                     bg_simple/spannung.cpp
+                     aux/aux_bridge.cpp
+                     )
 
 set(SOURCES_default  transform.cpp
                      vm2ug.cpp 
@@ -71,7 +73,9 @@ set(SOURCES_default  transform.cpp
                      bg_default/my_commands.cpp
                      bg_default/bg.cpp
                      bg_default/solve.cpp
-                     bg_default/gating.cpp)
+                     bg_default/gating.cpp
+                     aux/aux_bridge.cpp
+                     )
                      
 # set sources for unit tests
 set(SOURCES_TEST unit_tests/src/tests.cpp)
