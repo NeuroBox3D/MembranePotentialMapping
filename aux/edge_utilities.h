@@ -1,4 +1,4 @@
-/**
+/*!
  *
  * \file circumference.h
  * \brief auxiliary functions to calculate circumference
@@ -14,14 +14,14 @@
 #include "lib_grid/algorithms/subset_util.h"
 #include "lib_grid/tools/subset_handler_interface.h"
 
-// start namespace ug
+/*! begin namespace ug */
 namespace ug {
-	// start namespace mpm
+	/*! begin namespace mpm */
 	namespace membrane_potential_mapping {
-		//start namespace aux
+		/*! begin namespace aux */
 		namespace aux {
 
-			/**
+			/*!
 			 *
 			 * \fn EdgeSum
 			 * \brief iterator for calculation of the linear edge sum for an edge subset
@@ -36,7 +36,7 @@ namespace ug {
 			template <typename TEdgeIterator, typename TAAPosVRT>
 			number EdgeSum(TEdgeIterator eBegin, TEdgeIterator eEnd, TAAPosVRT& aaPos);
 
-			/**
+			/*!
 			 *
 			 * \fn EdgeSumSq
 			 * \brief iterator for calculation of the squared edge sum for an edge subset
@@ -51,7 +51,7 @@ namespace ug {
 			template <typename TEdgeIterator, typename TAAPosVRT>
 			number EdgeSum(TEdgeIterator eBegin, TEdgeIterator eEnd, TAAPosVRT& aaPos);
 
-			/**
+			/*!
 			 *
 			 * \fn EdgeSum
 			 * \brief calculates the linear edge sum for a given subset si on level lvl
@@ -67,7 +67,7 @@ namespace ug {
 			template <typename TAAPosVRT>
 			number EdgeSum(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos);
 
-			/**
+			/*!
 			 *
 			 * \fn EdgeSumSq
 			 * \brief calculates the squared edge sum for a given subset si on level lvl
@@ -83,12 +83,13 @@ namespace ug {
 			template <typename TAAPosVRT>
 			number EdgeSumSq(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos);
 
-		// end namespace aux
+		/*! end namespace aux */
 		}
-	// end namespace mpm
+	/*! end namespace mpm */
 	}
-// end namespace ug
+/*! end namespace ug */
 }
+
 #include "edge_utilities_impl.hpp"
 
 #endif //__H__UG_MEMBRANE_POTENTIAL_MAPPING__AUX__EDGE_UTILITIES__

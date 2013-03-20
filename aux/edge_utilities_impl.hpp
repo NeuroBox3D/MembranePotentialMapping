@@ -1,12 +1,13 @@
+/*! mandatory includes */
 #include "edge_utilities.h"
 #include <lib_grid/algorithms/geom_obj_util/edge_util.h>
 #include <lib_grid/grid/geometric_base_objects.h>
 
-// start namespace ug
+/*! begin namespace ug */
 namespace ug {
-	// start namespace mpm
+	/*! begin namespace mpm */
 	namespace membrane_potential_mapping {
-		// start namespace aux
+		/*! begin namespace aux */
 		namespace aux {
 
 			template <typename TEdgeIterator, typename TAAPosVRT>
@@ -73,9 +74,9 @@ namespace ug {
 
 				return circumference;
 			}
-		// end namespace aux
+		/*! end namespace aux */
 		}
-	// end namespace mpm
+	/*! end namespace mpm */
 	}
-// end namespace ug
+/*! end namespace ug */
 }

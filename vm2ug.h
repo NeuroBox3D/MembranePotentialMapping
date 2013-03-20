@@ -8,7 +8,8 @@
  *
  * TODO: migrate to UG's kd-tree on demand.
  * TODO: code could be optimized, lesser cctor calls!
- * TODO: cleanup code
+ * TODO: cleanup code; use typename instead of class for templates whenever possible.
+ * TODO: introduce proper doxygen: http://www.stack.nl/~dimitri/doxygen/manual/docblocks.html
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
