@@ -1,4 +1,4 @@
-/*
+/*!
  * \file mvec_impl.h
  * \brief implementation of mvec (\see mvec.h)
  *
@@ -6,26 +6,25 @@
  *  \author Stephan Grein
  */
 
-// includes
+/* standard and boost includes */
 #include <boost/lexical_cast.hpp>
-#include <numeric> // needed for std::inner_product
+#include <numeric> /*!< required for std::inner_product */
 #include <iostream>
 
-#include "mvec.h"
-
+/* ug includes */
 #include <common/log.h>
 
+/* mpm includes */
+#include "mvec.h"
 
-// using directives
 using namespace ug::membrane_potential_mapping;
 
-
-// default constructor
+/* default constructor */
 template <class T, size_t i> mvec<T, i>::mvec() {
 	this->reserve(i);
 }
 
-// main constructor
+/* main constructor */
 template<class T, size_t i> mvec<T, i>::mvec(const std::vector<T>& init) {
    this->reserve(i);
 
@@ -33,11 +32,11 @@ template<class T, size_t i> mvec<T, i>::mvec(const std::vector<T>& init) {
 		this->push_back(boost::lexical_cast<T>(*cit));
 }
 
-// default destructor
+/* default destructor */
 template<class T, size_t i> mvec<T, i>::~mvec() {
 }
 
-// determinante
+/* calculates det */
 template <class T, size_t i> const double mvec<T, i>::det(const std::vector<mvec<T, i> >& mvecs) {
 
 	double ret = 0.0;
@@ -56,14 +55,14 @@ template <class T, size_t i> const double mvec<T, i>::det(const std::vector<mvec
 			ret -= mvecs[2][2] * mvecs[0][1] * mvecs[1][0];
 			break;
 		default:
-			UG_LOG("mvec::det currently only works for 2 <= dim <= 3");
+			UG_LOG("mvec::det currently only works dimenstion of three (3).");
 			ret = 0.0;
 			break;
 	}
 	return ret;
 }
 
-// norm
+/* calculate norm */
 template <class T, size_t i> const double mvec<T, i>::norm(NORM norm) const {
      typedef typename std::vector<T>::const_iterator CIT;
      double ret = 0.0;
@@ -85,7 +84,7 @@ template <class T, size_t i> const double mvec<T, i>::norm(NORM norm) const {
      return ret;
 }
 
-// operators
+/* operators follow below */
 template<class T, size_t i> mvec<T, i> mvec<T, i>::add(const mvec<T, i>& rhs) const {
 	const size_t lhs_s = this->size();
 	const size_t rhs_s = rhs.size();

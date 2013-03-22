@@ -1,4 +1,4 @@
-/**
+/*!
  * \file transform.cpp
  * \brief implementation of preprocessing: uses high-level embedding of the Python language
  *
@@ -11,24 +11,22 @@
  */
 
 
-// includes
-//#include "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/Python.h"
-#include "Python.h"
+/* standard, boost and python includes */
+#include "Python.h" /*!< #include "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/Python.h" */
 #include <exception>
 #include <sstream>
 #include <string>
 #include <fstream>
 #include <boost/filesystem.hpp>
 
-#include "transform.h"
-
+/* ug includes */
 #include <common/log.h>
 #include <common/error.h>
 
+/* mpm includes */
+#include "transform.h"
 
-// using directives
 using namespace ug::membrane_potential_mapping;
-
 
 void Transform::modify_hoc_setup(const double dt, const long steps, const double vinit) {
 	try {
@@ -42,40 +40,40 @@ void Transform::modify_hoc_setup(const double dt, const long steps, const double
 
 void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::string& neugen_executable, const std::string& neutria_executable) {
 	try {
-		// initializes the Python interpreter
+		/*! initializes the Python interpreter */
 		Py_Initialize();
 
 		if (PyRun_SimpleString("from neuron import h") == -1) throw;
 		if (PyRun_SimpleString("from neuron import hoc") == -1) throw;
 
-		// command string buffer
+		/*! command string buffer */
 		std::stringstream command;
 
-		// 1st NEURON cmd
+		/*! 1st NEURON cmd */
 		command << "h.load_file("
 				<< m_hocfile
 				<< ")";
 		if (PyRun_SimpleString(command.str().c_str()) == -1) throw;
 		command.clear();
 
-		// 2nd NEURON cmd
+		/*! 2nd NEURON cmd */
 		if (PyRun_SimpleString("h.load_file(mview.hoc)") == -1) throw;
 
-		// 3rd NEURON cmd
+		/*! 3rd NEURON cmd */
 		if (PyRun_SimpleString("h.define_shape()") == -1) throw;
 
-		// 4th NEURON cmd
+		/*! 4th NEURON cmd */
 		if (PyRun_SimpleString("modelView = h.ModelView(0)") == -1) throw;
 
-		// 5th NEURON cmd
+		/*! 5th NEURON cmd */
 		if (PyRun_SimpleString("modelxml = h.ModelViewXML(modelView)") == -1) throw;
 
-		// 6th NEURON cmd
+		/*! 6th NEURON cmd */
 		command << "modelxml.xportLevel1(" << m_xmlfile << ")";
 		if (PyRun_SimpleString(command.str().c_str()) == -1) throw;
 		command.clear();
 
-		// 1st hoc cmd
+		/*! 1st hoc cmd */
 		command << "hoc.execute('"
 				<< "dt="
 				<< m_dt
@@ -83,7 +81,7 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::str
 		if (PyRun_SimpleString(command.str().c_str()) == -1) throw;
 		command.clear();
 
-		// 2nd hoc cmd
+		/*! 2nd hoc cmd */
 		command << "hoc.execute('"
 				<< "tstop"
 				<< m_steps*m_dt
@@ -91,7 +89,7 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::str
 		if (PyRun_SimpleString(command.str().c_str()) == -1) throw;
 		command.clear();
 
-		// 3rd hoc cmd
+		/*! 3rd hoc cmd */
 		command << "hoc.execute('"
 				<< "finitialize("
 				<< m_vinit
@@ -100,7 +98,7 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::str
 		if (PyRun_SimpleString(command.str().c_str()) == -1) throw;
 		command.clear();
 
-		// 4th hoc cmd
+		/*! 4th hoc cmd */
 		command << "hoc.execute('"
 				<< "while(t < tstop) { " << "\\n"
 				<< "sprint(fname, " << boost::filesystem::path(m_timestepdirectory) / boost::filesystem::path("timestep") << "%f.csv)" << ", t/1000) \\n"
@@ -113,7 +111,7 @@ void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::str
 		if (PyRun_SimpleString(command.str().c_str()) == -1) throw;
 		command.clear();
 
-		// shut the Python interpreter down
+		/*! shut down the Python interpreter */
 		Py_Finalize();
 
 		if (gen_objfile) {

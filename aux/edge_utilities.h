@@ -11,14 +11,15 @@
 #ifndef __H__UG_MEMBRANE_POTENTIAL_MAPPING__AUX__EDGE_UTILITIES__
 #define __H__UG_MEMBRANE_POTENTIAL_MAPPING__AUX__EDGE_UTILITIES__
 
+/* ug includes */
 #include "lib_grid/algorithms/subset_util.h"
 #include "lib_grid/tools/subset_handler_interface.h"
 
-/*! begin namespace ug */
+/* begin namespace ug */
 namespace ug {
-	/*! begin namespace mpm */
+	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
-		/*! begin namespace aux */
+		/* begin namespace aux */
 		namespace aux {
 
 			/*!
@@ -83,13 +84,14 @@ namespace ug {
 			template <typename TAAPosVRT>
 			number EdgeSumSq(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos);
 
-		/*! end namespace aux */
+		/* end namespace aux */
 		}
-	/*! end namespace mpm */
+	/* end namespace mpm */
 	}
-/*! end namespace ug */
+/* end namespace ug */
 }
 
+/* include edge utilities impleentation */
 #include "edge_utilities_impl.hpp"
 
 #endif //__H__UG_MEMBRANE_POTENTIAL_MAPPING__AUX__EDGE_UTILITIES__

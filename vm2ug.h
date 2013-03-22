@@ -1,4 +1,4 @@
-/**
+/*!
  * \file vm2ug.h
  * \brief header for the membrane_potential_mapping
  * \see docs for additional information
@@ -15,30 +15,34 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
-// macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.)
+/* macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.) */
 #ifndef QDIM
 #define QDIM 3 // MPMDIM:=3
 #endif
 
-// includes
+/* standard includes */
 #include <vector>
 #include <string>
 #include <istream>
 #include <ostream>
 #include <cmath>
 
+/* ANN include */
 #include <ANN/ANN.h>
 
+/* ug include */
 #include "common/common.h"
+
+/* mpm includes */
 #include "common_typedefs.h"
 #include "mvec.h"
 
-// start namespace ug (ug)
+/* begin namespace ug */
 namespace ug {
-	// start namespace membrane_potential_mapping (mpm)
+	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
 
-		// forward declarations
+		/* forward declarations */
 		template <class T> class Vm2uG;
 		template <class T> class sPoint;
 		template <class T> class uGPoint;
@@ -47,7 +51,7 @@ namespace ug {
 		template <class T> std::ostream& operator<< (std::ostream& output, const sPoint<T>& p);
 		template <class T> std::ostream& operator<< (std::ostream& output, const uGPoint<T>& p);
 
-		/**
+		/*!
 		 * \brief Vm2uG represents a class to perform the k nearest neighbor search with a kd tree and can return the neighbors encapsulates in classes
 		 * \see docs for additional informations
 		 */
@@ -56,7 +60,7 @@ namespace ug {
 		   friend std::ostream& operator<< <>(std::ostream& output, const Vm2uG<T>& p);
 
 		   public:
-			  /**
+			  /*!
 			   * \brief main constructor
 			   *
 			   * \param[in] dataFileBaseName basename of the input files (timesteps of the Neuron simulation)
@@ -65,7 +69,7 @@ namespace ug {
 			   */
 			  Vm2uG(std::string dataFileBaseName=std::string("timesteps/"), std::string dataFileExt=std::string(".csv"), const bool promise_ = false);
 
-			  /**
+			  /*!
 			   * \brief enhanced constructor
 			   *
 			   * \param[in] dataFileBaseName basename of the input files (timesteps of the Neuron simulation)
@@ -77,12 +81,12 @@ namespace ug {
 			   */
 			  Vm2uG(std::string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k);
 
-			  /**
+			  /*!
 			   * \brief default destructor
 			   */
 			  ~Vm2uG();
 
-			  /**
+			  /*!
 			   * \brief interpolate linearly the membrane potentials
 			   *
 			   * \param[in] node the query point (uG)
@@ -93,7 +97,7 @@ namespace ug {
 			   */
 			 const double interp_lin_vms(const T& timestep, const double node[], const double cutoff, const int k);
 
-			 /**
+			 /*!
 			  * \brief interpolate bilinearly the membrane potentials
 			  *
 			  * \param[in] node the query point (uG)
@@ -105,7 +109,7 @@ namespace ug {
 			  */
 			 const double interp_bilin_vms(const T& timestep, const double node[], const double cutoff, const int k);
 
-			 /**
+			 /*!
 			  * \brief return the associated membrane potential of the first nearest neighbor at cartesian coordinates x,y,z at timestep t: special case DIM=3.
 			  *
 			  * \param[in] x coordinate x
@@ -120,7 +124,7 @@ namespace ug {
 				 return vm_t(t, node).getVm();
 			  }
 
-			 /**
+			 /*!
 			  * \brief return the associated membrane potential of the first nearest neighbor at cartesian coordinates x,y,z at timestep t: special case DIM=3.
 			  *
 			  * \param[in] x coordinate x
@@ -135,7 +139,7 @@ namespace ug {
 				  return interp_lin_vms(t, node, cutoff, k);
 			  }
 
-			  /**
+			  /*!
 			  * \brief return the associated membrane potential of the first nearest neighbor at cartesian coordinates x,y,z at timestep t: special case DIM=3.
 			  *
 			  * \param[in] x coordinate x
@@ -150,7 +154,7 @@ namespace ug {
 				  return interp_bilin_vms(t, node, cutoff, k);
 			  }
 
-			  /**
+			  /*!
 			   * \brief builds the tree with timestep
 			   *
 			   * \param[in] timestep the timestep for build-up of the kd-tree
@@ -158,7 +162,7 @@ namespace ug {
 			   */
 			  void buildTree(const T& timestep);
 
-			  /**
+			  /*!
 			   * \brief get the nearest neighbor and return the associated membrane potential and distance to the query point
 			   *
 			   * \param[in] timestep the timestep for which a membrane potential shall be searched
@@ -171,7 +175,7 @@ namespace ug {
 			   */
 			  uGPoint<T> vm_t(const T& timestep, const double node[]);
 
-			  /**
+			  /*!
 			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP.
 			   *
 			   * \param[in] timestep the timestep for which a mmebrane potential shall be searched
@@ -187,7 +191,8 @@ namespace ug {
 			   */
 			  std::vector<uGPoint<T> > vm_t_many(const T& timestep, const double nodes[][QDIM]);
 
-			  /** \brief the same as vm_t but get the k nearest neighbors of one query points
+			  /*!
+			   * \brief the same as vm_t but get the k nearest neighbors of one query points
 			   *
 			   * \param[in] timestep the timestep for which a membrane potential shall be searched
 			   * \param[in] node the query point (cartesian coordinate of grid point from UG)
@@ -200,7 +205,7 @@ namespace ug {
 			  */
 			  uGPoint<T> vm_t_k(const T& timestep, const double node[], const int& k);
 
-			  /**
+			  /*!
 			   * \brief the same as vm_t_many but get the k nearest neighbors of many query points
 			   *
 			   * \param[in] timestep the timestep for which a membrane potential shall be searched
@@ -216,7 +221,7 @@ namespace ug {
 			   */
 			  std::vector<uGPoint<T> > vm_t_many_k(const T& timestep, const double nodes[][QDIM], const int& k);
 
-			  // setter
+			  /*! setters */
 			  void setK(const short int& k);
 			  void setDim(const short int& dim);
 			  void setTimestep(const T& timestep);
@@ -226,7 +231,7 @@ namespace ug {
 			  void setdataFileBaseName(std::string dataFileBaseName);
 			  void setdataFileExt(std::string dataFileExt);
 
-			  // getter
+			  /*! getters */
 			  bool treeBuild() { return isTreeBuild; }
 
 		   protected:
@@ -266,7 +271,7 @@ namespace ug {
 
 			  static std::ifstream dataStream;
 
-			  /**
+			  /*!
 			   * \brief prints a data or query point with its cartesian coordinates
 			   *
 			   * \param[in] out where the output should go to (default: std::cout)
@@ -277,7 +282,7 @@ namespace ug {
 			   */
 			  inline void printPt(std::ostream &out, const ANNpoint& p, const bool newline = true) const;
 
-			  /**
+			  /*!
 			   * \brief reads a data or query point with its cartesian coordinates
 			   *
 			   * \param[in] node a point with its coordinates
@@ -286,7 +291,7 @@ namespace ug {
 			   */
 			  inline void readPt(const double node[]);
 
-			  /**
+			  /*!
 			   * \brief rebuilds the kd-tree iff the timestep has changed
 			   *
 			   * \param[in] timestep which timestep is demanded
@@ -295,7 +300,7 @@ namespace ug {
 			   */
 			  void rebuildTree(const T& timestep);
 
-			  /**
+			  /*!
 			   * \brief generates a hash for the current timestep
 			   *
 			   * \param[in] timestep which timestep is demanded
@@ -304,7 +309,7 @@ namespace ug {
 			   */
 			  long genHash(const T& timestep);
 
-			  /**
+			  /*!
 			   * \brief check if two doubles can be considered equal (with accuracy < eps)
 			   *
 			   * \param[in] a first double
@@ -315,7 +320,7 @@ namespace ug {
 			  bool areSame(const double& a, const double& b);
 		};
 
-		/**
+		/*!
 		 * \brief sPoint represents a generalized n-dimensional point which has an associated membrane potential
 		 *
 		 */
@@ -324,7 +329,7 @@ namespace ug {
 		   friend std::ostream& operator<< <> (std::ostream& output, const sPoint<T>& p);
 
 		   public:
-			  /**
+			  /*!
 			   * \brief main constructor
 			   *
 			   * \param[in] coordinates coordinates of a hoc point from Neuron
@@ -338,17 +343,17 @@ namespace ug {
 			   */
 			  sPoint(const std::vector<double>& coordinates, const double& Vm, const double& dist, const int& index, const long& timestep, const T realfilename);
 
-			  /**
+			  /*!
 			   * \brief default constructor
 			   */
 			  sPoint();
 
-			  /**
+			  /*!
 			   * brief default destructor
 			   */
 			  ~sPoint();
 
-			  // getter
+			  /*! getters */
 			  const inline double getVm() const;
 			  const inline double getDist() const;
 			  const inline double getIndex() const;
@@ -365,10 +370,10 @@ namespace ug {
 
 			  T realfilename;
 
-			  std::vector<double> coordinates; /** coordinates extracted from a .hoc timestep file */
+			  std::vector<double> coordinates; /*!< coordinates extracted from a .hoc timestep file */
 		};
 
-		/**
+		/*!
 		 * \brief uGPoint represents a class (composites sPoint) to store the k nearest neighbors (as sPoints) of a query point (UG grid point).
 		 */
 		template <class T> class uGPoint {
@@ -376,7 +381,7 @@ namespace ug {
 		   friend std::ostream& operator<< <> (std::ostream& output, const uGPoint& p);
 
 		   public:
-			  /**
+			  /*!
 			   * \brief main constructor
 			   *
 			   * \param[in] coordinates coordinates of a query point (a grid point in uG)
@@ -387,32 +392,33 @@ namespace ug {
 			   */
 			  uGPoint(const std::vector<double>& coordinates, const std::vector<sPoint<T> >& nearestNeighbors);
 
-			  /**
+			  /*!
 			   * \brief default constructor
 			   */
 			  uGPoint();
 
-			  /**
+			  /*!
 			   * \brief default destructor
 			   */
 			  ~uGPoint();
 
-			  // getter
+			  /*! getters */
 			  const inline std::vector<sPoint<T> > getNearestNeighbors() const;
 			  const inline std::vector<double> getCoordinates() const;
 			  double getVm();
 			  double getDist();
 
 		   protected:
-			  std::vector<double> coordinates; /** cartesian coordinates from an UG grid point */
+			  std::vector<double> coordinates; /* cartesian coordinates from an UG grid point */
 			  std::vector<sPoint<T> > nearestNeighbors;
 
 		};
-	// end namespace membrane_potential_mapping (mpm)
+	/* end namespace mpm */
 	}
-// end namespace ug (ug)
+/* end namespace ug */
 }
 
+/* include vm2ug implementation */
 #include "vm2ug_impl.h"
 
 #endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__ */

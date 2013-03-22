@@ -1,4 +1,4 @@
-/**
+/*!
  * \file vm2ug.cpp
  * \brief forward declarations for vm2ug
  * \see vm2ug.h
@@ -7,7 +7,7 @@
  * \author Stephan Grein
  */
 
-// includes
+/* standard includes */
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
@@ -21,19 +21,16 @@
 #include <omp.h>
 #endif
 
+/* mpm includes */
 #include "vm2ug.h"
 
-
-// using directives
 using namespace std;
 
-// start namespace ug (ug)
+/* begin namespace ug */
 namespace ug {
-	// start namespace membrane_potential_mapping (mpm)
+	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
-		// template declarations for Vm2ug
-		//#include "vm2ug_impl.h"
-
+		/* template declarations for Vm2uG */
 		template Vm2uG<int>::~Vm2uG();
 		template Vm2uG<double>::~Vm2uG();
 		template Vm2uG<string>::~Vm2uG();
@@ -80,7 +77,7 @@ namespace ug {
 		template const double Vm2uG<int>::interp_lin_vms(const int& timestep, const double node[], const double cutoff, const int k);
 		template const double Vm2uG<double>::interp_lin_vms(const double& timestep, const double node[], const double cutoff, const int k);
 		template const double Vm2uG<string>::interp_lin_vms(const string& timestep, const double node[], const double cutoff, const int k);
-	// end namespace membrane_potential_mapping (mpm)
+	/* end namespace mpm */
 	}
-// end namespace ug (ug)
+/* end namespace ug */
 }

@@ -1,4 +1,4 @@
-/**
+/*!
  * \file transform.h
  * \brief header for the preprocessing step: transform (.hoc -> .obj) and
  *        extract the associated membrane potential for each timestep
@@ -11,19 +11,17 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__
 
-
-// includes
+/* standard and boost includes */
 #include <string>
 #include <boost/filesystem.hpp>
 
-
-// begin namespace ug (ug)
+/* begin namespace ug */
 namespace ug {
-	// begin namespace membrane_potential_mapping (mpm)
+	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
 		class Transform {
 			public:
-				/**
+				/*!
 				 * \brief default constructor for the Transform class
 				 *
 				 * \param[in] the hoc file which shall be transformed
@@ -36,7 +34,7 @@ namespace ug {
 				Transform(const std::string& hocfile, const std::string& timestep_directory, const double dt=0.1, const long steps=100, const double vinit=-75.0) : m_hocfile(hocfile), m_objfile(boost::filesystem::path(hocfile).replace_extension(".obj").string()), m_xmlfile(boost::filesystem::path(hocfile).replace_extension(".xml").string()), m_timestepdirectory(timestep_directory), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
 				~Transform() { };
 
-				/**
+				/*!
 				 * \brief modifies the hoc setup
 				 *
 				 * \param[in] dt the delta_t [ms]
@@ -47,7 +45,7 @@ namespace ug {
 				 */
 				void modify_hoc_setup(const double dt, const long steps, const double vinit);
 
-				/**
+				/*!
 				 * \brief extracts the timesteps and the object file (.obj)
 				 *
 				 * \param[in] gen_objfile perform second optional step iff True
@@ -61,23 +59,47 @@ namespace ug {
 				 */
 				void extract_timesteps_and_obj(const bool gen_objfile=false, const std::string& neugen_executable="NeuGen3D", const std::string& neutria_executable="neutria");
 
-				// getter
+				/*!
+				 * \brief simple getter for the hoc file
+				 *
+				 * \return \c the hoc file as string
+				 */
 				inline const std::string& get_hocfile() const {
 					return m_hocfile;
 				}
 
+				/*!
+				 * \brief simple getter for the obj file
+				 *
+				 * \return \c the obj file as string
+				 */
 				inline const std::string& get_objfile() const {
 					return m_objfile;
 				}
 
+				/*!
+				 * \brief simple getter for the xml file
+				 *
+				 * \return \c the xml file as string
+				 */
 				inline const std::string& get_xmlfile() const {
 					return m_xmlfile;
 				}
 
+				/*!
+				 * \brief simple getter for the timestep directory
+				 *
+				 * \return \c the timestep directory as string
+				 */
 				inline const std::string& get_timestepdirectory() const {
 					return m_timestepdirectory;
 				}
 
+				/*!
+				 * \brief simple getter for the timestep width
+				 *
+				 * \return \c the timestep width as double
+				 */
 				inline double get_dt() const {
 					return m_dt;
 				}
@@ -93,7 +115,9 @@ namespace ug {
 				long m_steps;
 				double m_vinit;
 		};
+	/* end namespace mpm */
 	}
+/* end namespace ug */
 }
 
 #endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__ */

@@ -1,4 +1,4 @@
-/**
+/*!
  * \file common_typedefs.h
  * \brief common typedefs for mvec usage (\see mvec.h)
  *
@@ -9,31 +9,35 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMON_TYPEDEFS__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMON_TYPEDEFS__
 
-// includes
+/* standard includes */
 #include <vector>
 #include <cstddef>
 
-
-// start namespace ug (ug)
+/* begin namespace ug */
 namespace ug {
-	// start namespace membrane_potential_mapping (mpm)
+	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
-		// forward declarations
+		/* forward declarations for mvec template */
 		template <class T, size_t i> class mvec;
 
-		// common typedefs
+		/* commonly used typedefs for mvec */
 		typedef mvec<double, 3> mvecd3;
 		typedef mvec<double, 2> mvecd2;
 		typedef mvec<double, 1> mvecd1;
 
-		typedef std::vector<double>::const_iterator DITC;
+		/* commonly used typedefs for iterators */
 		typedef std::vector<double>::iterator DIT;
+		typedef std::vector<double>::const_iterator DITC;
 
+		/*!
+		 * \enum NORM
+		 * \brief currently only three norms supported
+		 */
 		enum NORM {
 			INF=0, MANHATTAN, EUCLIDEAN
 		};
-	// end namespace membrane_potential_mapping (mpm)
+	/* end namespace mpm */
 	}
-// end namespace ug (ug)
+/* end namespace ug */
 }
 #endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMON_TYPEDEFS__ */

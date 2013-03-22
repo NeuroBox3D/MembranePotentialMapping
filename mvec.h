@@ -1,4 +1,4 @@
-/**
+/*!
  * \file mvec.h
  * \brief vector functionalities for linear and bilinear interpolation of membrane potentials.
  *
@@ -11,43 +11,43 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
 
-// includes
+/* standard includes */
 #include <vector>
 #include <cstddef>
 #include <cmath>
 #include <numeric>
 
+/* mvec includes */
 #include "common_typedefs.h"
 
-
-// begin namespace ug (ug)
+/* begin namespace ug */
 namespace ug {
-	// begin namespace membrane_potential_mapping (mpm)
+	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
-			/**
+			/*!
 			 * \brief mvec class for vector calculations
 			 *
-			 * \tparam[in] T the precision
-			 * \tparam[in] i the vector's length
+			 * \param[in] T the precision
+			 * \param[in] i the vector's length
 			 */
 			template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
 					public:
-					/**
+					/*!
 					 * \brief default constructor
 					 */
 					mvec();
 
-					/**
+					/*!
 					 * \brief main constructor
 					 */
 					mvec(const std::vector<T>& init);
 
-					/**
+					/*!
 					 * \brief default destructor
 					 */
 					~mvec();
 
-					/**
+					/*!
 					 * \brief calculates the determinant for a list of m n-dimensional vectors
 					 *
 					 * \param[in] mvecs the list of m n-dimensional vectors
@@ -56,7 +56,7 @@ namespace ug {
 					 */
 					static const double det(const std::vector<mvec<T, i> >& mvecs);
 
-					/**
+					/*!
 					 * \brief calculates the norm of an n-dimensional vector
 					 *
 					 * \param[in] NORM one of EUCLIDEAN, INFINITY or MANHATTAN
@@ -65,7 +65,7 @@ namespace ug {
 					 */
 					const double norm(NORM) const;
 
-					// operators
+					/*! operators follow below */
 					inline mvec<T, i> operator+(const mvec<T, i>& rhs) const { return this->add(rhs); }
 					inline mvec<T, i> operator-(const mvec<T, i>& rhs) const { return this->sub(rhs); }
 					inline const double operator*(const mvec<T, i>& rhs) const { return this->dot(rhs); }
@@ -78,7 +78,7 @@ namespace ug {
 					inline mvec<T, i>& operator%=(const mvec<T, i>& rhs);
 
 				private:
-					/**
+					/*!
 					 * \brief adds to vectors component-wise
 					 *
 					 * \param[in] rhs the right hand site vector
@@ -87,7 +87,7 @@ namespace ug {
 					 */
 					mvec<T, i> add(const mvec<T, i>& rhs) const;
 
-					/**
+					/*!
 					 * \brief subs to vectors component-wise
 					 *
 					 * \param[in] rhs the right hand site vector
@@ -96,7 +96,7 @@ namespace ug {
 					 */
 					mvec<T, i> sub(const mvec<T, i>& rhs) const;
 
-					/**
+					/*!
 					 * \brief calculates the dot product of two vectors
 					 *
 					 * \param[in] rhs the right hand site vector
@@ -105,7 +105,7 @@ namespace ug {
 					 */
 					inline const double dot(const mvec<T, i>& rhs) const;
 
-					/**
+					/*!
 					 * \brief calculates the cross product of two vectors
 					 *
 					 * \param[in] rhs the right hand site vector
@@ -114,22 +114,26 @@ namespace ug {
 					 */
 					mvec<T, i> vec(const mvec<T, i>& rhs) const;
 
-					/**
+					/*!
 					 * \brief negates a given vector component-wise
 					 *
 					 * \return mvec<T, i> the negated vector
 					 */
 					mvec<T, i> neg() const;
 
-					/**
+					/*!
 					 * \brief identity
 					 *
 					 * \return mvec<T, i> the unmodified vector
 					 */
 					mvec<T, i> id() const;
 		};
+	/* end namespace mpm */
 	}
+/* end namespace ug */
 }
-// include definitions
+
+/* include implementation of mvec */
 #include "mvec_impl.h"
+
 #endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__ */
