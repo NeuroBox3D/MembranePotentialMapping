@@ -104,15 +104,18 @@ namespace ug {
 	}
 
 	extern "C" void
-	InitUGPlugin_MembranePotentialMapping(ug::bridge::Registry& reg, std::string parentGroup)
+	InitUGPlugin_MembranePotentialMapping(bridge::Registry& reg, std::string& parentGroup)
 	{
-		parentGroup.append("membrane_potential_mapping");
-		typedef membrane_potential_mapping::Functionality Functionality;
-		try {
-			bridge::RegisterDomainDependent<Functionality>(reg,parentGroup);
-		} catch (const ug::bridge::UGRegistryError& error) {
-			UG_LOG("### ERROR in UGRegistry: InitUGPlugin_MembranePotentialMappingPlugin failed registering with message: " << error.name << "" << std::endl);
-		}
+		parentGroup.append("MembranePotentialMapping");
+		#ifdef UG_DIM_3
+			typedef membrane_potential_mapping::Functionality Functionality;
+			typedef boost::mpl::list<Domain3d> compile3d;
+			try {
+				bridge::RegisterDomainDependent<Functionality, compile3d>(reg, parentGroup);
+			} UG_REGISTRY_CATCH_THROW(parentGroup);
+		#else
+			#warning "build with -DDIM=3 or -DDIM=ALL for usage of plugin MembranePotentialMapping"
+		#endif
 	}
 /* end namespace ug */
 }
