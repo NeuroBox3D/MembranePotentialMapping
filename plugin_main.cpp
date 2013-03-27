@@ -107,14 +107,22 @@ namespace ug {
 	InitUGPlugin_MembranePotentialMapping(bridge::Registry& reg, std::string& parentGroup)
 	{
 		parentGroup.append("MembranePotentialMapping");
-		#ifdef UG_DIM_3
-			typedef membrane_potential_mapping::Functionality Functionality;
-			typedef boost::mpl::list<Domain3d> compile3d;
+		typedef membrane_potential_mapping::Functionality Functionality;
+
+		#if defined(UG_DIM_3) and not defined(UG_DIM_2) and not defined(UG_DIM_1)
 			try {
-				bridge::RegisterDomainDependent<Functionality, compile3d>(reg, parentGroup);
+				bridge::RegisterDomain3dDependent<Functionality>(reg, parentGroup);
+			} UG_REGISTRY_CATCH_THROW(parentGroup);
+		#elif defined(UG_DIM_2) and not defined(UG_DIM_3) and not defined(UG_DIM_1)
+			try {
+				bridge::RegisterDomain2dDependent2d<Functionality>(reg, parentGroup);
+			} UG_REGISTRY_CATCH_THROW(parentGroup);
+		#elif defined(UG_DIM_1) and not defined(UG_DIM_3) and not defined(UG_DIM_2)
+			try {
+				bridge::RegisterDomain1dDependent1d<Functionality>(reg, parentGroup);
 			} UG_REGISTRY_CATCH_THROW(parentGroup);
 		#else
-			#warning "build with -DDIM=3 or -DDIM=ALL for usage of plugin MembranePotentialMapping"
+			#warning "build with -DDIM=1, 2, or 3 for usage of plugin MembranePotentialMapping"
 		#endif
 	}
 /* end namespace ug */

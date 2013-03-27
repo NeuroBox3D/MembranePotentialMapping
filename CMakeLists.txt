@@ -104,11 +104,9 @@ if(${MPMTestsuite} STREQUAL "ON")
 endif(${MPMTestsuite} STREQUAL "ON")
 
 # decide which dimension you want to build (currently only DIM=3 is supported!)
-if (${MPMDim} EQUAL 3)
-    add_definitions(-DMPMDIM=${MPMDim})
-else(${MPMDim} EQUAL 3)
-    message(FATAL_ERROR "ERROR: Can currently only build with dimension 3, not ${MPMDim}.")
-endif(${MPMDim} EQUAL 3)
+if(NOT "${DIM}" STREQUAL "3" or "${DIM}" STREQUAL "2" or "${DIM}" STREQUAL "1")
+    message(WARNING "MembranePotentialMapping plugin requires DIM=1, 2, or 3! for proper usage")
+endif()
 
 # decide if you want to build membrane_potential_mapping with OMP support
 if (${MPMParallel} STREQUAL "ON")

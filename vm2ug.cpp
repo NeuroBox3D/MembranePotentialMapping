@@ -47,8 +47,8 @@ namespace ug {
 		template uGPoint<double> Vm2uG<double>::vm_t(const double& timestep, const double node[]);
 		template uGPoint<string> Vm2uG<string>::vm_t(const string& timestep, const double node[]);
 
-		template std::vector<uGPoint<int> > Vm2uG<int>::vm_t_many_k(const int& timestep, const double nodes[][QDIM], const int& k);
-		template std::vector<uGPoint<double> > Vm2uG<double>::vm_t_many_k(const double& timestep, const double nodes[][QDIM], const int& k);
+		template std::vector<uGPoint<int> > Vm2uG<int>::vm_t_many_k(const int& timestep, const double nodes[][DIM], const int& k);
+		template std::vector<uGPoint<double> > Vm2uG<double>::vm_t_many_k(const double& timestep, const double nodes[][DIM], const int& k);
 
 		template ostream& operator<<(ostream& output, const Vm2uG<int>& p);
 		template ostream& operator<<(ostream& output, const Vm2uG<double>& p);

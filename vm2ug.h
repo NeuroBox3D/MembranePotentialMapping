@@ -16,8 +16,18 @@
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
 /* macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.) */
-#ifndef QDIM
-#define QDIM 3 // MPMDIM:=3
+#ifndef DIM
+	#ifdef UG_DIM_1
+		#define DIM 1
+	#endif
+
+	#ifdef UG_DIM_2
+		#define DIM 2
+	#endif
+
+	#ifdef UG_DIM_3
+		#define DIM 3
+	#endif
 #endif
 
 /* standard includes */
@@ -189,7 +199,9 @@ namespace ug {
 			   * \see uGPoint
 			   *
 			   */
-			  std::vector<uGPoint<T> > vm_t_many(const T& timestep, const double nodes[][QDIM]);
+			  std::vector<uGPoint<T> > vm_t_many(const T& timestep, const double nodes[][DIM]);
+
+
 
 			  /*!
 			   * \brief the same as vm_t but get the k nearest neighbors of one query points
@@ -219,7 +231,7 @@ namespace ug {
 			   * \see sPoint
 			   * \see uGPoint
 			   */
-			  std::vector<uGPoint<T> > vm_t_many_k(const T& timestep, const double nodes[][QDIM], const int& k);
+			  std::vector<uGPoint<T> > vm_t_many_k(const T& timestep, const double nodes[][DIM], const int& k);
 
 			  /*! setters */
 			  void setK(const short int& k);

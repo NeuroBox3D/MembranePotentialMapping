@@ -452,7 +452,7 @@ namespace ug {
 
 
 
-		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timestep, const double nodes[][QDIM]) {
+		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timestep, const double nodes[][DIM]) {
 
 		   annQueryPtsIdxArray.clear();
 		   annQueryPtsDistsArray.clear();
@@ -613,7 +613,7 @@ namespace ug {
 		   return vm_t(timestep, node);
 		}
 
-		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many_k(const T& timestep, const double nodes[][QDIM], const int& k) {
+		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many_k(const T& timestep, const double nodes[][DIM], const int& k) {
 		   if (this->k < k) {
 			  this->k = k;
 			  rebuildTree(timestep); // timestep, was: k
