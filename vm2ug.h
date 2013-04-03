@@ -17,15 +17,17 @@
 
 /* macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.) */
 #ifndef DIM
-	#ifdef UG_DIM_1
+	#if defined(UG_DIM_1) and not defined(UG_DIM_1) and not defined(UG_DIM_3)
 		#define DIM 1
 	#endif
 
-	#ifdef UG_DIM_2
+	#if defined(UG_DIM_2) and not defined(UG_DIM_1) and not defined(UG_DIM_3)
 		#define DIM 2
 	#endif
 
-	#ifdef UG_DIM_3
+	#if defined(UG_DIM_3) and not defined(UG_DIM_1) and not defined(UG_DIM_2)
+		#define DIM 3
+	#else
 		#define DIM 3
 	#endif
 #endif
