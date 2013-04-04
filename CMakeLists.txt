@@ -19,27 +19,25 @@ cmake_minimum_required(VERSION 2.6)
 project(MEMBRANE_POTENTIAL_MAPPING)
 
 # default values
-set(MPMDim 3)
 set(MPMTestsuite ON)
 set(MPMDefault ON)
 set(MPMParallel OFF)
 
-message(STATUS "Info: Additional options for membrane_potential_mapping:")
+message(STATUS "")
+message(STATUS "Info: Additional options for the MembranePotentialMapping (MPM) plugin:")
 
 # options for building membrane_potential_mapping (e. g. -DMPMTestsuite=OFF)
-option(MPMTestsuite "Build MPMTestsuite" ${MPMTestsuite})
-message(STATUS "Info: MPMTestsuite:      "${MPMTestsuite}" (options are: ON, OFF)")
+option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
+message(STATUS "Info: Testsuite:   "${MPMTestsuite}" (options are: ON, OFF)")
 
-option(MPMDefault "Build MPMDefault    " ${MPMDefault})
-message(STATUS "Info: MPMDefault:        "${MPMDefault}" (options are: ON, OFF)")
+option(MPMDefault "Build VGCC:    " ${MPMDefault})
+message(STATUS "Info: VGCC:        "${MPMDefault}" (options are: ON, OFF)")
 
-option(MPMDim  "Build MPMDim:           " ${MPMDim})
-message(STATUS "Info: MPMDim:            "${MPMDim}" (options are: 1, 2, 3)") 
+option(MPMParallel "Build OpenMP:  " ${MPMParallel})
+message(STATUS "Info: OpenMP:      " ${MPMParallel}" (options are: ON, OFF)")
 
-option(MPMParallel "Build MPMParallel:  " ${MPMParallel})
-message(STATUS "Info: MPMParallel:       " ${MPMParallel}" (options are: ON, OFF)")
+message(STATUS "")
  
-message(STATUS "Info: Please build with -DINTERNAL_BOOST=OFF because some functionality isn't provided in the INTERNAL_BOOST revision!")
 # include the definitions and dependencies for ug-plugins.
 include("../../../cmake/ug_plugin_includes.cmake")
 
@@ -49,10 +47,11 @@ include_directories(${PYTHON_INCLUDE_DIRS})
 # fixes include issue (Python.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
 include_directories(${PYTHON_INCLUDE_PATH})
 
-# boost includes
+# boost includes (for now required - FIXME: remove that non-header-only components!!!)
 find_package(Boost COMPONENTS filesystem REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
+message(STATUS "")
 
 # set the sources 
 set(SOURCES_simple	 transform.cpp
@@ -103,11 +102,6 @@ if(${MPMTestsuite} STREQUAL "ON")
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
 endif(${MPMTestsuite} STREQUAL "ON")
 
-# decide which dimension you want to build (currently only DIM=3 is supported!)
-if(NOT "${DIM}" STREQUAL "3" or "${DIM}" STREQUAL "2" or "${DIM}" STREQUAL "1")
-    message(WARNING "MembranePotentialMapping plugin requires DIM=1, 2, or 3! for proper usage")
-endif()
-
 # decide if you want to build membrane_potential_mapping with OMP support
 if (${MPMParallel} STREQUAL "ON")
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -148,5 +142,11 @@ else(buildEmbeddedPlugins)
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)
+
+# decide which dimension you want to build (currently only DIM=3 is supported!)
+if (NOT ${DIM} STREQUAL 3 AND NOT ${DIM} STREQUAL 2 AND NOT ${DIM} STREQUAL 1)
+    message(WARNING "The MPM plugin requires DIM to be set to one of {1, 2, 3}.")
+endif(NOT ${DIM} STREQUAL 3 AND NOT ${DIM} STREQUAL 2 AND NOT ${DIM} STREQUAL 1)
+
 
 # ENDOF CMAKE
