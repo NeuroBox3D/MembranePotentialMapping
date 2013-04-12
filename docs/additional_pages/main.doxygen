@@ -1,8 +1,13 @@
-/** \mainpage plugin membrane_potential_mapping - Documentation 
- 
+/** \page plugin_experimental_mempotmap Membrane Potential Mapping
+\defgroup mempotmap_plugin Membrane Potential Mapping Plugin
+\ingroup experimental_plugins
+\{
+
 \section secAbout About
 \todo Some basic description of the plugin.
 
 \section secInterface Interface
 \todo Some basic description of the interface to the plugin.
- */
+
+\}
+*/
