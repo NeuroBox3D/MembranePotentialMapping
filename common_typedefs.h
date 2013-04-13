@@ -1,5 +1,5 @@
 /*!
- * \file common_typedefs.h
+ * \file plugins/experimental/membrane_potential_mapping/common_typedefs.h
  * \brief common typedefs for mvec usage (\see mvec.h)
  *
  * \author Stephan Grein

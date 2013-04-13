@@ -1,6 +1,6 @@
 /*!
  *
- * \file circumference.h
+ * \file plugins/experimental/membrane_potential_mapping/aux/edge_utilities.h
  * \brief auxiliary functions to calculate circumference
  *
  * \author Stephan Grein

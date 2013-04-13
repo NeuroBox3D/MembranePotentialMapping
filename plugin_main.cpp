@@ -1,5 +1,5 @@
 /*!
- * \file plugin_main.cpp
+ * \file plugins/experimental/membrane_potential_mapping/plugin_main.cpp
  * \brief registry of the ug plugin membrane_potential_mapping
  *
  *  \date created on Apr 30, 2012

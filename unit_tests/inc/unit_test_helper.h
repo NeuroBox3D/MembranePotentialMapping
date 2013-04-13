@@ -1,5 +1,5 @@
 /**
- * \file unit_test_helper.h
+ * \file plugins/experimental/membrane_potential_mapping/unit_tests/inc/unit_test_helper.h
  * \brief helper functions for unit tests
  *
  * \date created on Apr 27, 2012

@@ -1,5 +1,5 @@
 /**
- * \file fixtures.cpp
+ * \file plugins/experimental/membrane_potential_mapping/unit_tests/inc/fixtures.cpp
  * \brief fixtures for testing the membrane_potential_mapping ug plugin
  *
  * \date May 27, 2012

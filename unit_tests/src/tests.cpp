@@ -1,5 +1,5 @@
 /**
- * \file tests.cpp
+ * \file plugins/experimental/membrane_potential_mapping/unit_tests/src/tests.cpp
  * \brief boost unit test for the membrane_potenial_mapping ug plugin
  *
  * \date created on Apr 27, 2012
