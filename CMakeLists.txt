@@ -129,10 +129,10 @@ else(buildEmbeddedPlugins)
 
 # decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
     if(${MPMVGCC} STREQUAL "ON")
-       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
-       add_definitions(-DMPMDEFAULT) 
-    else(${MPMVGCC} STREQUAL "ON")
         add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
+       add_definitions(-DMPMVGCC) 
+    else(${MPMVGCC} STREQUAL "ON")
+       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
     endif(${MPMVGCC} STREQUAL "ON")
     
 	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})

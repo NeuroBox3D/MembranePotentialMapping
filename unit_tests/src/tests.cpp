@@ -1,4 +1,4 @@
-/**
+/*!
  * \file plugins/experimental/membrane_potential_mapping/unit_tests/src/tests.cpp
  * \brief boost unit test for the membrane_potenial_mapping ug plugin
  *
@@ -6,9 +6,8 @@
  * \author Stephan Grein
  */
 
-#define BOOST_TEST_MODULE __CPP__UNIT_TESTS__UG__PLASMA_MEMBRANE__
+#define BOOST_TEST_MODULE __CPP__UNIT_TESTS__UG__MEMBRANE_POTENTIAL_MAPPING__
 
-// includes
 extern "C" {
 #include "Python.h"
 }
@@ -31,7 +30,6 @@ extern "C" {
 #include "../../common_typedefs.h"
 #include "../../transform.h"
 
-// using directives
 using namespace boost::unit_test;
 using namespace ug::membrane_potential_mapping;
 using namespace ug::membrane_potential_mapping::bg;
@@ -39,9 +37,7 @@ using std::string;
 using ug::membrane_potential_mapping::SMALL;
 using ug::membrane_potential_mapping::VERY_SMALL;
 
-/**
- * BOOST Test Suite for testing of mvec class
- */
+// BOOST Test Suite for testing of mvec class
 BOOST_AUTO_TEST_SUITE(vec);
 
 // test basic constructor
@@ -354,9 +350,7 @@ BOOST_AUTO_TEST_CASE(test_assignment_vec) {
 
 BOOST_AUTO_TEST_SUITE_END();
 
-/**
- * BOOST Test Suite for testing of vm2ug class
- */
+// BOOST Test Suite for testing of vm2ug class
 BOOST_FIXTURE_TEST_SUITE(vm2ug, FixtureVUG<string>);
 
 // test constructor
@@ -387,17 +381,17 @@ BOOST_AUTO_TEST_CASE(get_potential) {
 
 BOOST_AUTO_TEST_SUITE_END();
 
-/**
- * BOOST Test Suite for testing of bg class
- */
+// BOOST Test Suite for testing of bg class
 BOOST_FIXTURE_TEST_SUITE(bg, FixtureBG);
 
+// test construct BG channel
 BOOST_AUTO_TEST_CASE(constructInstanceBG) {
 	BOOST_MESSAGE("Starting test >>constructBG<<");
 	BOOST_REQUIRE_MESSAGE(bg, "BG instance cannot be constructed");
 	BOOST_MESSAGE("End test >>constructBG<<");
 }
 
+// test install different gate types
 BOOST_AUTO_TEST_CASE(install_gates) {
 	BOOST_MESSAGE("Starting test >>install_gates<<");
 	BOOST_REQUIRE_MESSAGE(bg, "BG instance cannot be constructed");
@@ -410,7 +404,8 @@ BOOST_AUTO_TEST_CASE(install_gates) {
 	BOOST_MESSAGE("End test >>install_gates<<");
 }
 
-#ifndef MPMDEFAULT
+// check fluxes for the ohmic BG model
+#ifdef MPMVGCC
 BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
 	BOOST_MESSAGE("Starting test >>check_fluxes_ohmic<<");
 	BG* b = new BG();
@@ -434,6 +429,7 @@ BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
 	BOOST_MESSAGE("End test >>check_fluxes_ohmic<<");
 }
 
+//  check molar fluxes for the ohmic BG model
 BOOST_AUTO_TEST_CASE(check_molar_fluxes_ohmic) {
 	BOOST_MESSAGE("Starting test >>check_molar_fluxes_ohmic<<");
 	BG* b = new BG();
@@ -453,6 +449,7 @@ BOOST_AUTO_TEST_CASE(check_molar_fluxes_ohmic) {
 	BOOST_MESSAGE("End test >>check_molar_fluxes_ohmic<<");
 }
 #else
+// check fluxes for the cfp BG model
 BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
 	BOOST_MESSAGE("Starting test >>check_fluxes_cfp<<");
 	BG* b = new BG();
@@ -476,7 +473,7 @@ BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
 	}
 	BOOST_MESSAGE("End test >>check_fluxes_cfp<<");
 }
-
+// check molar fluxes for the cfp BG model
 BOOST_AUTO_TEST_CASE(check_molar_fluxes_cfp) {
 	BOOST_MESSAGE("Starting test >>check_molar_fluxes_cfp<<");
 	BG* b = new BG();
@@ -498,26 +495,26 @@ BOOST_AUTO_TEST_CASE(check_molar_fluxes_cfp) {
 }
 #endif
 
-// TODO check dervivatives of cfp and ohmic model!
-
 BOOST_AUTO_TEST_SUITE_END();
 
+// BOOST Test Suite for testing of the transform class
 BOOST_AUTO_TEST_SUITE(transform);
 
-// TODO: extended testing of the transform class
+// TODO: test the basic transform method here
 BOOST_AUTO_TEST_CASE(transform) {
 	Py_Initialize();
     BOOST_REQUIRE_EQUAL(PyRun_SimpleString("from neuron import h"), 0);
     Py_Finalize();
 }
 
+BOOST_AUTO_TEST_SUITE_END();
+
+// BOOST Test Suite for avoid warning
 BOOST_AUTO_TEST_SUITE(dummy);
 
-// to avoid a warning
+// dummy test
 BOOST_AUTO_TEST_CASE(dummy) {
 	BOOST_CHECK_SMALL(0.0, SMALL);
 }
-
-BOOST_AUTO_TEST_SUITE_END();
 
 BOOST_AUTO_TEST_SUITE_END();

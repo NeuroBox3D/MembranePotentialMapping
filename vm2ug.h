@@ -6,16 +6,14 @@
  * \author Stephan Grein
  * \date July, 2011
  *
- * TODO: migrate to UG's kd-tree on demand.
- * TODO: code could be optimized, lesser cctor calls!
- * TODO: cleanup code; use typename instead of class for templates whenever possible.
- * TODO: introduce proper doxygen: http://www.stack.nl/~dimitri/doxygen/manual/docblocks.html
+ * Notes: Migrate to the UG internal kd-tree
+ * TODO: Code optimization	and cleanup (cctor calls, typename vs. class for templates)
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
-/* macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.) */
+// macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.)
 #ifndef DIM
 	#if defined(UG_DIM_1) and not defined(UG_DIM_1) and not defined(UG_DIM_3)
 		#define DIM 1
@@ -32,29 +30,24 @@
 	#endif
 #endif
 
-/* standard includes */
 #include <vector>
 #include <string>
 #include <istream>
 #include <ostream>
 #include <cmath>
 
-/* ANN include */
-#include <ANN/ANN.h>
-
-/* ug include */
 #include "common/common.h"
 
-/* mpm includes */
+#include <ANN/ANN.h>
 #include "common_typedefs.h"
 #include "mvec.h"
 
-/* begin namespace ug */
+// begin namespace ug
 namespace ug {
-	/* begin namespace mpm */
+	// begin namespace mpm
 	namespace membrane_potential_mapping {
 
-		/* forward declarations */
+		// forward declarations
 		template <class T> class Vm2uG;
 		template <class T> class sPoint;
 		template <class T> class uGPoint;
@@ -235,7 +228,7 @@ namespace ug {
 			   */
 			  std::vector<uGPoint<T> > vm_t_many_k(const T& timestep, const double nodes[][DIM], const int& k);
 
-			  /*! setters */
+			  // setters
 			  void setK(const short int& k);
 			  void setDim(const short int& dim);
 			  void setTimestep(const T& timestep);
@@ -245,7 +238,7 @@ namespace ug {
 			  void setdataFileBaseName(std::string dataFileBaseName);
 			  void setdataFileExt(std::string dataFileExt);
 
-			  /*! getters */
+			  // getters
 			  bool treeBuild() { return isTreeBuild; }
 
 		   protected:
@@ -367,7 +360,7 @@ namespace ug {
 			   */
 			  ~sPoint();
 
-			  /*! getters */
+			  // getters
 			  const inline double getVm() const;
 			  const inline double getDist() const;
 			  const inline double getIndex() const;
@@ -384,7 +377,7 @@ namespace ug {
 
 			  T realfilename;
 
-			  std::vector<double> coordinates; /*!< coordinates extracted from a .hoc timestep file */
+			  std::vector<double> coordinates; /// coordinates extracted from a .hoc timestep file
 		};
 
 		/*!
@@ -416,23 +409,23 @@ namespace ug {
 			   */
 			  ~uGPoint();
 
-			  /*! getters */
+			  // getters
 			  const inline std::vector<sPoint<T> > getNearestNeighbors() const;
 			  const inline std::vector<double> getCoordinates() const;
 			  double getVm();
 			  double getDist();
 
 		   protected:
-			  std::vector<double> coordinates; /* cartesian coordinates from an UG grid point */
+			  std::vector<double> coordinates; /// cartesian coordinates from an UG grid point
 			  std::vector<sPoint<T> > nearestNeighbors;
 
 		};
-	/* end namespace mpm */
+	// end namespace mpm
 	}
-/* end namespace ug */
+// end namespace ug
 }
 
-/* include vm2ug implementation */
+// include vm2ug implementation
 #include "vm2ug_impl.h"
 
-#endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__ */
+#endif // __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__

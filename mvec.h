@@ -5,24 +5,22 @@
  * \author: Stephan Grein
  * \date Created on: Apr 07, 2012
  *
- * TODO: migrate to UG's vector class on demand
+ * Note: Migrate to UG's vector class
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
 
-/* standard includes */
 #include <vector>
 #include <cstddef>
 #include <cmath>
 #include <numeric>
 
-/* mvec includes */
 #include "common_typedefs.h"
 
-/* begin namespace ug */
+// begin namespace ug
 namespace ug {
-	/* begin namespace mpm */
+	// begin namespace mpm
 	namespace membrane_potential_mapping {
 			/*!
 			 * \brief mvec class for vector calculations
@@ -65,7 +63,7 @@ namespace ug {
 					 */
 					const double norm(NORM) const;
 
-					/*! operators follow below */
+					// operators follow below
 					inline mvec<T, i> operator+(const mvec<T, i>& rhs) const { return this->add(rhs); }
 					inline mvec<T, i> operator-(const mvec<T, i>& rhs) const { return this->sub(rhs); }
 					inline const double operator*(const mvec<T, i>& rhs) const { return this->dot(rhs); }
@@ -128,12 +126,12 @@ namespace ug {
 					 */
 					mvec<T, i> id() const;
 		};
-	/* end namespace mpm */
+	// end namespace mpm
 	}
-/* end namespace ug */
+// end namespace ug
 }
 
-/* include implementation of mvec */
+// include implementation of mvec
 #include "mvec_impl.h"
 
-#endif /* __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__ */
+#endif // __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__

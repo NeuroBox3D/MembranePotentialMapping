@@ -4,14 +4,13 @@
  *
  * \see http://docs.python.org/extending/embedding.html
  *
- * TODO: integrate into VRL
+ * TODO: integrate for usage within VRL
  *
  * \date created on Aug 3, 2012
  * \author Stephan Grein
  */
 
 
-/* standard, boost and python includes */
 #include "Python.h" /*!< #include "/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/Python.h" */
 #include <exception>
 #include <sstream>
@@ -19,11 +18,9 @@
 #include <fstream>
 #include <boost/filesystem.hpp>
 
-/* ug includes */
 #include <common/log.h>
 #include <common/error.h>
 
-/* mpm includes */
 #include "transform.h"
 
 using namespace ug::membrane_potential_mapping;
