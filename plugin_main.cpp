@@ -19,7 +19,7 @@
 #include <lib_grid/lib_grid.h>
 
 #include "vm2ug.h"
-#ifdef MPMDEFAULT
+#ifdef MPMVGCC
 #include "bg_default/bg.h"
 #else
 #include "bg_simple/bg.h"
@@ -69,7 +69,7 @@ namespace ug {
 			   reg.add_class_<TBG>("BorgGraham", grp)
 				  .add_constructor()
 				  .add_method("install_can_gates", &TBG::install_can_gates, grp)
-				  #ifdef MPMDEFAULT
+				  #ifdef MPMVGCC
 				  .add_method("install_can_gates_cfp", &TBG::install_can_gates_cfp, grp)
 				  .add_method("get_current", (double (TBG::*)(const double, const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default#custom membrane potential [mV]|default",  grp)
 				  .add_method("get_current", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::timestepping_of_gates_and_calc_current), "t [s] |default#delta t [s]|default#custom membrane potential [mV]|default#IC Calcium [Mol]|default#EC Calcium [Mol]|default",  grp)
@@ -80,7 +80,7 @@ namespace ug {
 				  .add_method("calc_current_at_start", (double (TBG::*)(const double, const double, const double, const double, const double)) (&TBG::calc_current_at_start), grp)
 				  .add_method("get_Neumann_Flux", &TBG::get_Neumann_Flux, grp)
 				  .add_method("get_Neumann_Flux_As_Concentration", &TBG::get_Neumann_Flux_as_Concentration, grp)
-				  #ifdef MPMDEFAULT
+				  #ifdef MPMVGCC
 				  .add_method("dCadCa_i", &TBG::dCa_dCa_i, "derivative w.r.t. internal calcium concentration|default", "", grp)
 				  .add_method("dCadCa_o", &TBG::dCa_dCa_i, "derivative w.r.t. external calcium concentration|default", "", grp)
 				  #else

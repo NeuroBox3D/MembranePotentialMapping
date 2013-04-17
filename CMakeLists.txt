@@ -129,10 +129,10 @@ else(buildEmbeddedPlugins)
 
 # decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
     if(${MPMVGCC} STREQUAL "ON")
-        add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
+       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
        add_definitions(-DMPMVGCC) 
     else(${MPMVGCC} STREQUAL "ON")
-       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
+        add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMVGCC} STREQUAL "ON")
     
 	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
@@ -148,5 +148,7 @@ if (NOT ${DIM} STREQUAL 3 AND NOT ${DIM} STREQUAL 2 AND NOT ${DIM} STREQUAL 1)
     message(WARNING "The MPM plugin requires DIM to be set to one of {1, 2, 3}.")
 endif(NOT ${DIM} STREQUAL 3 AND NOT ${DIM} STREQUAL 2 AND NOT ${DIM} STREQUAL 1)
 
+# warn of future obsolete VGCC components in this plugin
+message(WARNING "The MembranePotentialMapping's VGCC implementation and unit tests will be unified in voltage_gated_channels in future.")
 
 # ENDOF CMAKE

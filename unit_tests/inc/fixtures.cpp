@@ -13,7 +13,7 @@
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
 
-#ifdef MPMDEFAULT
+#ifdef MPMVGCC
 #include "../../bg_default/bg.h"
 #else
 #include "../../bg_simple/bg.h"

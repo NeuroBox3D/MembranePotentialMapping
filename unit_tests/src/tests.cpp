@@ -19,7 +19,7 @@ extern "C" {
 #include "../inc/unit_test_helper.h"
 #include "../inc/fixtures.cpp"
 
-#ifdef MPMDEFAULT
+#ifdef MPMVGCC
 #include "../../bg_default/bg.h"
 #else
 #include "../../bg_simple/bg.h"
@@ -405,7 +405,7 @@ BOOST_AUTO_TEST_CASE(install_gates) {
 }
 
 // check fluxes for the ohmic BG model
-#ifdef MPMVGCC
+#ifndef MPMVGCC
 BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
 	BOOST_MESSAGE("Starting test >>check_fluxes_ohmic<<");
 	BG* b = new BG();
