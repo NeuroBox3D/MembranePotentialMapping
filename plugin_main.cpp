@@ -34,7 +34,7 @@ namespace ug {
 	// begin namespace mpm
 	namespace membrane_potential_mapping {
 		/*!
-		 * \defgroup mpm_plugin MembranePotentialMapping plugin
+		 * \defgroup mpm_plugin Membrane Potential Mapping plugin
 		 * \ingroup experimental_plugins
 		 * \{
 		 *
@@ -104,7 +104,7 @@ namespace ug {
 	// end namespace mpm
 	}
 
-	/// \addtogroup mempotmap_plugin
+	/// \addtogroup mpm_plugin
 	extern "C" void
 	InitUGPlugin_MembranePotentialMapping(bridge::Registry& reg, std::string& parentGroup)
 	{
@@ -123,8 +123,6 @@ namespace ug {
 			try {
 				bridge::RegisterDomain1dDependent1d<Functionality>(reg, parentGroup);
 			} UG_REGISTRY_CATCH_THROW(parentGroup);
-		#else
-			#warning "build with -DDIM=1, 2, or 3 for usage of plugin MembranePotentialMapping"
 		#endif
 	}
 // end namespace ug

@@ -1,13 +1,13 @@
 /*!
  * \file mvec.h
  * \brief vector functionalities for linear and bilinear interpolation of membrane potentials.
+ * \addtogroup mpm_plugin
  *
  * \author: Stephan Grein
  * \date Created on: Apr 07, 2012
  *
  * Note: Migrate to UG's vector class
  */
-
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__MVEC__
 
@@ -24,6 +24,7 @@ namespace ug {
 	namespace membrane_potential_mapping {
 			/*!
 			 * \brief mvec class for vector calculations
+			 * \addtogroup mpm_plugin
 			 *
 			 * \param[in] T the precision
 			 * \param[in] i the vector's length

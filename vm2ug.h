@@ -1,6 +1,7 @@
 /*!
  * \file vm2ug.h
  * \brief header for the membrane_potential_mapping
+ * \addtogroup mpm_plugin
  * \see docs for additional information
  *
  * \author Stephan Grein
@@ -58,6 +59,8 @@ namespace ug {
 
 		/*!
 		 * \brief Vm2uG represents a class to perform the k nearest neighbor search with a kd tree and can return the neighbors encapsulates in classes
+		 * \addtogroup mpm_plugin
+		 *
 		 * \see docs for additional informations
 		 */
 		template <class T> class Vm2uG {
@@ -332,6 +335,7 @@ namespace ug {
 
 		/*!
 		 * \brief sPoint represents a generalized n-dimensional point which has an associated membrane potential
+		 * \addtogroup mpm_plugin
 		 *
 		 */
 		template <class T> class sPoint {
@@ -385,6 +389,7 @@ namespace ug {
 
 		/*!
 		 * \brief uGPoint represents a class (composites sPoint) to store the k nearest neighbors (as sPoints) of a query point (UG grid point).
+		 * \addtogroup mpm_plugin
 		 */
 		template <class T> class uGPoint {
 

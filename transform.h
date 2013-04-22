@@ -1,21 +1,24 @@
 /*!
  * \file transform.h
- * \brief header for the preprocessing step: transform (.hoc -> .obj) and
- *        extract the associated membrane potential for each timestep
- *        of the NEURON simulation setup (specified in .hoc).
+ * \brief header for the preprocessing step
+ * transform (.hoc -> .obj) and
+ * extract the associated membrane potential for each timestep
+ * of the NEURON simulation setup (specified in .hoc)
+ * \addtogroup mpm_plugin
  *
  * \date created on Aug 3, 2012
  * \author Stephan Grein
+ *
+ * Note: remove dependency to non-header only boost filesystem.hpp
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__
 
-/* standard and boost includes */
 #include <string>
 #include <boost/filesystem.hpp>
 
-/* begin namespace ug */
+// begin namespace ug
 namespace ug {
 	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
@@ -23,6 +26,7 @@ namespace ug {
 			public:
 				/*!
 				 * \brief default constructor for the Transform class
+				 * \addtogroup mpm_plugin
 				 *
 				 * \param[in] hocfile the hoc file which shall be transformed
 				 * \param[in] timestep_directory location to which the timesteps should be written

@@ -1,6 +1,7 @@
 /*!
  * \file plugins/experimental/membrane_potential_mapping/common_typedefs.h
  * \brief common typedefs for mvec usage (\see mvec.h)
+ * \addtogroup mpm_plugin
  *
  * \author Stephan Grein
  * \date Created on: 07 April, 2012
@@ -9,15 +10,14 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMON_TYPEDEFS__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMON_TYPEDEFS__
 
-/* standard includes */
 #include <vector>
 #include <cstddef>
 
-/* begin namespace ug */
+// begin namespace ug
 namespace ug {
-	/* begin namespace mpm */
+	// begin namespace mpm
 	namespace membrane_potential_mapping {
-		/* forward declarations for mvec template */
+		// forward declarations for mvec template
 		template <class T, size_t i> class mvec;
 
 		/* commonly used typedefs for mvec */
