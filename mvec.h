@@ -57,8 +57,6 @@ namespace ug {
 					/*!
 					 * \brief calculates the norm of an n-dimensional vector
 					 *
-					 * \param[in] NORM one of EUCLIDEAN, INFINITY or MANHATTAN
-					 *
 					 * \return \c double norm of n-dimensional vector
 					 */
 					const double norm(NORM) const;

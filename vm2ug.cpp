@@ -26,11 +26,11 @@
 
 using namespace std;
 
-/* begin namespace ug */
+// begin namespace ug 
 namespace ug {
-	/* begin namespace mpm */
+	// begin namespace mpm 
 	namespace membrane_potential_mapping {
-		/* template declarations for Vm2uG */
+		// template declarations for Vm2uG 
 		template Vm2uG<int>::~Vm2uG();
 		template Vm2uG<double>::~Vm2uG();
 		template Vm2uG<string>::~Vm2uG();
@@ -77,7 +77,7 @@ namespace ug {
 		template const double Vm2uG<int>::interp_lin_vms(const int& timestep, const double node[], const double cutoff, const int k);
 		template const double Vm2uG<double>::interp_lin_vms(const double& timestep, const double node[], const double cutoff, const int k);
 		template const double Vm2uG<string>::interp_lin_vms(const string& timestep, const double node[], const double cutoff, const int k);
-	/* end namespace mpm */
+	// end namespace mpm 
 	}
-/* end namespace ug */
+// end namespace ug 
 }

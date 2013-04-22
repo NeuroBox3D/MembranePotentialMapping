@@ -70,7 +70,7 @@ namespace ug {
 			   *
 			   * \param[in] dataFileBaseName basename of the input files (timesteps of the Neuron simulation)
 			   * \param[in] dataFileExt extension of the input files (i.e. .csv)
-			   * \param[in] promise specify if ordering of the datapoints in the input files can change (if true, tree needs to be rebuild less often)
+			   * \param[in] promise_ specify if ordering of the datapoints in the input files can change (if true, tree needs to be rebuild less often)
 			   */
 			  Vm2uG(std::string dataFileBaseName=std::string("timesteps/"), std::string dataFileExt=std::string(".csv"), const bool promise_ = false);
 
@@ -78,7 +78,6 @@ namespace ug {
 			   * \brief enhanced constructor
 			   *
 			   * \param[in] dataFileBaseName basename of the input files (timesteps of the Neuron simulation)
-			   * \param[in] dataFileExt extension of the input files (i.e.: .csv)
 			   * \param[in] dim dimension of the datapoints in the input file (default: 3)
 			   * \param[in] maxPts maximum number of datapoints in the input files (default: 10000)
 			   * \param[in] eps approximation factor for nearest neighbor search (default: 0)
@@ -136,6 +135,8 @@ namespace ug {
 			  * \param[in] y coordinate y
 			  * \param[in] z coordinate z
 			  * \param[in] t timestep
+			  * \param[in] cutoff
+			  * \param[in] k
 			  *
 			  * \return \c double the membrane potential (linearly interpolated)
 			  */
@@ -151,6 +152,8 @@ namespace ug {
 			  * \param[in] y coordinate y
 			  * \param[in] z coordinate z
 			  * \param[in] t timestep
+			  * \param[in] cutoff
+			  * \param[in] k
 			  *
 			  * \return \c double the membrane potential (bilinearly interpolated)
 			  */
@@ -320,7 +323,7 @@ namespace ug {
 			   * \brief check if two doubles can be considered equal (with accuracy < eps)
 			   *
 			   * \param[in] a first double
-			   * \param[in] second double
+			   * \param[in] b second double
 			   *
 			   * \return \c bool, true if considered equal
 			   */

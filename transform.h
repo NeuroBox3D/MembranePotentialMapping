@@ -24,10 +24,10 @@ namespace ug {
 				/*!
 				 * \brief default constructor for the Transform class
 				 *
-				 * \param[in] the hoc file which shall be transformed
+				 * \param[in] hocfile the hoc file which shall be transformed
 				 * \param[in] timestep_directory location to which the timesteps should be written
 				 * \param[in] dt the delta_t (0.1) [ms]
-				 * \param[in] number of steps (100) [#]
+				 * \param[in] steps number of steps (100) [#]
 				 * \param[in] vinit the initial membrane potential (= resting potential) (-75.0) [mV]
 				 *
 				 */
@@ -38,7 +38,7 @@ namespace ug {
 				 * \brief modifies the hoc setup
 				 *
 				 * \param[in] dt the delta_t [ms]
-				 * \param[in] number of steps [#]
+				 * \param[in] steps number of steps [#]
 				 * \param[in] vinit the initial membrane potential (= resting potential) (-75.0) [mV]
 				 *
 				 * \return \c bool true if preparation succeeded
