@@ -18,13 +18,13 @@
 namespace ug {
 	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
-		template<class T> const double Vm2uG<T>::interp_bilin_vms(const T& timestep,
-				const double node[], const double cutoff, const int k) {
+		template<class T> number Vm2uG<T>::interp_bilin_vms(const T& timestep,
+				number node[], number cutoff, int k) {
 			/* need at least four nearest neighbors for bilinear interpolation */
 			if (k < 4)
 				return vm_t(timestep, node).getVm();
 
-			double Vm_intp = 0.0;
+			number Vm_intp = 0.0;
 
 			uGPoint<T> nearest = vm_t(timestep, node);
 			std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
@@ -42,7 +42,7 @@ namespace ug {
 
 			typedef typename std::vector<sPoint<T> >::const_iterator SPIT;
 
-			double current_cutoff = cutoff;
+			number current_cutoff = cutoff;
 
 			for (SPIT it1 = nearestPoints.begin(); it1 < nearestPoints.end(); it1++)
 				for (SPIT it2 = nearestPoints.begin(); it2 < nearestPoints.end(); it2++)
@@ -50,10 +50,10 @@ namespace ug {
 							it3++)
 						for (SPIT it4 = nearestPoints.begin();
 								it4 < nearestPoints.end(); it4++) {
-								std::vector<double> coords1 = (*it1).getCoordinates();
-								std::vector<double> coords2 = (*it2).getCoordinates();
-								std::vector<double> coords3 = (*it3).getCoordinates();
-								std::vector<double> coords4 = (*it4).getCoordinates();
+								std::vector<number> coords1 = (*it1).getCoordinates();
+								std::vector<number> coords2 = (*it2).getCoordinates();
+								std::vector<number> coords3 = (*it3).getCoordinates();
+								std::vector<number> coords4 = (*it4).getCoordinates();
 								mvecd3 Q11(coords1);
 								mvecd3 Q12(coords2);
 								mvecd3 Q21(coords3);
@@ -79,10 +79,10 @@ namespace ug {
 									mvecd3 o = n - p;
 
 
-									double rhs = -(p * n);
-									double lhs = o * p;
+									number rhs = -(p * n);
+									number lhs = o * p;
 
-									double sigma = rhs / lhs;
+									number sigma = rhs / lhs;
 
 									mvecd3 mysigma;
 									for (size_t t = 0; t < 3; t++)
@@ -90,20 +90,20 @@ namespace ug {
 
 									mvecd3 pointOnPlane = u + mysigma; /* Lotfußpunkt on the plane, orthogonale Projektion */
 
-									double dist = (pointOnPlane - u).norm(EUCLIDEAN);
+									number dist = (pointOnPlane - u).norm(EUCLIDEAN);
 
 									if (dist < current_cutoff) {
-										double local_rhs;
-										double local_dist;
-										double local_lhs;
+										number local_rhs;
+										number local_dist;
+										number local_lhs;
 
 										/* project L onto line Q12-Q22 => yields R1 */
 										/* project L onto line Q11-Q21 => yields R2 */
 
 										/* point 1 */
-										double c_norm = 0;
-										double a_norm = 0;
-										double r_star = 0;
+										number c_norm = 0;
+										number a_norm = 0;
+										number r_star = 0;
 
 										mvecd3 a = Q12 - Q22;
 										mvecd3 b = pointOnPlane - Q22;
@@ -117,7 +117,7 @@ namespace ug {
 										r_star = -local_rhs / local_lhs;
 
 										mvecd3 pointOnG;
-										mvecd3 R = std::vector<double>(3, r_star);
+										mvecd3 R = std::vector<number>(3, r_star);
 
 										pointOnG = Q22 + (R % a);
 
@@ -143,7 +143,7 @@ namespace ug {
 										local_lhs = a * a;
 										r_star = -local_rhs / local_lhs;
 
-										R = std::vector<double>(3, r_star);
+										R = std::vector<number>(3, r_star);
 
 										pointOnG = Q21 + (R % a);
 
@@ -159,23 +159,23 @@ namespace ug {
 										mvecd3 R2 = pointOnG;
 
 										/* calculates bilinearly interpolated membrane potential */
-										double r1 = (Q12 - R2).norm(EUCLIDEAN)
+										number r1 = (Q12 - R2).norm(EUCLIDEAN)
 												/ (Q12 - Q22).norm(EUCLIDEAN)
 												* (*it1).getVm();
 										r1 += (Q22 - R2).norm(EUCLIDEAN)
 												/ (Q12 - Q22).norm(EUCLIDEAN)
 												* (*it3).getVm();
 
-										double r2 = (Q12 - R2).norm(EUCLIDEAN)
+										number r2 = (Q12 - R2).norm(EUCLIDEAN)
 												/ (Q12 - Q22).norm(EUCLIDEAN)
 												* (*it2).getVm();
 										r2 += (Q22 - R2).norm(EUCLIDEAN)
 												/ (Q12 - Q22).norm(EUCLIDEAN)
 												* (*it4).getVm();
 
-										double r3 = (R1 - R2).norm(EUCLIDEAN);
-										double l1 = (pointOnPlane - R1).norm(EUCLIDEAN);
-										double l2 = (pointOnPlane - R2).norm(EUCLIDEAN);
+										number r3 = (R1 - R2).norm(EUCLIDEAN);
+										number l1 = (pointOnPlane - R1).norm(EUCLIDEAN);
+										number l2 = (pointOnPlane - R2).norm(EUCLIDEAN);
 
 										Vm_intp = l1 / r3 * r1 + l2 / r3 * r2;
 										current_cutoff = local_dist;
@@ -186,14 +186,14 @@ namespace ug {
 			return Vm_intp;
 		}
 
-		template<class T> const double Vm2uG<T>::interp_lin_vms(const T& timestep,
-				const double node[], const double cutoff, const int k) {
+		template<class T> number Vm2uG<T>::interp_lin_vms(const T& timestep,
+				number node[], number cutoff, int k) {
 
 			/* need at least two nearest neighbors! */
 			if (k < 2)
 				return vm_t(timestep, node).getVm();
 
-			double Vm_intp = 0.0;
+			number Vm_intp = 0.0;
 
 			uGPoint<T> nearest = vm_t(timestep, node);
 			std::vector<sPoint<T> > nearestPoints = nearest.getNearestNeighbors();
@@ -208,16 +208,16 @@ namespace ug {
 			for (int i = 0; i < 3; i++)
 				u.push_back(node[i]);
 
-			double current_cutoff = cutoff;
-			double c_norm;
-			double a_norm;
-			double dist;
-			double rhs;
-			double lhs;
-			double r_star;
-			double d_minus;
-			double d_plus;
-			double d_sum;
+			number current_cutoff = cutoff;
+			number c_norm;
+			number a_norm;
+			number dist;
+			number rhs;
+			number lhs;
+			number r_star;
+			number d_minus;
+			number d_plus;
+			number d_sum;
 
 			typedef typename std::vector<sPoint<T> >::const_iterator SPIT;
 			/*
@@ -262,7 +262,7 @@ namespace ug {
 							r_star = -rhs / lhs;
 
 							mvecd3 pointOnG;
-							mvecd3 R = std::vector<double>(3, r_star);
+							mvecd3 R = std::vector<number>(3, r_star);
 
 							pointOnG = m1 + (R % a);
 
@@ -285,7 +285,7 @@ namespace ug {
 			return Vm_intp;
 		}
 
-		template <class T> Vm2uG<T>::Vm2uG(std::string dataFileBaseName_, std::string dataFileExt_, const bool promise_) {
+		template <class T> Vm2uG<T>::Vm2uG(const std::string& dataFileBaseName_, const std::string& dataFileExt_, bool promise_) {
 		   dim = 3;
 		   timestep = 0;
 		   maxPts = 100000;
@@ -297,7 +297,7 @@ namespace ug {
 		   promise = promise_;
 		}
 
-		template <class T> Vm2uG<T>::Vm2uG (std::string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k) {
+		template <class T> Vm2uG<T>::Vm2uG (const std::string& dataFileBaseName, short int dim, int maxPts, number eps, short int k) {
 		   this->dataFileBaseName = dataFileBaseName;
 		   this->dim = dim;
 		   this->maxPts = maxPts;
@@ -320,98 +320,9 @@ namespace ug {
 		   if (newline) out << ")" << std::endl;
 		}
 
-		template <class T> void Vm2uG<T>::readPt(const double node[]) {
+		template <class T> void Vm2uG<T>::readPt(number node[]) {
 		   for (int i=0; i < dim; i++) queryPt[i] = node[i];
 		}
-
-		// removed, since it produces duplicate symbol for T == double (cf. below)		 -mbreit
-		/*
-		template <> void Vm2uG<double>::buildTree(const double& timestep) {
-		   if (this->isTreeBuild) {
-			  rebuildTree(timestep);
-		   }
-
-		   static std::ifstream dataStream;
-
-		   std::ostringstream s;
-
-		   s << timestep;
-
-		  // cout << timestep;
-
-		   dataStream.open((dataFileBaseName+s.str()+this->dataFileExt).c_str(), std::ios::in);
-		   if (!dataStream) {
-			  std::cerr << "Cannot open data file" << std::endl;
-			  exit(1);
-		   } else {
-			  dataIn =& dataStream;
-		   }
-
-		   nPts = 0;
-		   queryPt = annAllocPt(dim); // allocate initially queryPt (and deallocate it on destruction)
-		   dim++; // (n+1)th coordinate (Vm)
-		   dataPts = annAllocPts(maxPts, dim);
-		   nnIdx = new ANNidx[k];
-		   dists = new ANNdist[k];
-
-		   while (nPts < maxPts && !dataStream.eof()) {
-			  for (int i=0; i < dim; i++) *dataIn >> dataPts[nPts][i];
-			  nPts++;
-		   }
-
-		   nPts--; // remove last (empty) point
-
-		   kdTree = new ANNkd_tree(dataPts, nPts, dim-1);
-		   dim--;
-
-		   dataStream.close();
-
-		   this->timestep = genHash(timestep);
-		   this->isTreeBuild = true;
-
-		}
-		*/
-		// removed, since it produces duplicate symbol for T == std::string (cf. directly below)	 -mbreit
-		/*
-		template <> void Vm2uG<std::string>::buildTree(const std::string& timestep) {
-		   //cout << timestep << endl;
-		   if (this->isTreeBuild) {
-			  rebuildTree(timestep);
-		   }
-
-		   static std::ifstream dataStream;
-
-		   dataStream.open((dataFileBaseName+timestep+this->dataFileExt).c_str(), std::ios::in);
-		   if (!dataStream) {
-			  std::cerr << "Cannot open data file" << dataFileBaseName+timestep+this->dataFileExt << std::endl;
-			  exit(1);
-		   } else {
-			  dataIn =& dataStream;
-		   }
-
-		   nPts = 0;
-		   queryPt = annAllocPt(dim); // allocate initially queryPt (and deallocate it on destruction)
-		   dim++; // (n+1)th coordinate (Vm)
-		   dataPts = annAllocPts(maxPts, dim);
-		   nnIdx = new ANNidx[k];
-		   dists = new ANNdist[k];
-
-		   while (nPts < maxPts && !dataStream.eof()) {
-			  for (int i=0; i < dim; i++) *dataIn >> dataPts[nPts][i];
-			  nPts++;
-		   }
-
-		   nPts--; // remove last (empty) point
-
-		   kdTree = new ANNkd_tree(dataPts, nPts, dim-1);
-		   dim--;
-
-		   dataStream.close();
-
-		   this->timestep = genHash(timestep);
-		   this->isTreeBuild = true;
-		}
-		*/
 
 		template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
 
@@ -452,7 +363,7 @@ namespace ug {
 
 
 
-		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timestep, const double nodes[][DIM]) {
+		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many(const T& timestep, number nodes[][DIM]) {
 
 		   annQueryPtsIdxArray.clear();
 		   annQueryPtsDistsArray.clear();
@@ -503,8 +414,8 @@ namespace ug {
 
 		   for (int i=0; i < size; i++) {
 
-			  std::vector<double> dataP;
-			  std::vector<double> queryP;
+			  std::vector<number> dataP;
+			  std::vector<number> queryP;
 			  std::vector<sPoint<T> > sP;
 
 			  int j;
@@ -531,46 +442,8 @@ namespace ug {
 		   return uGs;
 		}
 
-		// removed, since it produces duplicate symbol for T == std::string (cf. directly below)	 -mbreit
-		/*
-		template <> uGPoint<std::string> Vm2uG<std::string>::vm_t(const std::string& timestep, const double node[]) {
-		   if (!this->isTreeBuild) buildTree(timestep);
-		   if (genHash(timestep) == this->timestep) { // timestep
 
-		   readPt(node);
-
-		   this->kdTree->annkSearch(queryPt, this->k, this->nnIdx, this->dists, this->eps);
-
-		   } else {
-			  this->timestep = genHash(timestep); //timestep
-			  rebuildTree(timestep);
-			  vm_t(timestep, node);
-		   }
-
-		   std::vector<double> dataP;
-		   std::vector<double> queryP;
-		   std::vector<sPoint<std::string> > sP;
-
-		   int i;
-		   int j;
-
-		   for (i=0; i<dim; i++) queryP.push_back(queryPt[i]);
-
-		   for (j=0; j < k; j++) {
-
-			  for (i=0; i<dim; i++) dataP.push_back(dataPts[nnIdx[j]][i]);
-
-			  sP.push_back(sPoint<std::string>(dataP, sqrt(dists[j]), dataPts[nnIdx[j]][dim], nnIdx[j], genHash(timestep), timestep)); //timestep und string
-
-			  dataP.clear();
-		   }
-
-		   return uGPoint<std::string>(queryP, sP);
-
-		}
-		*/
-
-		template <class T> uGPoint<T> Vm2uG<T>::vm_t(const T& timestep, const double node[]) { // BOUNDARY NODE from uG
+		template <class T> uGPoint<T> Vm2uG<T>::vm_t(const T& timestep, number node[]) { // BOUNDARY NODE from uG
 		if (!this->isTreeBuild) buildTree(timestep);
 		   if (genHash(timestep) == this->timestep) { // timestep
 
@@ -584,8 +457,8 @@ namespace ug {
 			  vm_t(timestep, node);
 		   }
 
-		   std::vector<double> dataP;
-		   std::vector<double> queryP;
+		   std::vector<number> dataP;
+		   std::vector<number> queryP;
 		   std::vector<sPoint<T> > sP;
 
 		   int i;
@@ -605,7 +478,7 @@ namespace ug {
 		   return uGPoint<T>(queryP, sP);
 		}
 
-		template <class T> uGPoint<T> Vm2uG<T>::vm_t_k(const T& timestep, const double node[], const int& k) {
+		template <class T> uGPoint<T> Vm2uG<T>::vm_t_k(const T& timestep, number node[], int k) {
 		   if (this->k < k) {
 			  this->k = k;
 			  rebuildTree(timestep); // timestep, was: k
@@ -613,7 +486,7 @@ namespace ug {
 		   return vm_t(timestep, node);
 		}
 
-		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many_k(const T& timestep, const double nodes[][DIM], const int& k) {
+		template <class T> std::vector<uGPoint<T> > Vm2uG<T>::vm_t_many_k(const T& timestep, number nodes[][DIM], int k) {
 		   if (this->k < k) {
 			  this->k = k;
 			  rebuildTree(timestep); // timestep, was: k
@@ -621,11 +494,11 @@ namespace ug {
 		   return vm_t_many(timestep, nodes);
 		}
 
-		template <class T> void Vm2uG<T>::setK(const short int& k) {
+		template <class T> void Vm2uG<T>::setK(short int k) {
 		   this->k = k;
 		}
 
-		template <class T> void Vm2uG<T>::setDim(const short int& dim) {
+		template <class T> void Vm2uG<T>::setDim(short int dim) {
 		   this->dim = dim;
 		   this->promise = false;
 		   rebuildTree(this->timestep);
@@ -636,32 +509,32 @@ namespace ug {
 		   rebuildTree(timestep);
 		}
 
-		template <class T> void Vm2uG<T>::setMaxPts(const int& maxPts) {
+		template <class T> void Vm2uG<T>::setMaxPts(int maxPts) {
 		   this->maxPts = maxPts;
 		   rebuildTree(this->timestep);
 		}
 
-		template <class T> void Vm2uG<T>::setEps(const double& eps) {
+		template <class T> void Vm2uG<T>::setEps(number eps) {
 		   this->eps = eps;
 		}
 
-		template <class T> void Vm2uG<T>::setPromise(const bool& promise) {
+		template <class T> void Vm2uG<T>::setPromise(bool promise) {
 		   this->promise = promise;
 		}
 
-		template <class T> void Vm2uG<T>::setdataFileBaseName(std::string dataFile) {
+		template <class T> void Vm2uG<T>::setdataFileBaseName(const std::string& dataFile) {
 		   this->dataFileBaseName = dataFile;
 		   rebuildTree(this->timestep);
 		}
 
-		template <class T> void Vm2uG<T>::setdataFileExt(std::string dataFileExt) {
+		template <class T> void Vm2uG<T>::setdataFileExt(const std::string& dataFileExt) {
 		   this->dataFileExt = dataFileExt;
 		   rebuildTree(this->timestep);
 		}
 
 
-		template <class T> bool Vm2uG<T>::areSame(const double& a, const double& b) {
-		   return std::fabs(a - b) < std::numeric_limits<double>::epsilon();
+		template <class T> bool Vm2uG<T>::areSame(number a, number b) {
+		   return std::fabs(a - b) < std::numeric_limits<number>::epsilon();
 		}
 
 		template <class T> long Vm2uG<T>::genHash(const T& timestep) {
@@ -733,7 +606,7 @@ namespace ug {
 
 		/* sPoint {{{ */
 
-		template <class T> sPoint<T>::sPoint(const std::vector<double>& coordinates, const double& dist, const double& Vm, const int& index, const long& timestep, const T realfilename) {
+		template <class T> sPoint<T>::sPoint(const std::vector<number>& coordinates, number dist, number Vm, int index, long timestep, const T& realfilename) {
 		   if (coordinates.size() != 0) {
 			  try {
 				 this->coordinates = coordinates;
@@ -755,23 +628,23 @@ namespace ug {
 
 		template <class T> sPoint<T>::~sPoint() { }
 
-		template <class T> const double sPoint<T>::getVm() const {
+		template <class T> number sPoint<T>::getVm() const {
 		   return this->Vm;
 		}
 
-		template <class T> const double sPoint<T>::getDist() const {
+		template <class T> number sPoint<T>::getDist() const {
 		   return this->dist;
 		}
 
-		template <class T> const double sPoint<T>::getIndex() const {
+		template <class T> number sPoint<T>::getIndex() const {
 		   return this->index;
 		}
 
-		template <class T> const long sPoint<T>::getTimestep() const {
+		template <class T> long sPoint<T>::getTimestep() const {
 		   return this->timestep;
 		}
 
-		template <class T> const std::vector<double> sPoint<T>::getCoordinates() const {
+		template <class T> std::vector<number> sPoint<T>::getCoordinates() const {
 		   return this->coordinates;
 		}
 
@@ -790,7 +663,7 @@ namespace ug {
 		/* }}} */
 
 		/* uGPoint {{{ */
-		template <class T> uGPoint<T>::uGPoint(const std::vector<double>& coordinates, const std::vector<sPoint<T> >& nearestNeighbors) {
+		template <class T> uGPoint<T>::uGPoint(const std::vector<number>& coordinates, const std::vector<sPoint<T> >& nearestNeighbors) {
 		   if (coordinates.size() != 0) {
 			  try {
 				 this->coordinates = coordinates;
@@ -808,20 +681,20 @@ namespace ug {
 
 		template <class T> uGPoint<T>::~uGPoint() { }
 
-		template <class T> double uGPoint<T>::getVm() {
+		template <class T> number uGPoint<T>::getVm() {
 		   return nearestNeighbors[0].getVm();
 		}
 
-		template <class T> double uGPoint<T>::getDist() {
+		template <class T> number uGPoint<T>::getDist() {
 		   return nearestNeighbors[0].getDist();
 		}
 
 
-		template <class T> const std::vector<double> uGPoint<T>::getCoordinates() const {
+		template <class T> std::vector<number> uGPoint<T>::getCoordinates() const {
 		   return this->coordinates;
 		}
 
-		template <class T> const std::vector<sPoint<T> > uGPoint<T>::getNearestNeighbors() const {
+		template <class T> std::vector<sPoint<T> > uGPoint<T>::getNearestNeighbors() const {
 		   return this->nearestNeighbors;
 		}
 

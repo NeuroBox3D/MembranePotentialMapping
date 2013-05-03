@@ -59,7 +59,7 @@ namespace ug {
 
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
-				  .add_constructor<void (*)(std::string, std::string, bool)>("Initial timestep|load-dialog|endings=[\"csv\", \"txt\"];description=\"Timestep files\"#Suffix|selection|value=[\"csv\", \"txt\"]#Static Nodes|selection|value=[True, False]")
+				  .add_constructor<void (*)(const std::string&, const std::string&, bool)>("Initial timestep|load-dialog|endings=[\"csv\", \"txt\"];description=\"Timestep files\"#Suffix|selection|value=[\"csv\", \"txt\"]#Static Nodes|selection|value=[True, False]")
 				  .add_method("get_potential", &TVm2uG::get_potential, "Potential|default", "x|default#y|default#z|default#Timestep|default")
 				  .add_method("build_tree", &TVm2uG::buildTree, grp)
 				  .add_method("get_potential_lin", &TVm2uG::get_potential_lin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
@@ -90,13 +90,13 @@ namespace ug {
 
 			   // registry of Transform (\see transform.h)
 				reg.add_class_<TTransform>("TransformHocToObj", grp)
-				   .add_constructor<void (*)(std::string, std::string)>("hocfile|load-dialog|endings=[\"hoc\"];description=\"Hoc file for transformation\"#timestep directory|load-dialog;description=\"Location to store extracted timesteps\"#Delta t|default#steps|default#initial membrane potential|default")
+				   .add_constructor<void (*)(const std::string&, const std::string&)>("hocfile|load-dialog|endings=[\"hoc\"];description=\"Hoc file for transformation\"#timestep directory|load-dialog;description=\"Location to store extracted timesteps\"#Delta t|default#steps|default#initial membrane potential|default")
 				   .add_method("get_hocfile", &TTransform::get_hocfile, "hocfile|default", "", grp)
 				   .add_method("get_objfile", &TTransform::get_objfile, "objfile|default", "", grp)
 				   .add_method("get_xmlfile", &TTransform::get_xmlfile, "xmlfile|default", "", grp)
 				   .add_method("get_timestepdirectory", &TTransform::get_timestepdirectory, "timestep directory|default", "", grp)
 				   .add_method("get_dt", &TTransform::get_dt, "Delta t", "", grp)
-				   .add_method("extract_timesteps_and_obj", (void (TTransform::*)(bool, std::string, std::string)) &TTransform::extract_timesteps_and_obj, "", "generate object|default#neugen exe|load-dialog|endings=[\"jar\"];description=\"Neugen executable\"#neutria exe|load-dialog;description=\"Neutria executable\"", grp);
+				   .add_method("extract_timesteps_and_obj", (void (TTransform::*)(bool, const std::string&, const std::string&)) &TTransform::extract_timesteps_and_obj, "", "generate object|default#neugen exe|load-dialog|endings=[\"jar\"];description=\"Neugen executable\"#neutria exe|load-dialog;description=\"Neutria executable\"", grp);
 			}
 		// end of functionality which is to be exported
 		};
@@ -111,18 +111,12 @@ namespace ug {
 		parentGroup.append("MembranePotentialMapping");
 		typedef membrane_potential_mapping::Functionality Functionality;
 
-		#if defined(UG_DIM_3) and not defined(UG_DIM_2) and not defined(UG_DIM_1)
+		#if defined(UG_DIM_3)
 			try {
 				bridge::RegisterDomain3dDependent<Functionality>(reg, parentGroup);
 			} UG_REGISTRY_CATCH_THROW(parentGroup);
-		#elif defined(UG_DIM_2) and not defined(UG_DIM_3) and not defined(UG_DIM_1)
-			try {
-				bridge::RegisterDomain2dDependent2d<Functionality>(reg, parentGroup);
-			} UG_REGISTRY_CATCH_THROW(parentGroup);
-		#elif defined(UG_DIM_1) and not defined(UG_DIM_3) and not defined(UG_DIM_2)
-			try {
-				bridge::RegisterDomain1dDependent1d<Functionality>(reg, parentGroup);
-			} UG_REGISTRY_CATCH_THROW(parentGroup);
+		#else
+			UG_WARNING("Reasonable usage of MPM plugin assured with DIM=3.")
 		#endif
 	}
 // end namespace ug

@@ -98,8 +98,8 @@ endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 # decide if you want to build the boost testsuite executable (MPMTestsuite)
 if(${MPMTestsuite} STREQUAL "ON")
-	add_executable(MPMTestsuite ${SOURCES_TEST})
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
+	add_executable(MPMTestsuite ${SOURCES_TEST})
 endif(${MPMTestsuite} STREQUAL "ON")
 
 # decide if you want to build membrane_potential_mapping with OMP support
@@ -142,11 +142,6 @@ else(buildEmbeddedPlugins)
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)
-
-# decide which dimension you want to build (currently only DIM=3 is supported!)
-if (NOT ${DIM} STREQUAL 3 AND NOT ${DIM} STREQUAL 2 AND NOT ${DIM} STREQUAL 1)
-    message(WARNING "The MPM plugin requires DIM to be set to one of {1, 2, 3}.")
-endif(NOT ${DIM} STREQUAL 3 AND NOT ${DIM} STREQUAL 2 AND NOT ${DIM} STREQUAL 1)
 
 # warn of future obsolete VGCC components in this plugin
 message(WARNING "The MembranePotentialMapping's VGCC implementation and unit tests will be unified in voltage_gated_channels in future.")

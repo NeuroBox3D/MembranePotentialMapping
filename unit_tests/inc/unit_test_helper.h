@@ -12,7 +12,7 @@
 // includes
 #include <limits>
 #include <cmath>
-
+#include <common/types.h>
 
 // namespace ug (ug)
 namespace ug {
@@ -21,7 +21,7 @@ namespace ug {
 		/**
 		 * \brief checks if a value v is in a given range, i. e. v in [low, high].
 		 *
-		 * \tparam T the type for the values, e. g. int, double, etc.
+		 * \tparam T the type for the values, e. g. int, number, etc.
 		 * \param[in] low: the lower bound
 		 * \param[in] high: the upper bound
 		 *
@@ -35,8 +35,8 @@ namespace ug {
 		#endif
 
 		// initialization of static member
-		static const double SMALL = 10e-5;
-		static const double VERY_SMALL = 10e-8;
+		static const number SMALL = 10e-5;
+		static const number VERY_SMALL = 10e-8;
 	// end namespace mpm (membrane_potential_mapping)
 	}
 // end namespace ug (ug)

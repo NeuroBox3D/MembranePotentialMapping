@@ -29,7 +29,7 @@ namespace ug {
 			 * \param[in] T the precision
 			 * \param[in] i the vector's length
 			 */
-			template <class T = double, size_t i = 3> class mvec : public std::vector<T> {
+			template <class T = number, size_t i = 3> class mvec : public std::vector<T> {
 					public:
 					/*!
 					 * \brief default constructor
@@ -51,21 +51,21 @@ namespace ug {
 					 *
 					 * \param[in] mvecs the list of m n-dimensional vectors
 					 *
-					 * \return \c double determinant
+					 * \return \c number determinant
 					 */
-					static const double det(const std::vector<mvec<T, i> >& mvecs);
+					static number det(const std::vector<mvec<T, i> >& mvecs);
 
 					/*!
 					 * \brief calculates the norm of an n-dimensional vector
 					 *
-					 * \return \c double norm of n-dimensional vector
+					 * \return \c number norm of n-dimensional vector
 					 */
-					const double norm(NORM) const;
+					number norm(NORM) const;
 
 					// operators follow below
 					inline mvec<T, i> operator+(const mvec<T, i>& rhs) const { return this->add(rhs); }
 					inline mvec<T, i> operator-(const mvec<T, i>& rhs) const { return this->sub(rhs); }
-					inline const double operator*(const mvec<T, i>& rhs) const { return this->dot(rhs); }
+					inline const number operator*(const mvec<T, i>& rhs) const { return this->dot(rhs); }
 					inline mvec<T, i> operator%(const mvec<T, i>& rhs) const { return this->vec(rhs); }
 					inline mvec<T, i> operator-() const { return this->neg(); }
 					inline mvec<T, i> operator+() const { return this->id(); }
@@ -98,9 +98,9 @@ namespace ug {
 					 *
 					 * \param[in] rhs the right hand site vector
 					 *
-					 * \return \c double the dot product
+					 * \return \c number the dot product
 					 */
-					inline const double dot(const mvec<T, i>& rhs) const;
+					inline number dot(const mvec<T, i>& rhs) const;
 
 					/*!
 					 * \brief calculates the cross product of two vectors

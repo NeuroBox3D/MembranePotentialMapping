@@ -9,7 +9,7 @@
 
 /* standard includes */
 #include <cstdlib>
-#include <cstring>
+#include <string>
 #include <cstdio>
 #include <sstream>
 #include <fstream>
@@ -24,59 +24,57 @@
 /* mpm includes */
 #include "vm2ug.h"
 
-using namespace std;
-
 // begin namespace ug 
 namespace ug {
 	// begin namespace mpm 
 	namespace membrane_potential_mapping {
 		// template declarations for Vm2uG 
 		template Vm2uG<int>::~Vm2uG();
-		template Vm2uG<double>::~Vm2uG();
-		template Vm2uG<string>::~Vm2uG();
+		template Vm2uG<number>::~Vm2uG();
+		template Vm2uG<std::string>::~Vm2uG();
 
-		template Vm2uG<int>::Vm2uG (string dataFileBaseName, string dataFileExt, const bool promise);
-		template Vm2uG<double>::Vm2uG (string dataFileBaseName, string dataFileExt, const bool promise);
-		template Vm2uG<string>::Vm2uG (string dataFileBaseName, string dataFileExt, const bool promise);
+		template Vm2uG<int>::Vm2uG (const std::string& dataFileBaseName, const std::string& dataFileExt, bool promise);
+		template Vm2uG<number>::Vm2uG (const std::string& dataFileBaseName, const std::string& dataFileExt, bool promise);
+		template Vm2uG<std::string>::Vm2uG (const std::string& dataFileBaseName, const std::string& dataFileExt, bool promise);
 
 		template void Vm2uG<int>::buildTree(const int& timestep);
-		template void Vm2uG<double>::buildTree(const double& timestep);
-		template void Vm2uG<string>::buildTree(const string& timestep);
+		template void Vm2uG<number>::buildTree(const number& timestep);
+		template void Vm2uG<std::string>::buildTree(const std::string& timestep);
 
-		template uGPoint<int> Vm2uG<int>::vm_t(const int& timestep, const double node[]);
-		template uGPoint<double> Vm2uG<double>::vm_t(const double& timestep, const double node[]);
-		template uGPoint<string> Vm2uG<string>::vm_t(const string& timestep, const double node[]);
+		template uGPoint<int> Vm2uG<int>::vm_t(const int& timestep, number node[]);
+		template uGPoint<number> Vm2uG<number>::vm_t(const number& timestep, number node[]);
+		template uGPoint<std::string> Vm2uG<std::string>::vm_t(const std::string& timestep, number node[]);
 
-		template std::vector<uGPoint<int> > Vm2uG<int>::vm_t_many_k(const int& timestep, const double nodes[][DIM], const int& k);
-		template std::vector<uGPoint<double> > Vm2uG<double>::vm_t_many_k(const double& timestep, const double nodes[][DIM], const int& k);
+		template std::vector<uGPoint<int> > Vm2uG<int>::vm_t_many_k(const int& timestep, number nodes[][DIM], int k);
+		template std::vector<uGPoint<number> > Vm2uG<number>::vm_t_many_k(const number& timestep, number nodes[][DIM], int k);
 
-		template ostream& operator<<(ostream& output, const Vm2uG<int>& p);
-		template ostream& operator<<(ostream& output, const Vm2uG<double>& p);
-		template ostream& operator<<(ostream& output, const Vm2uG<string>& p);
+		template std::ostream& operator<<(std::ostream& output, const Vm2uG<int>& p);
+		template std::ostream& operator<<(std::ostream& output, const Vm2uG<number>& p);
+		template std::ostream& operator<<(std::ostream& output, const Vm2uG<std::string>& p);
 
 		template uGPoint<int>::~uGPoint();
-		template uGPoint<double>::~uGPoint();
-		template uGPoint<string>::~uGPoint();
+		template uGPoint<number>::~uGPoint();
+		template uGPoint<std::string>::~uGPoint();
 
-		template double uGPoint<int>::getVm();
-		template double uGPoint<double>::getVm();
-		template double uGPoint<string>::getVm();
+		template number uGPoint<int>::getVm();
+		template number uGPoint<number>::getVm();
+		template number uGPoint<std::string>::getVm();
 
-		template double uGPoint<int>::getDist();
-		template double uGPoint<double>::getDist();
-		template double uGPoint<string>::getDist();
+		template number uGPoint<int>::getDist();
+		template number uGPoint<number>::getDist();
+		template number uGPoint<std::string>::getDist();
 
-		template ostream& operator<<(ostream& output, const uGPoint<int>& p);
-		template ostream& operator<<(ostream& output, const uGPoint<double>& p);
-		template ostream& operator<<(ostream& output, const uGPoint<string>& p);
+		template std::ostream& operator<<(std::ostream& output, const uGPoint<int>& p);
+		template std::ostream& operator<<(std::ostream& output, const uGPoint<number>& p);
+		template std::ostream& operator<<(std::ostream& output, const uGPoint<std::string>& p);
 
-		template const double Vm2uG<int>::interp_bilin_vms(const int& timestep, const double node[], const double cutoff, const int k);
-		template const double Vm2uG<double>::interp_bilin_vms(const double& timestep, const double node[], const double cutoff, const int k);
-		template const double Vm2uG<string>::interp_bilin_vms(const string& timestep, const double node[], const double cutoff, const int k);
+		template number Vm2uG<int>::interp_bilin_vms(const int& timestep, number node[], number cutoff, int k);
+		template number Vm2uG<number>::interp_bilin_vms(const number& timestep, number node[], number cutoff, int k);
+		template number Vm2uG<std::string>::interp_bilin_vms(const std::string& timestep, number node[], number cutoff, int k);
 
-		template const double Vm2uG<int>::interp_lin_vms(const int& timestep, const double node[], const double cutoff, const int k);
-		template const double Vm2uG<double>::interp_lin_vms(const double& timestep, const double node[], const double cutoff, const int k);
-		template const double Vm2uG<string>::interp_lin_vms(const string& timestep, const double node[], const double cutoff, const int k);
+		template number Vm2uG<int>::interp_lin_vms(const int& timestep, number node[], number cutoff, int k);
+		template number Vm2uG<number>::interp_lin_vms(const number& timestep, number node[],  number cutoff, int k);
+		template number Vm2uG<std::string>::interp_lin_vms(const std::string& timestep, number node[],  number cutoff, int k);
 	// end namespace mpm 
 	}
 // end namespace ug 

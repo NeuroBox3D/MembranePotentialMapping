@@ -42,16 +42,12 @@ BOOST_AUTO_TEST_SUITE(vec);
 
 // test basic constructor
 BOOST_AUTO_TEST_CASE(test_constructor) {
-#ifdef DIM
-	UG_LOG("Dim: " << DIM << std::endl);
-#endif
-
 	BOOST_MESSAGE("Starting test >>test_constructor<<");
-	mvec<double, 3> m1;
+	mvec<number, 3> m1;
 	for (size_t i = 0; i < 3; i++)
 			m1.push_back(2.0);
 
-	for (std::vector<double>::const_iterator it = m1.begin(); it < m1.end(); it++)
+	for (std::vector<number>::const_iterator it = m1.begin(); it < m1.end(); it++)
 		BOOST_CHECK_CLOSE(*it, 2.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_constructor<<");
@@ -60,12 +56,12 @@ BOOST_AUTO_TEST_CASE(test_constructor) {
 // test default constructor
 BOOST_AUTO_TEST_CASE(test_default_constructor) {
 	BOOST_MESSAGE("Starting test >>test_default_constructor<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++)
 		a.push_back(2.0);
 
-	mvec<double, 3> m1(a);
-	for (std::vector<double>::const_iterator it = m1.begin(); it < m1.end(); it++)
+	mvec<number, 3> m1(a);
+	for (std::vector<number>::const_iterator it = m1.begin(); it < m1.end(); it++)
 		BOOST_CHECK_CLOSE(*it, 2.0, SMALL);
 
 	BOOST_MESSAGE("End test >>default_constructor<<");
@@ -75,8 +71,8 @@ BOOST_AUTO_TEST_CASE(test_default_constructor) {
 BOOST_AUTO_TEST_CASE(test_determinante) {
 	BOOST_MESSAGE("Starting test >>test_determinante<<");
 
-	std::vector<double> a;
-	std::vector<double> b;
+	std::vector<number> a;
+	std::vector<number> b;
 
 		a.push_back(-2.0);
 		a.push_back(5.0);
@@ -93,14 +89,14 @@ BOOST_AUTO_TEST_CASE(test_determinante) {
 	mvecs.push_back(mvec1);
 	mvecs.push_back(mvec2);
 
-	double ret = mvec<double, 3>::det(mvecs);
+	number ret = mvec<number, 3>::det(mvecs);
 	BOOST_REQUIRE_CLOSE(-16.0, ret, SMALL);
 
 	a.clear();
 	b.clear();
 	mvecs.clear();
 
-	std::vector<double> c;
+	std::vector<number> c;
 
 	a.push_back(2.0);
 	a.push_back(-1.0);
@@ -122,7 +118,7 @@ BOOST_AUTO_TEST_CASE(test_determinante) {
 	mvecs.push_back(mvec2);
 	mvecs.push_back(mvec3);
 
-	double ret2 = mvec<double, 3>::det(mvecs);
+	number ret2 = mvec<number, 3>::det(mvecs);
 	BOOST_REQUIRE_CLOSE(26.0, ret2, SMALL);
 
 	BOOST_MESSAGE("End test >> test_determinante<<");
@@ -131,15 +127,15 @@ BOOST_AUTO_TEST_CASE(test_determinante) {
 // test norm
 BOOST_AUTO_TEST_CASE(test_norm) {
 	BOOST_MESSAGE("Starting test >>test_norm<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 	}
 
-	mvec<double, 3> m1(a);
+	mvec<number, 3> m1(a);
 
-	double res = m1.norm(EUCLIDEAN);
-	double check = std::sqrt(12.0);
+	number res = m1.norm(EUCLIDEAN);
+	number check = std::sqrt(12.0);
 
 	BOOST_REQUIRE_CLOSE(res, check, SMALL);
 
@@ -151,18 +147,18 @@ BOOST_AUTO_TEST_CASE(test_norm) {
 // test add
 BOOST_AUTO_TEST_CASE(test_add) {
 	BOOST_MESSAGE("Starting test >>test_add<<");
-	std::vector<double> a;
-	std::vector<double> b;
+	std::vector<number> a;
+	std::vector<number> b;
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 		b.push_back(1.0);
 	}
 
-	mvec<double, 3> m1(a);
-	mvec<double, 3> m2(b);
-	mvec<double, 3> c = m1 + m2;
+	mvec<number, 3> m1(a);
+	mvec<number, 3> m2(b);
+	mvec<number, 3> c = m1 + m2;
 
-	for (std::vector<double>::const_iterator it = c.begin(); it < c.end(); it++) {
+	for (std::vector<number>::const_iterator it = c.begin(); it < c.end(); it++) {
 		BOOST_REQUIRE_CLOSE(*it, 3.0, SMALL);
 	}
 	BOOST_MESSAGE("End test >>test_add<<");
@@ -171,19 +167,19 @@ BOOST_AUTO_TEST_CASE(test_add) {
 // test sub
 BOOST_AUTO_TEST_CASE(test_sub) {
 	BOOST_MESSAGE("Starting test >>test_sub<<");
-	std::vector<double> a;
-	std::vector<double> b;
+	std::vector<number> a;
+	std::vector<number> b;
 
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 		b.push_back(1.0);
 	}
 
-	mvec<double, 3> m1(a);
-	mvec<double, 3> m2(b);
-	mvec<double, 3> c = m1 - m2;
+	mvec<number, 3> m1(a);
+	mvec<number, 3> m2(b);
+	mvec<number, 3> c = m1 - m2;
 
-	for (std::vector<double>::const_iterator it = c.begin(); it < c.end(); it++) {
+	for (std::vector<number>::const_iterator it = c.begin(); it < c.end(); it++) {
 		BOOST_REQUIRE_CLOSE(*it, 1.0, SMALL);
 	}
 	BOOST_MESSAGE("End test >>test_sub<<");
@@ -192,18 +188,18 @@ BOOST_AUTO_TEST_CASE(test_sub) {
 // test vec
 BOOST_AUTO_TEST_CASE(test_vec) {
 	BOOST_MESSAGE("Starting test >>test_vec<<");
-	std::vector<double> a;
-	std::vector<double> b;
+	std::vector<number> a;
+	std::vector<number> b;
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 		b.push_back(1.0);
 	}
 
-	mvec<double, 3> m1(a);
-	mvec<double, 3> m2(b);
-	mvec<double, 3> c = m1 % m2;
+	mvec<number, 3> m1(a);
+	mvec<number, 3> m2(b);
+	mvec<number, 3> c = m1 % m2;
 
-	for (std::vector<double>::const_iterator it = c.begin(); it < c.end(); it++) {
+	for (std::vector<number>::const_iterator it = c.begin(); it < c.end(); it++) {
 		BOOST_REQUIRE_CLOSE(*it, 0.0, SMALL);
 	}
 	BOOST_MESSAGE("End test >>test_vec<<");
@@ -212,14 +208,14 @@ BOOST_AUTO_TEST_CASE(test_vec) {
 // test dot
 BOOST_AUTO_TEST_CASE(test_dot) {
 	BOOST_MESSAGE("Starting test >>test_dot<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 	}
 
-	mvec<double, 3> m1(a);
+	mvec<number, 3> m1(a);
 
-	double c = m1 * m1;
+	number c = m1 * m1;
 
 	BOOST_REQUIRE_CLOSE(c, 12.0, SMALL);
 
@@ -229,13 +225,13 @@ BOOST_AUTO_TEST_CASE(test_dot) {
 // test neg
 BOOST_AUTO_TEST_CASE(test_neg) {
 	BOOST_MESSAGE("Starting test >>test_neg<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 	}
 
-	mvec<double, 3> m1(a);
-	mvec<double, 3> m2 = -m1;
+	mvec<number, 3> m1(a);
+	mvec<number, 3> m2 = -m1;
 
 	for (size_t i = 0; i < 3; i++)
 	BOOST_REQUIRE_CLOSE(m2[i], -m1[i], SMALL);
@@ -245,12 +241,12 @@ BOOST_AUTO_TEST_CASE(test_neg) {
 // test id
 BOOST_AUTO_TEST_CASE(test_id) {
 	BOOST_MESSAGE("Starting test >>test_id<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++) {
 		a.push_back(2.0);
 	}
-	mvec<double, 3> m1(a);
-	mvec<double, 3> m2 = +m1;
+	mvec<number, 3> m1(a);
+	mvec<number, 3> m2 = +m1;
 
 	for (size_t i = 0; i < 3; i++) {
 		BOOST_REQUIRE_CLOSE(m2[i], m1[i], SMALL);
@@ -262,12 +258,12 @@ BOOST_AUTO_TEST_CASE(test_id) {
 // test assignment
 BOOST_AUTO_TEST_CASE(test_assignment) {
 	BOOST_MESSAGE("Starting test >>test_assignment<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++)
 	a.push_back(2.0);
-	mvec<double, 3> m1 = a;
+	mvec<number, 3> m1 = a;
 
-	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 	BOOST_REQUIRE_CLOSE(*cit, 2.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment<<");
@@ -276,23 +272,23 @@ BOOST_AUTO_TEST_CASE(test_assignment) {
 // test assignment plus
 BOOST_AUTO_TEST_CASE(test_assignment_plus) {
 	BOOST_MESSAGE("Starting test >>test_assignment_plus<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++)
 		a.push_back(2.0);
 
-	std::vector<double> b;
+	std::vector<number> b;
 	for (size_t i = 0; i < 3; i++)
 		b.push_back(1.0);
 
-	mvec<double, 3> m1 = a;
-	mvec<double, 3> m2 = b;
+	mvec<number, 3> m1 = a;
+	mvec<number, 3> m2 = b;
 
 	m2 += m1;
 
-	for (std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 3.0, SMALL);
 
-	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 2.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment_plus<<");
@@ -301,23 +297,23 @@ BOOST_AUTO_TEST_CASE(test_assignment_plus) {
 // test assignment minus
 BOOST_AUTO_TEST_CASE(test_assignment_minus) {
 	BOOST_MESSAGE("Starting test >>test_assignment_minus<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++)
 		a.push_back(2.0);
 
-	std::vector<double> b;
+	std::vector<number> b;
 		for (size_t i = 0; i < 3; i++)
 	b.push_back(1.0);
 
-		mvec<double, 3> m1 = a;
-	mvec<double, 3> m2 = b;
+		mvec<number, 3> m1 = a;
+	mvec<number, 3> m2 = b;
 
 	m1 -= m2;
 
-	for (std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
 
-	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment_minus<<");
@@ -326,23 +322,23 @@ BOOST_AUTO_TEST_CASE(test_assignment_minus) {
 //test assignment vec
 BOOST_AUTO_TEST_CASE(test_assignment_vec) {
 	BOOST_MESSAGE("Starting test >>test_assignment_vec<<");
-	std::vector<double> a;
+	std::vector<number> a;
 	for (size_t i = 0; i < 3; i++)
 		a.push_back(2.0);
 
-	std::vector<double> b;
+	std::vector<number> b;
 	for (size_t i = 0; i < 3; i++)
 		b.push_back(1.0);
 
-	mvec<double, 3> m1 = a;
-	mvec<double, 3> m2 = b;
+	mvec<number, 3> m1 = a;
+	mvec<number, 3> m2 = b;
 
 	m1 %= m2;
 
-	for (std::vector<double>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m2.begin(); cit < m2.end(); cit++)
 		BOOST_REQUIRE_CLOSE(*cit, 1.0, SMALL);
 
-	for (std::vector<double>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
+	for (std::vector<number>::const_iterator cit = m1.begin(); cit < m1.end(); cit++)
 		BOOST_CHECK_CLOSE(*cit, 0.0, SMALL);
 
 	BOOST_MESSAGE("End test >>test_assignment_vec<<");
@@ -412,7 +408,7 @@ BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
 	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
 	b->install_can_gates(1000.0);
 	b->calc_current_at_start(0);
-	std::vector<double> results;
+	std::vector<number> results;
 	results.push_back(1.6345251904980005);
 	results.push_back(1.6345251904980005);
 	results.push_back(7.80493);
@@ -421,9 +417,9 @@ BOOST_AUTO_TEST_CASE(check_fluxes_ohmic) {
 	results.push_back(1946.1);
 	results.push_back(240.059);
 	results.push_back(36.044762202708);
-	double delta_t = 0.001;
+	number delta_t = 0.001;
 	for (size_t i = 0; i < results.size(); i++) {
-		double d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t);
+		number d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t);
 		BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
 	}
 	BOOST_MESSAGE("End test >>check_fluxes_ohmic<<");
@@ -436,14 +432,14 @@ BOOST_AUTO_TEST_CASE(check_molar_fluxes_ohmic) {
 	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
 	b->install_can_gates(1000.0);
 	b->calc_current_at_start(0);
-	std::vector<double> results;
+	std::vector<number> results;
 	results.push_back(8.4684798976316203e-06);
 	results.push_back(8.4684798976316203e-06);
 	results.push_back(4.0437351365245749e-05);
-	double delta_t = 0.001;
+	number delta_t = 0.001;
 	for (size_t i = 0; i < results.size(); i++) {
 		b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t);
-		double d = b->get_Neumann_Flux_as_Concentration(delta_t);
+		number d = b->get_Neumann_Flux_as_Concentration(delta_t);
 	    BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
 	}
 	BOOST_MESSAGE("End test >>check_molar_fluxes_ohmic<<");
@@ -456,7 +452,7 @@ BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
 	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
 	b->install_can_gates_cfp();
 	b->calc_current_at_start(0.0);
-	std::vector<double> results;
+	std::vector<number> results;
 	results.push_back(3.70861628e-09);
 	results.push_back(4.48751466e-09);
 	results.push_back(4.73544e-09);
@@ -466,9 +462,9 @@ BOOST_AUTO_TEST_CASE(check_fluxes_cfp) {
 	results.push_back(4.802373071129e-09);
 	results.push_back(4.788292607170e-09);
 	results.push_back(4.773723314275e-09);
-	double delta_t = 0.001;
+	number delta_t = 0.001;
 	for (size_t i = 0; i < results.size(); i++) {
-		double d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t, -55.0);
+		number d = b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t, -55.0);
 		BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
 	}
 	BOOST_MESSAGE("End test >>check_fluxes_cfp<<");
@@ -481,14 +477,14 @@ BOOST_AUTO_TEST_CASE(check_molar_fluxes_cfp) {
 	BOOST_CHECK_MESSAGE(b, "BG instance cannot be constructed");
 	b->install_can_gates_cfp();
 	b->calc_current_at_start(0.0);
-	std::vector<double> results;
-	results.push_back(1.9214352053711674e-14);
-	results.push_back(2.3249826893955825e-14);
-	results.push_back(2.4534319739280018e-14);
-	double delta_t = 0.001;
+	std::vector<number> results;
+	results.push_back(1.9214352053711674e-29);
+	results.push_back(2.3249826893955825e-29);
+	results.push_back(2.4534319739280018e-29);
+	number delta_t = 0.001;
 	for (size_t i = 0; i < results.size(); i++) {
 		b->timestepping_of_gates_and_calc_current(delta_t * i, delta_t, -55.0);
-		double d = b->get_Neumann_Flux_as_Concentration(delta_t);
+		number d = b->get_Neumann_Flux_as_Concentration(delta_t);
 		BOOST_REQUIRE_CLOSE(d, results[i], SMALL);
 	}
 	BOOST_MESSAGE("End test >>check_molar_fluxes_cfp<<");

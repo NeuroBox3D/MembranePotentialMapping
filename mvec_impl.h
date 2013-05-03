@@ -37,9 +37,9 @@ template<class T, size_t i> mvec<T, i>::~mvec() {
 }
 
 /* calculates det */
-template <class T, size_t i> const double mvec<T, i>::det(const std::vector<mvec<T, i> >& mvecs) {
+template <class T, size_t i> number mvec<T, i>::det(const std::vector<mvec<T, i> >& mvecs) {
 
-	double ret = 0.0;
+	number ret = 0.0;
 
 	switch(mvecs.size()) {
 		case 2:
@@ -63,9 +63,9 @@ template <class T, size_t i> const double mvec<T, i>::det(const std::vector<mvec
 }
 
 /* calculate norm */
-template <class T, size_t i> const double mvec<T, i>::norm(NORM norm) const {
+template <class T, size_t i> number mvec<T, i>::norm(NORM norm) const {
      typedef typename std::vector<T>::const_iterator CIT;
-     double ret = 0.0;
+     number ret = 0.0;
 
      switch(norm) {
      case INF:
@@ -74,11 +74,11 @@ template <class T, size_t i> const double mvec<T, i>::norm(NORM norm) const {
     	 break;
      case EUCLIDEAN:
     	 for (CIT cit = this->begin(); cit < this->end(); cit++)
-    		 ret += boost::lexical_cast<double>((*cit) * (*cit));
+    		 ret += boost::lexical_cast<number>((*cit) * (*cit));
     	 return std::sqrt(ret);
      default:
     	 for (CIT cit = this->begin(); cit < this->end(); cit++)
-    		 ret += boost::lexical_cast<double>((*cit) * (*cit));
+    		 ret += boost::lexical_cast<number>((*cit) * (*cit));
     	 return std::sqrt(ret);
      }
      return ret;
@@ -123,7 +123,7 @@ template<class T, size_t i> mvec<T, i> mvec<T, i>::sub(const mvec<T, i>& rhs) co
 	return ret;
 }
 
-template <class T, size_t i> const double mvec<T, i>::dot(const mvec<T, i>& rhs) const {
+template <class T, size_t i> number mvec<T, i>::dot(const mvec<T, i>& rhs) const {
 	return std::inner_product(this->begin(), this->end(), rhs.begin(), 0);
 }
 

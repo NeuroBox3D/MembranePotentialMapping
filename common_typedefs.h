@@ -21,13 +21,13 @@ namespace ug {
 		template <class T, size_t i> class mvec;
 
 		/* commonly used typedefs for mvec */
-		typedef mvec<double, 3> mvecd3;
-		typedef mvec<double, 2> mvecd2;
-		typedef mvec<double, 1> mvecd1;
+		typedef mvec<number, 3> mvecd3;
+		typedef mvec<number, 2> mvecd2;
+		typedef mvec<number, 1> mvecd1;
 
 		/* commonly used typedefs for iterators */
-		typedef std::vector<double>::iterator DIT;
-		typedef std::vector<double>::const_iterator DITC;
+		typedef std::vector<number>::iterator DIT;
+		typedef std::vector<number>::const_iterator DITC;
 
 		/*!
 		 * \enum NORM

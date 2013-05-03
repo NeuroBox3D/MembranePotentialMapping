@@ -35,7 +35,7 @@ namespace ug {
 				 * \param[in] vinit the initial membrane potential (= resting potential) (-75.0) [mV]
 				 *
 				 */
-				Transform(const std::string& hocfile, const std::string& timestep_directory, const double dt=0.1, const long steps=100, const double vinit=-75.0) : m_hocfile(hocfile), m_objfile(boost::filesystem::path(hocfile).replace_extension(".obj").string()), m_xmlfile(boost::filesystem::path(hocfile).replace_extension(".xml").string()), m_timestepdirectory(timestep_directory), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
+				Transform(const std::string& hocfile, const std::string& timestep_directory, number dt=0.1, long steps=100, number vinit=-75.0) : m_hocfile(hocfile), m_objfile(boost::filesystem::path(hocfile).replace_extension(".obj").string()), m_xmlfile(boost::filesystem::path(hocfile).replace_extension(".xml").string()), m_timestepdirectory(timestep_directory), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
 				~Transform() { };
 
 				/*!
@@ -47,7 +47,7 @@ namespace ug {
 				 *
 				 * \return \c bool true if preparation succeeded
 				 */
-				void modify_hoc_setup(const double dt, const long steps, const double vinit);
+				void modify_hoc_setup(number dt, long steps, number vinit);
 
 				/*!
 				 * \brief extracts the timesteps and the object file (.obj)
@@ -61,14 +61,14 @@ namespace ug {
 				 *
 				 * \return \c return the path to the .obj file
 				 */
-				void extract_timesteps_and_obj(const bool gen_objfile=false, const std::string& neugen_executable="NeuGen3D", const std::string& neutria_executable="neutria");
+				void extract_timesteps_and_obj(bool gen_objfile=false, const std::string& neugen_executable="NeuGen3D", const std::string& neutria_executable="neutria");
 
 				/*!
 				 * \brief simple getter for the hoc file
 				 *
 				 * \return \c the hoc file as string
 				 */
-				inline const std::string& get_hocfile() const {
+				 inline std::string get_hocfile() const {
 					return m_hocfile;
 				}
 
@@ -77,7 +77,7 @@ namespace ug {
 				 *
 				 * \return \c the obj file as string
 				 */
-				inline const std::string& get_objfile() const {
+				inline std::string get_objfile() const {
 					return m_objfile;
 				}
 
@@ -86,7 +86,7 @@ namespace ug {
 				 *
 				 * \return \c the xml file as string
 				 */
-				inline const std::string& get_xmlfile() const {
+				inline std::string get_xmlfile() const {
 					return m_xmlfile;
 				}
 
@@ -95,7 +95,7 @@ namespace ug {
 				 *
 				 * \return \c the timestep directory as string
 				 */
-				inline const std::string& get_timestepdirectory() const {
+				inline std::string get_timestepdirectory() const {
 					return m_timestepdirectory;
 				}
 

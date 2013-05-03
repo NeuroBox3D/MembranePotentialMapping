@@ -14,17 +14,16 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
-// macros (Please note: Symbol MPMDIM could not be resolved, e. g. in eclipse, is not an error.)
 #ifndef DIM
-	#if defined(UG_DIM_1) and not defined(UG_DIM_1) and not defined(UG_DIM_3)
+	#if defined(UG_DIM_1)
 		#define DIM 1
 	#endif
 
-	#if defined(UG_DIM_2) and not defined(UG_DIM_1) and not defined(UG_DIM_3)
+	#if defined(UG_DIM_2)
 		#define DIM 2
 	#endif
 
-	#if defined(UG_DIM_3) and not defined(UG_DIM_1) and not defined(UG_DIM_2)
+	#if defined(UG_DIM_3)
 		#define DIM 3
 	#else
 		#define DIM 3
@@ -75,7 +74,7 @@ namespace ug {
 			   * \param[in] dataFileExt extension of the input files (i.e. .csv)
 			   * \param[in] promise_ specify if ordering of the datapoints in the input files can change (if true, tree needs to be rebuild less often)
 			   */
-			  Vm2uG(std::string dataFileBaseName=std::string("timesteps/"), std::string dataFileExt=std::string(".csv"), const bool promise_ = false);
+			  Vm2uG(const std::string& dataFileBaseName=std::string("timesteps/"), const std::string& dataFileExt=std::string(".csv"), bool promise_ = false);
 
 			  /*!
 			   * \brief enhanced constructor
@@ -86,7 +85,7 @@ namespace ug {
 			   * \param[in] eps approximation factor for nearest neighbor search (default: 0)
 			   * \param[in] k search for k nearest neighbors (default: 1)
 			   */
-			  Vm2uG(std::string dataFileBaseName, const short int& dim, const int& maxPts, const double& eps, const short int& k);
+			  Vm2uG(const std::string& dataFileBaseName, short int dim, int maxPts, number eps, short int k);
 
 			  /*!
 			   * \brief default destructor
@@ -100,9 +99,9 @@ namespace ug {
 			   * \param[in] timestep for which the nearest neighbor should be computed
 			   * \param[in] cutoff maximum distance for nearest neighbor
 			   * \param[in] k how many nearest neighbors should be considered for linear interpolation
-			   * \return \c double the membrane potential (potentially linearly interpolated)
+			   * \return \c number the membrane potential (potentially linearly interpolated)
 			   */
-			 const double interp_lin_vms(const T& timestep, const double node[], const double cutoff, const int k);
+			 number interp_lin_vms(const T& timestep, number node[], number cutoff, int k);
 
 			 /*!
 			  * \brief interpolate bilinearly the membrane potentials
@@ -112,9 +111,9 @@ namespace ug {
 			  * \param[in] cutoff maximum distance for nearest neighbor
 			  * \param[in] k how many nearest neighbors should be considered for bilinear interpolation
 			  *
-			  * \return \c double the membrane potential (potentially bilinearly interpolated)
+			  * \return \c number the membrane potential (potentially bilinearly interpolated)
 			  */
-			 const double interp_bilin_vms(const T& timestep, const double node[], const double cutoff, const int k);
+			 number interp_bilin_vms(const T& timestep, number node[], number cutoff, int k);
 
 			 /*!
 			  * \brief return the associated membrane potential of the first nearest neighbor at cartesian coordinates x,y,z at timestep t: special case DIM=3.
@@ -124,10 +123,10 @@ namespace ug {
 			  * \param[in] z coordinate z
 			  * \param[in] t timestep
 			  *
-			  * \return \c double the membrane potential
+			  * \return \c number the membrane potential
 			  */
-			  double get_potential(double x, double y, double z, std::string t) {
-				 double  node[3] = {x,y,z};
+			  number get_potential(number x, number y, number z, const std::string& t) {
+				 number node[3] = {x, y, z};
 				 return vm_t(t, node).getVm();
 			  }
 
@@ -141,10 +140,10 @@ namespace ug {
 			  * \param[in] cutoff
 			  * \param[in] k
 			  *
-			  * \return \c double the membrane potential (linearly interpolated)
+			  * \return \c number the membrane potential (linearly interpolated)
 			  */
-			  double get_potential_lin(double x, double y, double z, std::string t, const double cutoff, const int k=2) {
-				  double node[3] = {x,y,z};
+			  number get_potential_lin(number x, number y, number z, const std::string& t, number cutoff, int k=2) {
+				  number node[3] = {x,y,z};
 				  return interp_lin_vms(t, node, cutoff, k);
 			  }
 
@@ -158,10 +157,10 @@ namespace ug {
 			  * \param[in] cutoff
 			  * \param[in] k
 			  *
-			  * \return \c double the membrane potential (bilinearly interpolated)
+			  * \return \c number the membrane potential (bilinearly interpolated)
 			  */
-			  double get_potential_bilin(double x, double y, double z, std::string t, const double cutoff, const int k=4) {
-				  double node[3] = {x,y,z};
+			  number get_potential_bilin(number x, number y, number z, const std::string& t, number cutoff, int k=4) {
+				  number node[3] = {x, y, z};
 				  return interp_bilin_vms(t, node, cutoff, k);
 			  }
 
@@ -184,7 +183,7 @@ namespace ug {
 			   *
 			   * \return \c uGPoint<T> an grid point from UG with additional attributes, e. g. membrane potential, distance to query point, etc.
 			   */
-			  uGPoint<T> vm_t(const T& timestep, const double node[]);
+			  uGPoint<T> vm_t(const T& timestep, number node[]);
 
 			  /*!
 			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP.
@@ -200,7 +199,7 @@ namespace ug {
 			   * \see uGPoint
 			   *
 			   */
-			  std::vector<uGPoint<T> > vm_t_many(const T& timestep, const double nodes[][DIM]);
+			  std::vector<uGPoint<T> > vm_t_many(const T& timestep, number nodes[][DIM]);
 
 
 
@@ -216,7 +215,7 @@ namespace ug {
 			   * \see uGPoint
 			   * \see sPoint
 			  */
-			  uGPoint<T> vm_t_k(const T& timestep, const double node[], const int& k);
+			  uGPoint<T> vm_t_k(const T& timestep, number node[], int k);
 
 			  /*!
 			   * \brief the same as vm_t_many but get the k nearest neighbors of many query points
@@ -232,17 +231,17 @@ namespace ug {
 			   * \see sPoint
 			   * \see uGPoint
 			   */
-			  std::vector<uGPoint<T> > vm_t_many_k(const T& timestep, const double nodes[][DIM], const int& k);
+			  std::vector<uGPoint<T> > vm_t_many_k(const T& timestep, number nodes[][DIM], int k);
 
 			  // setters
-			  void setK(const short int& k);
-			  void setDim(const short int& dim);
+			  void setK(short int k);
+			  void setDim(short int dim);
 			  void setTimestep(const T& timestep);
-			  void setMaxPts(const int& maxPts);
-			  void setEps(const double& eps);
-			  void setPromise(const bool& promise);
-			  void setdataFileBaseName(std::string dataFileBaseName);
-			  void setdataFileExt(std::string dataFileExt);
+			  void setMaxPts(int maxPts);
+			  void setEps(number eps);
+			  void setPromise(bool promise);
+			  void setdataFileBaseName(const std::string& dataFileBaseName);
+			  void setdataFileExt(const std::string& dataFileExt);
 
 			  // getters
 			  bool treeBuild() { return isTreeBuild; }
@@ -258,7 +257,7 @@ namespace ug {
 
 			  long timestep;
 
-			  double eps;
+			  number eps;
 
 			  std::string dataFileBaseName;
 			  std::string dataFileExt;
@@ -293,7 +292,7 @@ namespace ug {
 			   *
 			   * \return \c void
 			   */
-			  inline void printPt(std::ostream &out, const ANNpoint& p, const bool newline = true) const;
+			  inline void printPt(std::ostream &out, const ANNpoint& p, bool newline = true) const;
 
 			  /*!
 			   * \brief reads a data or query point with its cartesian coordinates
@@ -302,7 +301,7 @@ namespace ug {
 			   *
 			   * \return \c void
 			   */
-			  inline void readPt(const double node[]);
+			  inline void readPt(number node[]);
 
 			  /*!
 			   * \brief rebuilds the kd-tree iff the timestep has changed
@@ -318,19 +317,19 @@ namespace ug {
 			   *
 			   * \param[in] timestep which timestep is demanded
 			   *
-			   * \return \c double the hashcode (runtime: log(n))
+			   * \return \c number the hashcode (runtime: log(n))
 			   */
 			  long genHash(const T& timestep);
 
 			  /*!
-			   * \brief check if two doubles can be considered equal (with accuracy < eps)
+			   * \brief check if two numbers can be considered equal (with accuracy < eps)
 			   *
-			   * \param[in] a first double
-			   * \param[in] b second double
+			   * \param[in] a first number
+			   * \param[in] b second number
 			   *
 			   * \return \c bool, true if considered equal
 			   */
-			  bool areSame(const double& a, const double& b);
+			  bool areSame(number a, number b);
 		};
 
 		/*!
@@ -355,7 +354,7 @@ namespace ug {
 			   * \see uGPoint
 			   * \see Vm2uG
 			   */
-			  sPoint(const std::vector<double>& coordinates, const double& Vm, const double& dist, const int& index, const long& timestep, const T realfilename);
+			  sPoint(const std::vector<number>& coordinates, number Vm, number dist, int index, long timestep, const T& realfilename);
 
 			  /*!
 			   * \brief default constructor
@@ -368,23 +367,23 @@ namespace ug {
 			  ~sPoint();
 
 			  // getters
-			  const inline double getVm() const;
-			  const inline double getDist() const;
-			  const inline double getIndex() const;
-			  const inline long getTimestep() const;
-			  const inline std::vector<double> getCoordinates() const;
+			  inline number getVm() const;
+			  inline number getDist() const;
+			  inline number getIndex() const;
+			  inline long getTimestep() const;
+			  inline std::vector<number> getCoordinates() const;
 
 		   protected:
 			  int index;
 
 			  long timestep;
 
-			  double Vm;
-			  double dist;
+			  number Vm;
+			  number dist;
 
 			  T realfilename;
 
-			  std::vector<double> coordinates; /// coordinates extracted from a .hoc timestep file
+			  std::vector<number> coordinates; /// coordinates extracted from a .hoc timestep file
 		};
 
 		/*!
@@ -405,7 +404,7 @@ namespace ug {
 			   * \see sPoint
 			   * \see Vm2uG
 			   */
-			  uGPoint(const std::vector<double>& coordinates, const std::vector<sPoint<T> >& nearestNeighbors);
+			  uGPoint(const std::vector<number>& coordinates, const std::vector<sPoint<T> >& nearestNeighbors);
 
 			  /*!
 			   * \brief default constructor
@@ -418,13 +417,13 @@ namespace ug {
 			  ~uGPoint();
 
 			  // getters
-			  const inline std::vector<sPoint<T> > getNearestNeighbors() const;
-			  const inline std::vector<double> getCoordinates() const;
-			  double getVm();
-			  double getDist();
+			  inline std::vector<sPoint<T> > getNearestNeighbors() const;
+			  inline std::vector<number> getCoordinates() const;
+			  number getVm();
+			  number getDist();
 
 		   protected:
-			  std::vector<double> coordinates; /// cartesian coordinates from an UG grid point
+			  std::vector<number> coordinates; /// cartesian coordinates from an UG grid point
 			  std::vector<sPoint<T> > nearestNeighbors;
 
 		};

@@ -25,7 +25,7 @@
 
 using namespace ug::membrane_potential_mapping;
 
-void Transform::modify_hoc_setup(const double dt, const long steps, const double vinit) {
+void Transform::modify_hoc_setup(number dt, long steps, number vinit) {
 	try {
 		m_dt = dt;
 		m_steps = steps;
@@ -35,7 +35,7 @@ void Transform::modify_hoc_setup(const double dt, const long steps, const double
     }
 }
 
-void Transform::extract_timesteps_and_obj(const bool gen_objfile, const std::string& neugen_executable, const std::string& neutria_executable) {
+void Transform::extract_timesteps_and_obj(bool gen_objfile, const std::string& neugen_executable, const std::string& neutria_executable) {
 	try {
 		/*! initializes the Python interpreter */
 		Py_Initialize();
