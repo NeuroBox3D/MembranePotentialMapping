@@ -35,7 +35,7 @@ namespace ug {
 	namespace membrane_potential_mapping {
 		/*!
 		 * \defgroup mpm_plugin Membrane Potential Mapping plugin
-		 * \ingroup experimental_plugins
+		 * \ingroup plugins_experimental
 		 * \{
 		 *
 		 */
