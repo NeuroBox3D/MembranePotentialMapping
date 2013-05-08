@@ -9,24 +9,22 @@
  *
  * Notes: Migrate to the UG internal kd-tree
  * TODO: Code optimization	and cleanup (cctor calls, typename vs. class for templates)
+ * TOOD: introduce template parameter for DIM in mapper
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
 
 #ifndef DIM
-	#if defined(UG_DIM_1)
-		#define DIM 1
-	#endif
-
-	#if defined(UG_DIM_2)
-		#define DIM 2
-	#endif
-
-	#if defined(UG_DIM_3)
+	#if defined(UG_DIM_3) and not defined(UG_DIM_2) and not defined(UG_DIM_1)
 		#define DIM 3
+	#elif defined(UG_DIM_2) and not defined(UG_DIM_3) and not defined (UG_DIM_1)
+		#define DIM 2
+	#elif defined(UG_DIM_1) and not defined(UG_DIM_2) and not defined (UG_DIM_3)
+		#define DIM 1
 	#else
 		#define DIM 3
+		#warning "Assuming DIM=3 for now, as provided DIM is ambiguous."
 	#endif
 #endif
 
