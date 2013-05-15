@@ -62,7 +62,7 @@ set(SOURCES_simple	 transform.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
                      bg_simple/spannung.cpp
-                     aux/aux_bridge.cpp
+                     auxiliary/auxiliary_bridge.cpp
                      )
 
 set(SOURCES_default  transform.cpp
@@ -73,7 +73,7 @@ set(SOURCES_default  transform.cpp
                      bg_default/bg.cpp
                      bg_default/solve.cpp
                      bg_default/gating.cpp
-                     aux/aux_bridge.cpp
+                     auxiliary/auxiliary_bridge.cpp
                      )
                      
 # set sources for unit tests
