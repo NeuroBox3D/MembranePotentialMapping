@@ -26,8 +26,8 @@
 #endif
 #include "transform.h"
 
-#include "aux/edge_utilities.h"
-#include "aux/aux_bridge.cpp"
+#include "auxiliary/edge_utilities.h"
+#include "auxiliary/auxiliary_bridge.cpp"
 
 // begin namespace ug
 namespace ug {
