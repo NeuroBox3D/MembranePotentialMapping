@@ -97,7 +97,7 @@ double BG::get_Neumann_Flux() {
 
 
 double BG::get_Neumann_Flux_as_Concentration(const double dt, const double valency) const { // dt [s]
-	return 1e-12 * (Neumann_flux * 6.24e18) / (6.022e23 * valency); // [Mol/s]
+	return 1e-18 * (Neumann_flux * 6.24e18) / (6.022e23 * valency); // [Mol/s]
 
 }
 
