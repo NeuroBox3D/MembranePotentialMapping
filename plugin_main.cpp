@@ -1,6 +1,7 @@
 /*!
  * \file plugins/experimental/membrane_potential_mapping/plugin_main.cpp
  * \brief registry of the ug plugin membrane_potential_mapping
+ * TODO: templatize plugin with world dim
  *
  * \date created on Apr 30, 2012
  * \author stephan grein
@@ -115,8 +116,6 @@ namespace ug {
 			try {
 				bridge::RegisterDomain3dDependent<Functionality>(reg, parentGroup);
 			} UG_REGISTRY_CATCH_THROW(parentGroup);
-		#else
-			UG_WARNING("Reasonable usage of MPM plugin assured with DIM=3.")
 		#endif
 	}
 // end namespace ug
