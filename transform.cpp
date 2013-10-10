@@ -16,7 +16,6 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-#include <boost/filesystem.hpp>
 
 #include <common/log.h>
 #include <common/error.h>
@@ -98,7 +97,7 @@ void Transform::extract_timesteps_and_obj(bool gen_objfile, const std::string& n
 		/*! 4th hoc cmd */
 		command << "hoc.execute('"
 				<< "while(t < tstop) { " << "\\n"
-				<< "sprint(fname, " << boost::filesystem::path(m_timestepdirectory) / boost::filesystem::path("timestep") << "%f.csv)" << ", t/1000) \\n"
+				<< "sprint(fname, " << m_timestepdirectory << "/" << "%f.csv)" << ", t/1000) \\n"
 				<< "outfile = wopen(fname, \'w\') \\n"
 				<< "forall for i=0,n3d()-1 fprint(\"%f %f %f %f\n\", x3d(i), y3d(i), z3d(i), v(i)) \\n"
 				<< "wopen() \\n"
@@ -111,16 +110,19 @@ void Transform::extract_timesteps_and_obj(bool gen_objfile, const std::string& n
 		/*! shut down the Python interpreter */
 		Py_Finalize();
 
+   std::string directory = m_xmlfile;
+   directory.erase(directory.find_last_of(".", std::string::npos));
+
+   std::string xmlfile = m_xmlfile;
+   xmlfile.erase(directory.find_first_of(".", std::string::npos));
+
 		if (gen_objfile) {
-			const boost::filesystem::path xmlfile(m_xmlfile);
-			std::string directory = xmlfile.parent_path().string();
-			std::string filename = xmlfile.filename().string();
 
 			command << "cd " << directory << std::endl;
 			if (system(command.str().c_str()) == -1) throw;
 			command.clear();
 
-			command << "java -jar " << neugen_executable << " " << m_xmlfile << std::endl;
+			command << "java -jar " << neugen_executable << " " << xmlfile << std::endl;
 			if (system(command.str().c_str()) == -1) throw;
 			command.clear();
 

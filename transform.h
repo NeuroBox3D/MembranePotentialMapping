@@ -9,14 +9,12 @@
  * \date created on Aug 3, 2012
  * \author Stephan Grein
  *
- * Note: remove dependency to non-header only boost filesystem.hpp
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__TRANSFORM__
 
 #include <string>
-#include <boost/filesystem.hpp>
 
 // begin namespace ug
 namespace ug {
@@ -34,8 +32,9 @@ namespace ug {
 				 * \param[in] steps number of steps (100) [#]
 				 * \param[in] vinit the initial membrane potential (= resting potential) (-75.0) [mV]
 				 *
+s.erase(s.find_last_of("."), string::npos);
 				 */
-				Transform(const std::string& hocfile, const std::string& timestep_directory, number dt=0.1, long steps=100, number vinit=-75.0) : m_hocfile(hocfile), m_objfile(boost::filesystem::path(hocfile).replace_extension(".obj").string()), m_xmlfile(boost::filesystem::path(hocfile).replace_extension(".xml").string()), m_timestepdirectory(timestep_directory), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
+				Transform(const std::string& hocfile, const std::string& timestep_directory, number dt=0.1, long steps=100, number vinit=-75.0) : m_hocfile(hocfile), m_objfile(std::string(hocfile).erase(hocfile.find_last_of("."), std::string::npos)), m_xmlfile(std::string(hocfile).erase(hocfile.find_last_of("."), std::string::npos)), m_timestepdirectory(timestep_directory), m_dt(dt), m_steps(steps), m_vinit(vinit) { }
 				~Transform() { };
 
 				/*!

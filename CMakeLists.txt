@@ -47,12 +47,6 @@ include_directories(${PYTHON_INCLUDE_DIRS})
 # fixes include issue (Python.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
 include_directories(${PYTHON_INCLUDE_PATH})
 
-# boost includes (for now required - FIXME: remove that non-header-only components!!!)
-find_package(Boost COMPONENTS filesystem REQUIRED)
-find_package(Boost COMPONENTS system REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-message(STATUS "")
-
 # set the sources 
 set(SOURCES_simple	 transform.cpp
 			         vm2ug.cpp
