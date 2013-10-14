@@ -124,7 +124,7 @@ template<class T, size_t i> mvec<T, i> mvec<T, i>::sub(const mvec<T, i>& rhs) co
 }
 
 template <class T, size_t i> number mvec<T, i>::dot(const mvec<T, i>& rhs) const {
-	return std::inner_product(this->begin(), this->end(), rhs.begin(), 0);
+	return std::inner_product(this->begin(), this->end(), rhs.begin(), (number) 0.0);
 }
 
 
