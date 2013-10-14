@@ -382,7 +382,7 @@ namespace ug {
 			  qPts++;
 		   }
 
-		   if (timestep == this->timestep) {
+		   if (genHash(timestep) == this->timestep) {
 			  #ifdef _OPENMP
 			  #pragma omp parallel
 			  {
@@ -395,7 +395,7 @@ namespace ug {
 			  }
 			  #endif
 		   } else {
-			  this->timestep = timestep;
+			  this->timestep = genHash(timestep);
 			  rebuildTree(timestep);
 			  #ifdef _OPENMP
 			  #pragma omp parallel
