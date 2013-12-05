@@ -23,6 +23,11 @@ set(MPMTestsuite ON)
 set(MPMVGCC ON)
 set(MPMOpenMP OFF)
 
+if(buildEmbeddedPlugins)
+   set(MPMTestsuite OFF)
+endif(buildEmbeddedPlugins)
+
+
 message(STATUS "")
 message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM) plugin:")
 
@@ -48,7 +53,7 @@ include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${PYTHON_INCLUDE_PATH})
 
 # set the sources 
-set(SOURCES_simple	 transform.cpp
+set(SOURCES_simple	 
 			         vm2ug.cpp
 			         plugin_main.cpp
 			         bg_simple/bg.cpp
@@ -59,7 +64,7 @@ set(SOURCES_simple	 transform.cpp
                      auxiliary/auxiliary_bridge.cpp
                      )
 
-set(SOURCES_default  transform.cpp
+set(SOURCES_default  
                      vm2ug.cpp 
                      plugin_main.cpp
                      bg_default/spannung.cpp
@@ -83,6 +88,7 @@ endif(NOT ANNLIB)
 find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
 # fixes include issue (ANN.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
 include_directories(${ANNLIB}/include)
+include_directories(${ANNLIB}/include/ANN/ANN.h)
 
 if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
@@ -109,6 +115,8 @@ endif(${MPMOpenMP} STREQUAL "ON")
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
 # decide which build of the plugin you want to build
+	      exportDependencies(${ANNLIB}/lib/libANN.a)
+        exportIncludes(${ANNLIB}/include)
     if(${MPMVGCC} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
 	else(${MPMVGCC} STREQUAL "ON")
