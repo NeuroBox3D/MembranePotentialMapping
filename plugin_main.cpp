@@ -25,7 +25,7 @@
 #else
 #include "bg_simple/bg.h"
 #endif
-#include "transform.h"
+//#include "transform.h"
 
 #include "auxiliary/edge_utilities.h"
 #include "auxiliary/auxiliary_bridge.cpp"
@@ -46,13 +46,13 @@ namespace ug {
 			Domain(ug::bridge::Registry& reg, const std::string& parentGroup)
 			{
 			   // group membership of the membrane_potential_mapping plugin
-			   std::string grp(parentGroup);
-			   grp.append("Neuro/");
+         std::string grp("/UG4/Plugins/NeuroBox3D/MembranePotentialMapping/");
+         
 
 			   // typedefs
 			   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 			   typedef membrane_potential_mapping::bg::BG TBG;
-			   typedef membrane_potential_mapping::Transform TTransform;
+	//		   typedef membrane_potential_mapping::Transform TTransform;
 
 			   // registry of auxiliarities (\see aux/edge_utilities.h)
 			   reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum<TDomain>), "", grp);
@@ -90,6 +90,7 @@ namespace ug {
 				  ;
 
 			   // registry of Transform (\see transform.h)
+/*
 				reg.add_class_<TTransform>("TransformHocToObj", grp)
 				   .add_constructor<void (*)(const std::string&, const std::string&)>("hocfile|load-dialog|endings=[\"hoc\"];description=\"Hoc file for transformation\"#timestep directory|load-dialog;description=\"Location to store extracted timesteps\"#Delta t|default#steps|default#initial membrane potential|default")
 				   .add_method("get_hocfile", &TTransform::get_hocfile, "hocfile|default", "", grp)
@@ -98,7 +99,8 @@ namespace ug {
 				   .add_method("get_timestepdirectory", &TTransform::get_timestepdirectory, "timestep directory|default", "", grp)
 				   .add_method("get_dt", &TTransform::get_dt, "Delta t", "", grp)
 				   .add_method("extract_timesteps_and_obj", (void (TTransform::*)(bool, const std::string&, const std::string&)) &TTransform::extract_timesteps_and_obj, "", "generate object|default#neugen exe|load-dialog|endings=[\"jar\"];description=\"Neugen executable\"#neutria exe|load-dialog;description=\"Neutria executable\"", grp);
-			}
+			*/ 
+}
 		// end of functionality which is to be exported
 		};
 	/// \}
@@ -107,15 +109,15 @@ namespace ug {
 
 	/// \addtogroup mpm_plugin
 	extern "C" void
-	InitUGPlugin_MembranePotentialMapping(bridge::Registry& reg, std::string& parentGroup)
-	{
-		parentGroup.append("MembranePotentialMapping");
+	InitUGPlugin_MembranePotentialMapping(bridge::Registry& reg, const std::string& parentGroup)
+	{  
+		std::string name("/UG4/Plugins/NeuroBox3D/MembranePotentialMapping/");
 		typedef membrane_potential_mapping::Functionality Functionality;
 
 		#if defined(UG_DIM_3)
 			try {
-				bridge::RegisterDomain3dDependent<Functionality>(reg, parentGroup);
-			} UG_REGISTRY_CATCH_THROW(parentGroup);
+				bridge::RegisterDomain3dDependent<Functionality>(reg, name);
+			} UG_REGISTRY_CATCH_THROW(name);
 		#endif
 	}
 // end namespace ug

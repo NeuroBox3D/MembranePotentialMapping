@@ -46,11 +46,37 @@ message(STATUS "")
 # include the definitions and dependencies for ug-plugins.
 include("../../../cmake/ug_plugin_includes.cmake")
 
-include(FindPythonLibs  REQUIRED)
-include(FindPythonInterp  REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
+#include(FindPythonLibs  REQUIRED)
+#include(FindPythonInterp  REQUIRED)
+#include_directories(${PYTHON_INCLUDE_DIRS})
 # fixes include issue (Python.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
-include_directories(${PYTHON_INCLUDE_PATH})
+#include_directories(${PYTHON_INCLUDE_PATH})
+
+# get the path to annlib and set annlib include path
+option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
+
+if(NOT ANNLIB)
+	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
+endif(NOT ANNLIB)
+
+find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
+# fixes include issue (ANN.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
+#include_directories(${ANNLIB}/include ${ANNLIB} ${ANNLIB}/include/ANN/ANN.h)
+include_directories("/Users/stephangrein/ann_1.1.2/include/")
+include_directories(${ANNLIB}/include)
+message("ANNLIB path: " ${ANNLIB})
+
+if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
+else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	include_directories(${ANNLIB}/include)		
+	include_directories(${ANNLIB})		
+endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+
+
+#find_path(ANNLIB_INCLUDE_DIR ANN/ANN.h ${ANNLIB}/include)
+FIND_PATH(ANNLIB_INCLUDE_DIR ANN/ANN.h PATHS ${ANNLIB}/include)
+include_directories(${ANNLIB_INCLUDE_DIR})
 
 # set the sources 
 set(SOURCES_simple	 
@@ -114,6 +140,7 @@ endif(${MPMOpenMP} STREQUAL "ON")
 
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
+#link_libraries(${ANNLIB}/lib)
 # decide which build of the plugin you want to build
 	      exportDependencies(${ANNLIB}/lib/libANN.a)
         exportIncludes(${ANNLIB}/include)
@@ -123,10 +150,12 @@ if(buildEmbeddedPlugins)
 	else(${MPMVGCC} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
 	endif(${MPMVGCC} STREQUAL "ON")
-	
-	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
-	endif(${MPMTestsuite} STREQUAL "ON")
+      EXPORTDEPENDENCIES(${ANNLIB_LIBS})
+#target_link_libraries(ug4 ${ANNLIB_LIBS})
+		#target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
+	#if(${MPMTestsuite} STREQUAL "ON")
+#		target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
+#	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
 
 

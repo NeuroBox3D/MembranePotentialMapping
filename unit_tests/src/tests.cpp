@@ -8,9 +8,6 @@
 
 #define BOOST_TEST_MODULE __CPP__UNIT_TESTS__UG__MEMBRANE_POTENTIAL_MAPPING__
 
-extern "C" {
-#include "Python.h"
-}
 
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
@@ -498,9 +495,6 @@ BOOST_AUTO_TEST_SUITE(transform);
 
 // TODO: test the basic transform method here
 BOOST_AUTO_TEST_CASE(transform) {
-	Py_Initialize();
-    BOOST_REQUIRE_EQUAL(PyRun_SimpleString("from neuron import h"), 0);
-    Py_Finalize();
 }
 
 BOOST_AUTO_TEST_SUITE_END();
