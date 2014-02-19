@@ -45,7 +45,7 @@ namespace ug {
 				number circumference = 0.;
 				GridObjectCollection goc = sh.get_grid_objects_in_subset(si);
 
-				if (goc.num<Edge>(lvl) == 0) {
+				if (goc.num<RegularEdge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
 				} else {
 					for (EdgeBaseIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
@@ -63,7 +63,7 @@ namespace ug {
 				number circumference = 0.;
 				GridObjectCollection goc = sh.get_grid_objects_in_subset(si);
 
-				if (goc.num<Edge>(lvl) == 0) {
+				if (goc.num<RegularEdge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
 				} else {
 					for (EdgeBaseIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
