@@ -19,7 +19,7 @@ namespace ug {
 					return circumference;
 
 				for(; eBegin != eEnd; ++eBegin) {
-					EdgeBase* cEdge = *eBegin;
+					Edge* cEdge = *eBegin;
 					circumference += EdgeLength(cEdge, aaPos);
 				}
 			}
@@ -33,7 +33,7 @@ namespace ug {
 					return circumference;
 
 				for(; eBegin != eEnd; ++eBegin) {
-					EdgeBase* cEdge = *eBegin;
+					Edge* cEdge = *eBegin;
 					circumference += EdgeLength(cEdge, aaPos);
 				}
 			}
@@ -48,8 +48,8 @@ namespace ug {
 				if (goc.num<RegularEdge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
 				} else {
-					for (EdgeBaseIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
-						EdgeBase* curEdge = *eIt;
+					for (EdgeIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
+						Edge* curEdge = *eIt;
 						circumference += EdgeLength(curEdge, aaPos);
 					}
 				}
@@ -66,8 +66,8 @@ namespace ug {
 				if (goc.num<RegularEdge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
 				} else {
-					for (EdgeBaseIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
-						EdgeBase* curEdge = *eIt;
+					for (EdgeIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
+						Edge* curEdge = *eIt;
 						circumference += EdgeLength(curEdge, aaPos);
 					}
 				}
