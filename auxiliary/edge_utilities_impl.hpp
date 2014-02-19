@@ -1,7 +1,7 @@
 /* mandatory includes */
 #include "edge_utilities.h"
 #include <lib_grid/algorithms/geom_obj_util/edge_util.h>
-#include <lib_grid/grid/geometric_base_objects.h>
+#include <lib_grid/grid/grid_base_objects.h>
 
 /* begin namespace ug */
 namespace ug {
@@ -43,7 +43,7 @@ namespace ug {
 			number EdgeSum(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos)
 			{
 				number circumference = 0.;
-				GeometricObjectCollection goc = sh.get_geometric_objects_in_subset(si);
+				GridObjectCollection goc = sh.get_grid_objects_in_subset(si);
 
 				if (goc.num<Edge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
@@ -61,7 +61,7 @@ namespace ug {
 			number EdgeSumSq(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos)
 			{
 				number circumference = 0.;
-				GeometricObjectCollection goc = sh.get_geometric_objects_in_subset(si);
+				GridObjectCollection goc = sh.get_grid_objects_in_subset(si);
 
 				if (goc.num<Edge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
