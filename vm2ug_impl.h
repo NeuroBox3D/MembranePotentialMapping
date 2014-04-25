@@ -13,11 +13,13 @@
 #include "vm2ug.h"
 #include "mvec.h"
 #include "common_typedefs.h"
+#include "transformator.h"
 
 /* begin namespace ug */
 namespace ug {
 	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
+#ifndef MPMNEURON
 		template<class T> number Vm2uG<T>::interp_bilin_vms(const T& timestep,
 				number node[], number cutoff, int k) {
 			/* need at least four nearest neighbors for bilinear interpolation */
@@ -284,6 +286,7 @@ namespace ug {
 			}
 			return Vm_intp;
 		}
+#endif
 
 		template <class T> Vm2uG<T>::Vm2uG(const std::string& dataFileBaseName_, const std::string& dataFileExt_, bool promise_) {
 		   dim = 3;
@@ -324,10 +327,44 @@ namespace ug {
 		   for (int i=0; i < dim; i++) queryPt[i] = node[i];
 		}
 
+#ifdef MPMNEURON
+		template <class T> void Vm2uG<T>::buildTree() {
+				if (this->isTreeBuild) {
+					 rebuildTree();
+				} else {
+					nPts = 0;
+					queryPt = annAllocPt(dim);
+					dim++;
+					dataPts = annAllocPts(maxPts, dim);
+					nnIdx = new ANNidx[k];
+					dists = new ANNdist[k];
+
+					typedef std::vector<std::pair<std::vector<number>, number> > VMS;
+					VMS vms = (m_transformator->get_vms()).front();
+					for (VMS::const_iterator cit = vms.begin(); cit != vms.end(); cit++) {
+						int i = 0;
+						for (std::vector<number>::const_iterator cit2 = (cit->first).begin(); cit2 != (cit->first).end(); cit2++) {
+							dataPts[nPts][i] = *cit2;
+							i++;
+						}
+						dataPts[nPts][i] = cit->second; // was cit->second
+						nPts++;
+					}
+
+					nPts--;
+					kdTree = new ANNkd_tree(dataPts, nPts, dim-1);
+					dim--;
+					this->isTreeBuild = true;
+				}
+		}
+#else
+
 		template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
 
 		   if (this->isTreeBuild) {
+#ifndef MPMNEURON
 			  rebuildTree(timestep);
+#endif
 		   }
 
 		   static std::ifstream dataStream;
@@ -360,6 +397,7 @@ namespace ug {
 		   this->timestep = genHash(timestep);
 		   this->isTreeBuild = true;
 		}
+#endif
 
 
 
@@ -382,7 +420,7 @@ namespace ug {
 			  qPts++;
 		   }
 
-		   if (genHash(timestep) == this->timestep) {
+		   if (timestep == this->timestep) {
 			  #ifdef _OPENMP
 			  #pragma omp parallel
 			  {
@@ -395,8 +433,10 @@ namespace ug {
 			  }
 			  #endif
 		   } else {
-			  this->timestep = genHash(timestep);
+			  this->timestep = timestep;
+#ifndef MPMNEURON
 			  rebuildTree(timestep);
+#endif
 			  #ifdef _OPENMP
 			  #pragma omp parallel
 			  {
@@ -441,8 +481,7 @@ namespace ug {
 
 		   return uGs;
 		}
-
-
+#ifndef MPMNEURON
 		template <class T> uGPoint<T> Vm2uG<T>::vm_t(const T& timestep, number node[]) { // BOUNDARY NODE from uG
 		if (!this->isTreeBuild) buildTree(timestep);
 		   if (genHash(timestep) == this->timestep) { // timestep
@@ -493,11 +532,25 @@ namespace ug {
 		   }
 		   return vm_t_many(timestep, nodes);
 		}
+#else
+		template <class T> number Vm2uG<T>::vm_t(number node[]) {
+			if (!this->isTreeBuild) {
+				buildTree();
+			}
+
+			readPt(node);
+
+			this->kdTree->annkSearch(queryPt, this->k, this->nnIdx, this->dists, this->eps);
+
+		   return dataPts[nnIdx[0]][dim];
+		}
+#endif
 
 		template <class T> void Vm2uG<T>::setK(short int k) {
 		   this->k = k;
 		}
 
+#ifndef MPMNEURON
 		template <class T> void Vm2uG<T>::setDim(short int dim) {
 		   this->dim = dim;
 		   this->promise = false;
@@ -508,6 +561,7 @@ namespace ug {
 		   this->timestep = genHash(timestep);
 		   rebuildTree(timestep);
 		}
+#endif
 
 		template <class T> void Vm2uG<T>::setMaxPts(int maxPts) {
 		   this->maxPts = maxPts;
@@ -522,6 +576,7 @@ namespace ug {
 		   this->promise = promise;
 		}
 
+#ifndef MPMNEURON
 		template <class T> void Vm2uG<T>::setdataFileBaseName(const std::string& dataFile) {
 		   this->dataFileBaseName = dataFile;
 		   rebuildTree(this->timestep);
@@ -531,12 +586,24 @@ namespace ug {
 		   this->dataFileExt = dataFileExt;
 		   rebuildTree(this->timestep);
 		}
+#endif
 
 
 		template <class T> bool Vm2uG<T>::areSame(number a, number b) {
 		   return std::fabs(a - b) < std::numeric_limits<number>::epsilon();
 		}
 
+#ifdef MPMNEURON
+		template <class T> long Vm2uG<T>::genHash(number timestep) {
+			std::locale loc;
+			const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
+			std::ostringstream s;
+			s << timestep;
+			std::string tmp = (this->dataFileBaseName+s.str()+this->dataFileExt).c_str();
+			return coll.hash(tmp.data(),tmp.data()+tmp.length());
+
+		}
+#else
 		template <class T> long Vm2uG<T>::genHash(const T& timestep) {
 			std::locale loc;
 			const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
@@ -545,7 +612,9 @@ namespace ug {
 			std::string tmp = (this->dataFileBaseName+s.str()+this->dataFileExt).c_str();
 			return coll.hash(tmp.data(),tmp.data()+tmp.length());
 		}
+#endif
 
+#ifndef MPMNEURON
 		template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
 		   //std::cout << "tree needs rebuild!" << std::endl;
 		   // tree needs to be rebuild if indices and or datapoints vary during timestepping (default: promise=false, i.e. we need to rebuild all)
@@ -569,9 +638,9 @@ namespace ug {
 		   //queryPt = annAllocPt(dim); // let queryPt allocated, because queryPt dimension will not change
 		   dim++; // (n+1)th coordinate (Vm)
 		   if (!promise) {
-		   dataPts = annAllocPts(maxPts, dim);
-		   nnIdx = new ANNidx[k];
-		   dists = new ANNdist[k];
+			   dataPts = annAllocPts(maxPts, dim);
+			   nnIdx = new ANNidx[k];
+			   dists = new ANNdist[k];
 		   }
 
 		   while (nPts < maxPts && !dataStream.eof()) {
@@ -589,6 +658,40 @@ namespace ug {
 
 		   this->timestep=genHash(timestep);
 		}
+#else
+		template <class T> void Vm2uG<T>::rebuildTree() {
+			if (!promise) {
+				delete [] nnIdx;
+				delete [] dists;
+				delete kdTree;
+			}
+
+			nPts = 0;
+			dim++;
+			if (!promise) {
+				dataPts = annAllocPts(maxPts, dim);
+				nnIdx = new ANNidx[k];
+				dists = new ANNdist[k];
+			}
+
+			typedef std::vector<std::pair<std::vector<number>, number> > VMS;
+			VMS vms = (m_transformator->get_vms()).front();
+			for (VMS::const_iterator cit = vms.begin(); cit != vms.end(); cit++) {
+				int i = 0;
+				for (std::vector<number>::const_iterator cit2 = (cit->first).begin(); cit2 != (cit->first).end(); cit2++) {
+					dataPts[nPts][i] = *cit2;
+					i++;
+				}
+
+			dataPts[nPts][i+1] = cit->second;
+			nPts++;
+			}
+
+			nPts--;
+			if (!promise) this->kdTree = new ANNkd_tree(dataPts, nPts, dim-1);
+			dim--;
+		}
+#endif
 
 		template <class T> std::ostream& operator<<(std::ostream& output, const Vm2uG<T>& p) {
 		   output << "current instance of Vm2uG holds the properties:" << std::endl;

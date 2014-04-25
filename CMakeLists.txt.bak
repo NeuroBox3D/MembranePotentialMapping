@@ -1,0 +1,181 @@
+################################################################################
+# CMake for the membrane_potential_mapping ug plugin 
+# Please note: to activate use -DMembranePotentialMapping=ON during CMake config
+#
+# created by: Stephan Grein, adopted by Sebastian Reiter and Martin Scherer
+# on 02. Feb, 2012
+# see: docs for additional informations
+# prerequisites for usage with VRL/ugshell: 
+#      a working NEURON, NeuGen and NeuTria installation is needed on runtime,
+#      additional make sure that ugshell is linked against libpython.so 
+#      (see ldd ugshell for further)
+#
+################################################################################
+
+# minimum required CMake version for project below
+cmake_minimum_required(VERSION 2.6)
+
+# specify project name
+project(MEMBRANE_POTENTIAL_MAPPING)
+
+# default values
+set(MPMTestsuite ON)
+set(MPMVGCC ON)
+set(MPMOpenMP OFF)
+
+if(buildEmbeddedPlugins)
+   set(MPMTestsuite OFF)
+endif(buildEmbeddedPlugins)
+
+
+message(STATUS "")
+message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM) plugin:")
+
+# options for building membrane_potential_mapping (e. g. -DMPMTestsuite=OFF)
+option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
+message(STATUS "Info: Testsuite:   "${MPMTestsuite}" (options are: ON, OFF)")
+
+option(MPMVGCC "Build VGCC:    " ${MPMVGCC})
+message(STATUS "Info: VGCC:        "${MPMVGCC}" (options are: ON, OFF)")
+
+option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
+message(STATUS "Info: OpenMP:      " ${MPMOpenMP}" (options are: ON, OFF)")
+
+message(STATUS "")
+ 
+# include the definitions and dependencies for ug-plugins.
+include("../../../cmake/ug_plugin_includes.cmake")
+
+#include(FindPythonLibs  REQUIRED)
+#include(FindPythonInterp  REQUIRED)
+#include_directories(${PYTHON_INCLUDE_DIRS})
+# fixes include issue (Python.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
+#include_directories(${PYTHON_INCLUDE_PATH})
+
+# get the path to annlib and set annlib include path
+option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
+
+if(NOT ANNLIB)
+	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
+endif(NOT ANNLIB)
+
+find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
+# fixes include issue (ANN.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
+#include_directories(${ANNLIB}/include ${ANNLIB} ${ANNLIB}/include/ANN/ANN.h)
+include_directories("/Users/stephangrein/ann_1.1.2/include/")
+include_directories(${ANNLIB}/include)
+message("ANNLIB path: " ${ANNLIB})
+
+if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
+else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	include_directories(${ANNLIB}/include)		
+	include_directories(${ANNLIB})		
+endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+
+
+#find_path(ANNLIB_INCLUDE_DIR ANN/ANN.h ${ANNLIB}/include)
+FIND_PATH(ANNLIB_INCLUDE_DIR ANN/ANN.h PATHS ${ANNLIB}/include)
+include_directories(${ANNLIB_INCLUDE_DIR})
+
+# set the sources 
+set(SOURCES_simple	 
+			         vm2ug.cpp
+			         plugin_main.cpp
+			         bg_simple/bg.cpp
+			         bg_simple/my_commands.cpp
+			         bg_simple/solve.cpp
+			         bg_simple/gating.cpp
+                     bg_simple/spannung.cpp
+                     auxiliary/auxiliary_bridge.cpp
+                     )
+
+set(SOURCES_default  
+                     vm2ug.cpp 
+                     plugin_main.cpp
+                     bg_default/spannung.cpp
+                     bg_default/my_commands.cpp
+                     bg_default/bg.cpp
+                     bg_default/solve.cpp
+                     bg_default/gating.cpp
+                     auxiliary/auxiliary_bridge.cpp
+                     )
+                     
+# set sources for unit tests
+set(SOURCES_TEST unit_tests/src/tests.cpp)
+		
+# get the path to annlib and set annlib include path
+option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
+
+if(NOT ANNLIB)
+	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
+endif(NOT ANNLIB)
+
+find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
+# fixes include issue (ANN.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
+include_directories(${ANNLIB}/include)
+include_directories(${ANNLIB}/include/ANN/ANN.h)
+
+if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
+else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	include_directories(${ANNLIB}/include)		
+endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+
+# decide if you want to build the boost testsuite executable (MPMTestsuite)
+if(${MPMTestsuite} STREQUAL "ON")
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
+	add_executable(MPMTestsuite ${SOURCES_TEST})
+endif(${MPMTestsuite} STREQUAL "ON")
+
+# decide if you want to build membrane_potential_mapping with OMP support
+if (${MPMOpenMP} STREQUAL "ON")
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        message(FATAL_ERROR "ERROR: Clang currently does not support OpenMP.")
+    else ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
+    endif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+endif(${MPMOpenMP} STREQUAL "ON")
+
+# create a shared library from the sources and link it against ug4.
+if(buildEmbeddedPlugins)
+#link_libraries(${ANNLIB}/lib)
+# decide which build of the plugin you want to build
+	      exportDependencies(${ANNLIB}/lib/libANN.a)
+        exportIncludes(${ANNLIB}/include)
+    if(${MPMVGCC} STREQUAL "ON")
+      exportDefinitions("-DMPMVGCC")
+	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
+	else(${MPMVGCC} STREQUAL "ON")
+	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
+	endif(${MPMVGCC} STREQUAL "ON")
+      EXPORTDEPENDENCIES(${ANNLIB_LIBS})
+#target_link_libraries(ug4 ${ANNLIB_LIBS})
+		#target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
+	#if(${MPMTestsuite} STREQUAL "ON")
+#		target_link_libraries (MPMTestsuite ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES}) # was: MPMTestSuite MembranePotentialMapping ug4_s ...
+#	endif(${MPMTestsuite} STREQUAL "ON")
+else(buildEmbeddedPlugins)
+
+
+# decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
+    if(${MPMVGCC} STREQUAL "ON")
+       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
+       add_definitions(-DMPMVGCC) 
+    else(${MPMVGCC} STREQUAL "ON")
+        add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
+    endif(${MPMVGCC} STREQUAL "ON")
+    
+	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+	
+	if(${MPMTestsuite} STREQUAL "ON")
+		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+	endif(${MPMTestsuite} STREQUAL "ON")
+	
+endif(buildEmbeddedPlugins)
+
+# warn of future obsolete VGCC components in this plugin
+message(WARNING "The MembranePotentialMapping's VGCC implementation and unit tests will be unified in voltage_gated_channels in future.")
+
+# ENDOF CMAKE

@@ -9,7 +9,8 @@
  *
  * Notes: Migrate to the UG internal kd-tree
  * TODO: Code optimization	and cleanup (cctor calls, typename vs. class for templates)
- * TOOD: introduce template parameter for DIM in mapper
+ * TODO: introduce template parameter for DIM in mapper
+ * TODO: code cleanup
  */
 
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG__
@@ -35,11 +36,13 @@
 #include <cmath>
 
 #include "common/common.h"
+#include "common/util/smart_pointer.h"
 
-//#include "/home/stephan/libs/ann_1.1.2/include/ANN/ANN.h"
 #include <ANN/ANN.h>
+
 #include "common_typedefs.h"
 #include "mvec.h"
+#include "transformator.h"
 
 // begin namespace ug
 namespace ug {
@@ -62,7 +65,6 @@ namespace ug {
 		 * \see docs for additional informations
 		 */
 		template <class T> class Vm2uG {
-
 		   friend std::ostream& operator<< <>(std::ostream& output, const Vm2uG<T>& p);
 
 		   public:
@@ -85,6 +87,23 @@ namespace ug {
 			   * \param[in] k search for k nearest neighbors (default: 1)
 			   */
 			  Vm2uG(const std::string& dataFileBaseName, short int dim, int maxPts, number eps, short int k);
+
+			  /*!
+			   * \brief another constructor for neuron usage
+			   */
+#ifdef MPMNEURON
+			  Vm2uG(SmartPtr<Transformator> transformator) {
+				  m_transformator = transformator;
+				  isTreeBuild = false;
+				  promise = true;
+				   dim = 3;
+						   timestep = 0;
+						   maxPts = 100000;
+						   k = 1;
+						   eps = 0.0;
+				  buildTree();
+			  }
+#endif
 
 			  /*!
 			   * \brief default destructor
@@ -129,6 +148,11 @@ namespace ug {
 				 return vm_t(t, node).getVm();
 			  }
 
+			  number get_potential(number x, number y, number z) {
+				  number node[3] = {x, y, z};
+				  return vm_t(node);
+			  }
+
 			 /*!
 			  * \brief return the associated membrane potential of the first nearest neighbor at cartesian coordinates x,y,z at timestep t: special case DIM=3.
 			  *
@@ -163,13 +187,19 @@ namespace ug {
 				  return interp_bilin_vms(t, node, cutoff, k);
 			  }
 
-			  /*!
+
+#ifdef MPMNEURON
+			  void buildTree();
+#else
+			  			  /*!
 			   * \brief builds the tree with timestep
 			   *
 			   * \param[in] timestep the timestep for build-up of the kd-tree
 			   * \return \c void
 			   */
 			  void buildTree(const T& timestep);
+#endif
+
 
 			  /*!
 			   * \brief get the nearest neighbor and return the associated membrane potential and distance to the query point
@@ -183,6 +213,8 @@ namespace ug {
 			   * \return \c uGPoint<T> an grid point from UG with additional attributes, e. g. membrane potential, distance to query point, etc.
 			   */
 			  uGPoint<T> vm_t(const T& timestep, number node[]);
+
+			  number vm_t(number node[]);
 
 			  /*!
 			   * \brief the same as vm_t except supplied is a list of query points; parallelized with OMP.
@@ -281,6 +313,10 @@ namespace ug {
 			  ANNpointArray queryPts;
 
 			  static std::ifstream dataStream;
+#ifdef MPMNEURON
+			  SmartPtr<Transformator> m_transformator;
+#endif
+
 
 			  /*!
 			   * \brief prints a data or query point with its cartesian coordinates
@@ -309,7 +345,12 @@ namespace ug {
 			   *
 			   * \return \c void
 			   */
+#ifndef MPMNEURON
 			  void rebuildTree(const T& timestep);
+
+#else
+			  void rebuildTree();
+#endif
 
 			  /*!
 			   * \brief generates a hash for the current timestep
@@ -318,7 +359,11 @@ namespace ug {
 			   *
 			   * \return \c number the hashcode (runtime: log(n))
 			   */
+#ifdef MPMNEURON
+			  long genHash(double timestep);
+#else
 			  long genHash(const T& timestep);
+#endif
 
 			  /*!
 			   * \brief check if two numbers can be considered equal (with accuracy < eps)

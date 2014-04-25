@@ -16,6 +16,10 @@
 
 #include <string>
 
+#include "/home/stephan/code/hg/nrn/nrn-7.3/src/ivoc/oc2iv.h"
+#include "/home/stephan/code/hg/nrn/nrn-7.3/src/ivoc/ocjump.cpp"
+#include "/home/stephan/code/hg/nrn/nrn-7.3/src/ivoc/ivocmain.cpp"
+
 // begin namespace ug
 namespace ug {
 	/* begin namespace mpm */

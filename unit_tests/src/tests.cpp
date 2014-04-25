@@ -8,7 +8,6 @@
 
 #define BOOST_TEST_MODULE __CPP__UNIT_TESTS__UG__MEMBRANE_POTENTIAL_MAPPING__
 
-
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/parameterized_test.hpp>
 #include <cmath>
@@ -25,7 +24,6 @@
 #include "../../vm2ug.h"
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
-#include "../../transform.h"
 
 using namespace boost::unit_test;
 using namespace ug::membrane_potential_mapping;
@@ -354,6 +352,7 @@ BOOST_AUTO_TEST_CASE(construct_Vm2uG) {
 }
 
 // test build_tree
+#ifndef MPMNEURON
 BOOST_AUTO_TEST_CASE(build_tree) {
 
 	BOOST_REQUIRE_MESSAGE(vm2ug, "Vm2uG<string> instance cannot be constructed");
@@ -361,7 +360,9 @@ BOOST_AUTO_TEST_CASE(build_tree) {
 	BOOST_CHECK_MESSAGE(vm2ug->treeBuild(), "tree could not be rebuild");
 
 }
+#endif
 
+#ifndef MPMNEURON
 // test get_potential
 BOOST_AUTO_TEST_CASE(get_potential) {
 
@@ -371,6 +372,7 @@ BOOST_AUTO_TEST_CASE(get_potential) {
 	BOOST_CHECK_MESSAGE(vm2ug->get_potential(0,0,0, "timestep0.000000.csv") == -75.0, "initial potential should be -75.0");
 
 }
+#endif
 
 BOOST_AUTO_TEST_SUITE_END();
 
@@ -487,15 +489,6 @@ BOOST_AUTO_TEST_CASE(check_molar_fluxes_cfp) {
 
 }
 #endif
-
-BOOST_AUTO_TEST_SUITE_END();
-
-// BOOST Test Suite for testing of the transform class
-BOOST_AUTO_TEST_SUITE(transform);
-
-// TODO: test the basic transform method here
-BOOST_AUTO_TEST_CASE(transform) {
-}
 
 BOOST_AUTO_TEST_SUITE_END();
 
