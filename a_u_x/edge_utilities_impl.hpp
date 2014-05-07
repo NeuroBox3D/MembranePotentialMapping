@@ -1,7 +1,6 @@
 /* mandatory includes */
 #include "edge_utilities.h"
 #include <lib_grid/algorithms/geom_obj_util/edge_util.h>
-#include <lib_grid/grid/geometric_base_objects.h>
 
 /* begin namespace ug */
 namespace ug {
@@ -19,7 +18,7 @@ namespace ug {
 					return circumference;
 
 				for(; eBegin != eEnd; ++eBegin) {
-					EdgeBase* cEdge = *eBegin;
+					Edge* cEdge = *eBegin;
 					circumference += EdgeLength(cEdge, aaPos);
 				}
 			}
@@ -33,7 +32,7 @@ namespace ug {
 					return circumference;
 
 				for(; eBegin != eEnd; ++eBegin) {
-					EdgeBase* cEdge = *eBegin;
+					Edge* cEdge = *eBegin;
 					circumference += EdgeLength(cEdge, aaPos);
 				}
 			}
@@ -43,13 +42,13 @@ namespace ug {
 			number EdgeSum(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos)
 			{
 				number circumference = 0.;
-				GeometricObjectCollection goc = sh.get_geometric_objects_in_subset(si);
+				GridObjectCollection goc = sh.get_grid_objects_in_subset(si);
 
 				if (goc.num<Edge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
 				} else {
-					for (EdgeBaseIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
-						EdgeBase* curEdge = *eIt;
+					for (EdgeIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
+						Edge* curEdge = *eIt;
 						circumference += EdgeLength(curEdge, aaPos);
 					}
 				}
@@ -61,13 +60,13 @@ namespace ug {
 			number EdgeSumSq(ISubsetHandler& sh, int si, int lvl, TAAPosVRT& aaPos)
 			{
 				number circumference = 0.;
-				GeometricObjectCollection goc = sh.get_geometric_objects_in_subset(si);
+				GridObjectCollection goc = sh.get_grid_objects_in_subset(si);
 
 				if (goc.num<Edge>(lvl) == 0) {
 					UG_WARNING("WARNING: Given subset doesn't contain any edges on provided level " << lvl << std::endl);
 				} else {
-					for (EdgeBaseIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
-						EdgeBase* curEdge = *eIt;
+					for (EdgeIterator eIt = goc.edges_begin(lvl); eIt != goc.edges_end(lvl); ++eIt) {
+						Edge* curEdge = *eIt;
 						circumference += EdgeLength(curEdge, aaPos);
 					}
 				}
