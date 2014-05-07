@@ -117,7 +117,7 @@ set(SOURCES_simple
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
                      bg_simple/spannung.cpp
-                     auxiliary/auxiliary_bridge.cpp
+                     a_u_x/a_u_x_bridge.cpp
                      )
 
 set(SOURCES_default  
@@ -128,7 +128,7 @@ set(SOURCES_default
                      bg_default/bg.cpp
                      bg_default/solve.cpp
                      bg_default/gating.cpp
-                     auxiliary/auxiliary_bridge.cpp
+                     a_u_x/a_u_x_bridge.cpp
                      )
                      
 else(NOT MPMNEURON)
@@ -140,7 +140,7 @@ set(SOURCES_simple
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
                      bg_simple/spannung.cpp
-                     auxiliary/auxiliary_bridge.cpp
+                     a_u_x/aux_bridge.cpp
                      transformator.cpp
                      )
 
@@ -152,7 +152,7 @@ set(SOURCES_default
                      bg_default/bg.cpp
                      bg_default/solve.cpp
                      bg_default/gating.cpp
-                     auxiliary/auxiliary_bridge.cpp
+                     a_u_x/aux_bridge.cpp
                      transformator.cpp
                      )
 

@@ -28,8 +28,8 @@
 #include "transformator.h"
 #endif
 
-#include "auxiliary/edge_utilities.h"
-#include "auxiliary/auxiliary_bridge.cpp"
+#include "a_u_x/edge_utilities.h"
+#include "a_u_x/aux_bridge.cpp"
 
 #include <lib_disc/function_spaces/grid_function.h>
 #include <bridge/util_domain_algebra_dependent.h>
