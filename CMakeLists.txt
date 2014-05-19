@@ -28,13 +28,13 @@ message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM
 
 # options for building membrane_potential_mapping (e. g. -DMPMTestsuite=OFF)
 option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
-message(STATUS "Info: Testsuite:   "${MPMTestsuite}" (options are: ON, OFF)")
+message(STATUS "Info: Testsuite:   " ${MPMTestsuite} " (options are: ON, OFF)")
 
 option(MPMVGCC "Build VGCC:    " ${MPMVGCC})
-message(STATUS "Info: VGCC:        "${MPMVGCC}" (options are: ON, OFF)")
+message(STATUS "Info: VGCC:        " ${MPMVGCC} " (options are: ON, OFF)")
 
 option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
-message(STATUS "Info: OpenMP:      " ${MPMOpenMP}" (options are: ON, OFF)")
+message(STATUS "Info: OpenMP:      " ${MPMOpenMP} " (options are: ON, OFF)")
 message(STATUS "")
 
 # check for NEURON api
