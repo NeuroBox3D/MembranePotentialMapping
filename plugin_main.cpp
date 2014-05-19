@@ -29,7 +29,7 @@
 #endif
 
 #include "a_u_x/edge_utilities.h"
-#include "a_u_x/aux_bridge.cpp"
+#include "a_u_x/a_u_x_bridge.cpp"
 
 #include <lib_disc/function_spaces/grid_function.h>
 #include <bridge/util_domain_algebra_dependent.h>
