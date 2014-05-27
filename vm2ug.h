@@ -38,7 +38,9 @@
 #include "common/common.h"
 #include "common/util/smart_pointer.h"
 
-#include <ANN/ANN.h>
+// FIXME: below fails if EMBEDDED_PLUGINGS=ON -> why?
+// #include "ANN/ANN.h"
+#include "/Users/stephan/Code/unversioned/ann_1.1.2/include/ANN/ANN.h"
 
 #include "common_typedefs.h"
 #include "mvec.h"

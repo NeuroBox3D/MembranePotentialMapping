@@ -168,7 +168,6 @@ if(NOT ANNLIB)
 endif(NOT ANNLIB)
 
 find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
-# fixes include issue (ANN.h is NOT found) on some MacOS X systems (>= 10.7.4 (Lion)) 
 include_directories(${ANNLIB}/include)
 
 if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
@@ -198,8 +197,12 @@ if(buildEmbeddedPlugins)
 # decide which build of the plugin you want to build
     if(${MPMVGCC} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
+	   ExportDependencies(${ANNLIB}/lib/libANN.a)
+   ExportDefinitions(-DMPMVGCC)
 	else(${MPMVGCC} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
+	  ExportDependencies(${ANNLIB}/lib/libANN.a)
+   ExportDefinitions(-DMPMVGCC)
 	endif(${MPMVGCC} STREQUAL "ON")
 	
 	if(${MPMTestsuite} STREQUAL "ON")

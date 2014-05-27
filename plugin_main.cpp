@@ -95,6 +95,7 @@ namespace ug {
 #endif
 				  .set_construct_as_smart_pointer(bSmartPointer);
 
+
 			   // registry of BG (\see bg.h)
 			   reg.add_class_<TBG>("BorgGraham", grp)
 				  .add_constructor()
