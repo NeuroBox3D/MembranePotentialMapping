@@ -142,6 +142,7 @@ set(SOURCES_simple
                      bg_simple/spannung.cpp
                      a_u_x/a_u_x_bridge.cpp
                      transformator.cpp
+                     hoc_command.cpp
                      )
 
 set(SOURCES_default  
@@ -154,6 +155,7 @@ set(SOURCES_default
                      bg_default/gating.cpp
                      a_u_x/a_u_x_bridge.cpp
                      transformator.cpp
+                     hoc_command.cpp
                      )
 
 endif(NOT MPMNEURON)

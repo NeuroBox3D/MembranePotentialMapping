@@ -6,6 +6,7 @@
  */
 
 #include "transformator.h"
+#include "hoc_command.h"
 
 // define nil (how to circumvent that define?)
 #define nil NULL
@@ -903,3 +904,27 @@ void Transformator::print_setup(bool verbose) {
 		std::cout << "--------------------------------------------------------------------------------" << std::endl;
 	}
 }
+
+
+		/////////////////////////////////////////////////////////
+		/// execute
+	    /////////////////////////////////////////////////////////
+		bool HocCommand::execute() const {
+			return hoc_valid_stmt(m_command.str().c_str(), 0);
+		}
+
+	    /////////////////////////////////////////////////////////
+		/// result
+	    /////////////////////////////////////////////////////////
+		number HocCommand::result() const {
+			return hoc_ac_;
+		}
+
+	    /////////////////////////////////////////////////////////
+		/// clear
+	    /////////////////////////////////////////////////////////
+		void HocCommand::clear() {
+			m_command.clear();
+		}
+
+

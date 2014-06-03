@@ -9,10 +9,6 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMAND_BUILDER__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMAND_BUILDER__
 
-// extern C functions (NEURON)
-extern bool hoc_valid_stmt(const char* stmt, Object* ob);
-extern int ivocmain(int, char**, char**);
-extern double hoc_ac_;
 
 #include "common/log.h"
 #include "common/error.h"
@@ -22,7 +18,6 @@ namespace ug {
 		/*!
 		 * \class HocCommand
 		 */
-		template <typename T>
 		class HocCommand {
 		private:
 			// number of arguments to hoc interpreter
@@ -35,37 +30,53 @@ namespace ug {
 			std::stringstream m_command;
 
 		public:
-			HocCommand(const std::vector<T>& commands) {
-				for (std::vector<T>::const_iterator it = commands.begin(); it != commands.end(); ++it) {
-					m_command << *it;
-				}
-			}
-
-			HocCommand(const T& val) {
-				m_command << val;
-			}
-
+			/*!
+			 * \brief default ctor
+			 */
 			HocCommand() {
 			}
 
-			SmartPtr<HocCommand> build(const T& command) {
-				try {
-					m_command << command;
-				} UG_CATCH_THROW("HocCommand.build() failed" << std::endl);
-				return SmartPtr<this>;
+			/*!
+			 * \brief default dtor
+			 */
+			~HocCommand() {
 			}
 
-			bool execute() const {
-				return hoc_valid_stmt(m_command.str().c_str(), NULL);
-			}
+			/*!
+			 * \brief ctor
+			 * \param[in] val
+			 */
+			template <typename T>
+			HocCommand(const T& val);
 
-			number result() const {
-				return hoc_ac_;
-			}
+			/*!
+			 * \brief ctor
+			 * \param[in] commands
+			 */
+			template <typename T>
+			HocCommand(const std::vector<T>& commands);
 
-			void clear() {
-				m_command.clear();
-			}
+			/*!
+			 * \brief build the comamnd string
+			 * \param[in] command
+			 */
+			template <typename T>
+			void build(const T& command);
+
+			/*!
+			 * \brief execute hoc statement
+			 */
+			bool execute() const;
+
+			/*!
+			 * \brief get result of hoc statement execution
+			 */
+			number result() const;
+
+			/*!
+			 * \brief clear the hoc command string
+			 */
+			void clear();
 		};
 	}
 }

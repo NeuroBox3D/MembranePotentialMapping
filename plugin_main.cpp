@@ -26,6 +26,7 @@
 #endif
 #ifdef MPMNEURON
 #include "transformator.h"
+#include "hoc_command.h"
 #endif
 
 #include "a_u_x/edge_utilities.h"
@@ -66,6 +67,7 @@ namespace ug {
 			   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 			   typedef membrane_potential_mapping::bg::BG TBG;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
+			   typedef membrane_potential_mapping::HocCommand THC;
 
 				// do we want to use smartpointers?
 				const bool bSmartPointer = true;
@@ -145,6 +147,9 @@ namespace ug {
 	    			.add_method("init_feedback", (void (TTransformator::*)(const char* uCmp, const char* , const char* ,double, const char*))(&TTransformator::init_feedback), "", "", grp)
 	    			.add_method("init_feedbacks", (void (TTransformator::*)(const char* uCmp, const char* , const char* ,double, const char* ))(&TTransformator::init_feedbacks), "", "", grp)
 					.set_construct_as_smart_pointer(bSmartPointer);
+
+				reg.add_class_<THC>("HocCmd", grp)
+					.add_constructor<void (*)()>("");
 #endif
 			}
 		// end of functionality which is to be exported
