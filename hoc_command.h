@@ -9,7 +9,6 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMAND_BUILDER__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__COMMAND_BUILDER__
 
-
 #include "common/log.h"
 #include "common/error.h"
 
