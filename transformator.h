@@ -230,22 +230,22 @@ namespace ug {
 				size_t get_total_points() const;
 
 				/*!
-				 * �\brief get tstart
+				 * ���\brief get tstart
 				 */
 				number get_tstart();
 
 				/*!
-				 * �brief get tstart
+				 * ���brief get tstart
 				 */
 				number get_tstop();
 
 				/*!
-				 * �\brief get tstart
+				 * ���\brief get tstart
 				 */
 				number get_dt();
 
 				/*!
-				 * �\brief get tstart
+				 * ���\brief get tstart
 				 */
 				number get_finitialize() const;
 
@@ -255,7 +255,7 @@ namespace ug {
 				number get_t();
 
 				/*!
-				 * �\brief get timestep
+				 * ���\brief get timestep
 				 */
 				size_t get_limit() const;
 
@@ -272,11 +272,33 @@ namespace ug {
 				number execute_hoc_stmt(const std::string& stmt) const;
 
 				/*!
+				 * Set a hoc variable
+				 */
+				bool set_hoc_variable(const std::string& var, number value);
+
+
+				/*!
+				 * Get a hoc variable
+				 */
+				number get_hoc_variable(const std::string& var);
+
+				/*!
+				 * Set a hoc variable for a section
+				 */
+				bool set_hoc_variable_sec(const std::string& var, number value, const std::string& sec);
+
+				/*!
+				 * Get a hoc variable for a section
+				 */
+				number get_hoc_variable_sec(const std::string& var, const std::string& sec);
+
+				/*!
 				 * \brief execute multiple single hoc statements
 				 *
 				 * Please note, if any value is returned from hoc, we will return it as a vector of doubles
 				 */
 				std::vector<number> execute_hoc_stmts(const std::vector<std::string>& stmts) const;
+
 
 				/*!
 				 * \brief get on the fly the membrane potential for limit next timestep
@@ -290,7 +312,7 @@ namespace ug {
 
 
 				/*!
-				 * �brief returns the vms for limit next timesteps
+				 * ���brief returns the vms for limit next timesteps
 				 */
 				std::vector<std::vector<std::pair<std::vector<number>, number > > > get_vms(size_t limit=1) const;
 

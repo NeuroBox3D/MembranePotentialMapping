@@ -1,5 +1,7 @@
-/*
+/*!
  * transformator.cpp
+ *
+ * TODO: eliminate code duplication as a next step
  *
  *  Created on: Nov 6, 2013
  *      Author: stephangrein
@@ -211,7 +213,7 @@ void Transformator::set_feedback() {
 										if (m_saved_neuron_point.x() == neuron_point.x() && m_saved_neuron_point.y() == neuron_point.y() && m_saved_neuron_point.z() == neuron_point.z()) {
 											Ca_i = m_saved_neuron_point_integral;
 										}
-										stmt << "forsec current_section { cai = " << Ca_i << "}"; // for this to work specify channel model with NMDL language of NEURON TODO
+										stmt << "forsec current_section { cai = " << Ca_i << "}"; // for this to work specify channel model with NMDL language of NEURON
 										break;
 									} // for points
 							} // ret no_points
@@ -263,7 +265,7 @@ void Transformator::set_feedbacks() {
 
 											if (cit->x() == neuron_point.x() && cit->y() == neuron_point.y() && cit->z() == neuron_point.z()) {
 												Ca_i = mIntegrals[index];
-												stmt << "forsec current_section { Cai = " << Ca_i << "}"; // for this to work specify channel model with NMDL language of NEURON TODO
+												stmt << "forsec current_section { cai = " << Ca_i << "}"; // for this to work specify channel model with NMDL language of NEURON
 												break;
 											}
 											index++;
@@ -384,7 +386,7 @@ void Transformator::init_feedbacks(const char* uCmp, const char* subset, const c
 													for (std::vector<ug::vector3>::const_iterator cit = mNeuronPoints.begin(); cit != mNeuronPoints.end(); cit++) {
 
 											if (cit->x() == neuron_point.x() && cit->y() == neuron_point.y() && cit->z() == neuron_point.z()) {
-												stmt << "forsec current_section { insert  " << channel << "}"; // for this to work specify channel model with NMDL language of NEURON TODO
+												stmt << "forsec current_section { insert  " << channel << "}"; // for this to work specify channel model with NMDL language of NEURON
 												hoc_valid_stmt(stmt.str().c_str(), 0);
 												stmt.clear();
 											}
@@ -668,6 +670,52 @@ void Transformator::setup_hoc(number tstart, number tstop, number dt, number fin
 		} // for no_sections
 	m_vms.push_back(local_vms);
 	local_vms.clear();
+}
+
+bool Transformator::set_hoc_variable(const std::string& var, number value) {
+	std::stringstream ss;
+	ss << var << " = " << value;
+	bool ret = hoc_valid_stmt(ss.str().c_str(), 0);
+	if (ret != 1) {
+		UG_LOG("Could not execute hoc stmt: " << "var = " << value << " in Transformator::set_hoc_variable" << std::endl);
+	}
+	return ret;
+}
+
+bool Transformator::set_hoc_variable_sec(const std::string& var, number value, const std::string& section) {
+	std::stringstream ss;
+	ss << "access" << " " << section;
+	bool ret = hoc_valid_stmt(ss.str().c_str(), 0);
+
+	if (ret != 1) {
+		UG_LOG("Could not execute hoc stmt: " << "access " << section << " in Transformator::set_hoc_variable_sec (Probably section does not exist)" <<  std::endl);
+		return ret;
+	}
+
+	return set_hoc_variable(var, value);
+}
+
+number Transformator::get_hoc_variable(const std::string& var) {
+	std::stringstream ss;
+	ss << "hoc_ac_" << " = " << var;
+	bool ret = hoc_valid_stmt(ss.str().c_str(), 0);
+	if (ret != 1) {
+		UG_LOG("Could not execute hoc stmt: " << "hoc_ac_ = " << var << " in Transformator::get_hoc_variable" << std::endl);
+	}
+	return static_cast<number>(hoc_ac_);
+}
+
+number Transformator::get_hoc_variable_sec(const std::string& var, const std::string& section) {
+	std::stringstream ss;
+	ss << "access" << " " << section;
+	bool ret = hoc_valid_stmt(ss.str().c_str(), 0);
+
+	if (ret != 1) {
+		UG_LOG("Could not execute hoc stmt: " << "access " << section << " in Transformator::set_hoc_variable_sec (Probably section does not exist)" <<  std::endl);
+		return ret;
+	}
+
+	return get_hoc_variable(var);
 }
 
 number Transformator::execute_hoc_stmt(const std::string& stmt) const {

@@ -67,7 +67,7 @@ namespace ug {
 			   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 			   typedef membrane_potential_mapping::bg::BG TBG;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
-			   typedef membrane_potential_mapping::HocCommand THC;
+			   //typedef membrane_potential_mapping::HocCommand THC;
 
 				// do we want to use smartpointers?
 				const bool bSmartPointer = true;
@@ -146,10 +146,15 @@ namespace ug {
 	  			    .add_method("set_grid", (void (TTransformator::*)(TGridFunction&, const char*))(&TTransformator::set_grid<TGridFunction, TDomain>), "", "", grp)
 	    			.add_method("init_feedback", (void (TTransformator::*)(const char* uCmp, const char* , const char* ,double, const char*))(&TTransformator::init_feedback), "", "", grp)
 	    			.add_method("init_feedbacks", (void (TTransformator::*)(const char* uCmp, const char* , const char* ,double, const char* ))(&TTransformator::init_feedbacks), "", "", grp)
+	    			.add_method("execute_hoc_stmt", (number (TTransformator::*)(const std::string& stmt))(&TTransformator::execute_hoc_stmt), "success or failure", "any valid hoc statement", grp)
+	    			.add_method("set_hoc_variable", (bool (TTransformator::*)(const std::string& var, number value))(&TTransformator::set_hoc_variable), "sucess or failure", "variable|value", grp)
+	    			.add_method("set_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, number value, const std::string& section))(&TTransformator::set_hoc_variable_sec), "sucess or failure", "variable|value|section", grp)
+	    			.add_method("get_hoc_variable", (bool (TTransformator::*)(const std::string& var))(&TTransformator::get_hoc_variable), "sucess or failure", "variable", grp)
+	    			.add_method("get_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, const std::string& section))(&TTransformator::get_hoc_variable_sec), "sucess or failure", "variable|section", grp)
 					.set_construct_as_smart_pointer(bSmartPointer);
 
-				reg.add_class_<THC>("HocCmd", grp)
-					.add_constructor<void (*)()>("");
+				//reg.add_class_<THC>("HocCmd", grp)
+					//.add_constructor<void (*)()>("");
 #endif
 			}
 		// end of functionality which is to be exported
