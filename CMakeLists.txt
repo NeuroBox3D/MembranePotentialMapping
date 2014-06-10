@@ -22,6 +22,7 @@ project(MEMBRANE_POTENTIAL_MAPPING)
 set(MPMTestsuite ON)
 set(MPMVGCC ON)
 set(MPMOpenMP OFF)
+set(MPMNEURON_REVISION OFF)
 
 message(STATUS "")
 message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM) plugin:")
@@ -37,20 +38,26 @@ option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
 message(STATUS "Info: OpenMP:      " ${MPMOpenMP} " (options are: ON, OFF)")
 message(STATUS "")
 
-option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_VERSION})
-message(STATUS "Info: NEURON revisvion: " ${MPMNEURON_VERSION} " (options are: ON, OFF)")
+option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_REVISION})
+message(STATUS "Info: NEURON head revision: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
 message(STATUS "")
 
-# check for NEURON api
+# check for NEURON API
 if (NOT MPMNEURON)
    message(STATUS "NEURON API is off, you can turn it on by -DMPMNEURON=/path/to/NEURON/install")
 else (NOT MPMNEURON)
-   # TODO: check for architecture (64 bit or 32 bit on x86 systems). hack: works only if target == build host ...
+   # check for 64 or 32 bit - works only if target and build host are identically 
+   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
       set(MPMNEURON_ARCH "x86_64")
-   # TODO: make this more convenient later
-      if (MPMNEURON_REVISION)
-         add_definitions(-DMPMNEURON_REVISION)
-      endif(MPMNEURON_REVISION)
+      message(STATUS "fooo")
+   else(CMAKE_SIZEOF_VOID_P EQUAL 8)
+      set(MPMNEURON_ARCH "i686")
+   endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+   
+   # check for NEURON API revision (head or pre 7.3)
+   if (MPMNEURON_REVISION)
+      add_definitions(-DMPMNEURON_REVISION)
+   endif(MPMNEURON_REVISION)
 
    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       set(NEURON_LIBRARY_PATH ${MPMNEURON}/src/oc/modlreg.o
