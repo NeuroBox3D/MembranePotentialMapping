@@ -37,13 +37,19 @@ option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
 message(STATUS "Info: OpenMP:      " ${MPMOpenMP} " (options are: ON, OFF)")
 message(STATUS "")
 
+option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_VERSION})
+message(STATUS "Info: NEURON revisvion: " ${MPMNEURON_VERSION} " (options are: ON, OFF)")
+
 # check for NEURON api
 if (NOT MPMNEURON)
    message(STATUS "NEURON API is off, you can turn it on by -DMPMNEURON=/path/to/NEURON/install")
 else (NOT MPMNEURON)
-   # check for architecture (64 bit or 32 bit on x86 systems). hack: works only if target == build host ...
+   # TODO: check for architecture (64 bit or 32 bit on x86 systems). hack: works only if target == build host ...
       set(MPMNEURON_ARCH "i686")
-      
+   # TODO: make this more convenient later
+      if (MPMNEURON_REVISION)
+         add_definitions(-DMPMNEURON_REVISION)
+      endif(MPMNEURON_REVISION)
 
    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       set(NEURON_LIBRARY_PATH ${MPMNEURON}/src/oc/modlreg.o
@@ -96,7 +102,7 @@ else (NOT MPMNEURON)
    endif()
    message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API. Don't forget that SHELLTYPE readline is required.")
    # additional include directories
-   include_directories(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src)
+   include_directories(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
    # definition for usage in source code, if we have no NEURON API then we just use the membrane potential mapping plugin without NEURON API dependent features for convenience
    add_definitions(-DMPMNEURON)
    # output information on success

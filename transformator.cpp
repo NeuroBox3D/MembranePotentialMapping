@@ -13,9 +13,12 @@
 // define nil (how to circumvent that define?)
 #define nil NULL
 // necessary NEURON includes
-#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/oc2iv.h"
-#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/ocjump.cpp"
-#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/ivocmain.cpp"
+#include "oc2iv.h"
+#include "ocjump.cpp"
+#include "ivocmain.cpp"
+//#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/oc2iv.h"
+//#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/ocjump.cpp"
+//#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/ivocmain.cpp"
 
 // necessary stdlib includes
 #include <string>
@@ -31,7 +34,11 @@
 
 // extern C functions (NEURON)
 extern bool hoc_valid_stmt(const char* stmt, Object* ob);
+#ifndef MPMNEURON_REVISION
 extern int ivocmain(int, char**, char**);
+#else
+extern int ivocmain(int, const char**, const char**);
+#endif
 //void ivoc_cleanup() { return; } // UNDEF this afterwards TODO (when fixing includes in ivoc.cpp it becomes available!!!)
 extern double hoc_ac_;
 
@@ -475,7 +482,14 @@ Transformator::~Transformator() {
 
 bool Transformator::init() {
 	 // init ivocmain (hoc) interpreter
-	 int init = ivocmain(ARGC, ARGV, ENV);
+   const char* a[] = {0};
+   const char* e[] = {0};
+   
+   #ifdef MPMNEURON_REVISION
+	 int init = ivocmain(0, a, e);
+   #else
+   int init = ivocmain(ARGC, ARGV, ENV);
+   #endif
 
 	 // check for success
 	 if (init != 0) {
