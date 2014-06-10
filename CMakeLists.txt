@@ -24,32 +24,35 @@ set(MPMVGCC ON)
 set(MPMOpenMP OFF)
 set(MPMNEURON_REVISION OFF)
 
+# show optional arguments for the plugin
 message(STATUS "")
 message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM) plugin:")
 
-# options for building membrane_potential_mapping (e. g. -DMPMTestsuite=OFF)
+# enable the boost testsuite
 option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
 message(STATUS "Info: Testsuite:   " ${MPMTestsuite} " (options are: ON, OFF)")
 
+# which channel type
 option(MPMVGCC "Build VGCC:    " ${MPMVGCC})
 message(STATUS "Info: VGCC:        " ${MPMVGCC} " (options are: ON, OFF)")
 
+# build with openmp
 option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
 message(STATUS "Info: OpenMP:      " ${MPMOpenMP} " (options are: ON, OFF)")
 message(STATUS "")
 
+# use head NEURON revision or pre 7.3
 option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_REVISION})
 message(STATUS "Info: NEURON head revision: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
 message(STATUS "")
 
-# check for NEURON API
+# check for the presence of the NEURON API
 if (NOT MPMNEURON)
    message(STATUS "NEURON API is off, you can turn it on by -DMPMNEURON=/path/to/NEURON/install")
 else (NOT MPMNEURON)
    # check for 64 or 32 bit - works only if target and build host are identically 
    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
       set(MPMNEURON_ARCH "x86_64")
-      message(STATUS "fooo")
    else(CMAKE_SIZEOF_VOID_P EQUAL 8)
       set(MPMNEURON_ARCH "i686")
    endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -58,56 +61,33 @@ else (NOT MPMNEURON)
    if (MPMNEURON_REVISION)
       add_definitions(-DMPMNEURON_REVISION)
    endif(MPMNEURON_REVISION)
-
+   
+   # determine system, i. e. windows, linux or mac and set appropriate linking order 
    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-      set(NEURON_LIBRARY_PATH ${MPMNEURON}/src/oc/modlreg.o
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.dll
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.dll)
+      set(MPMNEURON_SYSTEM_EXT "dll")
    elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-      set(NEURON_LIBRARY_PATH ${MPMNEURON}/src/oc/modlreg.o
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.so
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.so)
+      set(MPMNEURON_SYSTEM_EXT "so")
    elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-      set(NEURON_LIBRARY_PATH ${MPMNEURON}/src/oc/modlreg.o
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.dylib
-                              ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.dylib)
+      set(MPMNEURON_SYSTEM_EXT "dylib")
    endif()
+   
+   # set the libraries for neuron
+   set(NEURON_LIBRARY_PATH 
+                           ${MPMNEURON}/src/oc/modlreg.o
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
+                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
    message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API. Don't forget that SHELLTYPE readline is required.")
    # additional include directories
    include_directories(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
