@@ -1,24 +1,33 @@
 ################################################################################
-# CMake for the membrane_potential_mapping ug plugin 
-# Please note: to activate use -DMembranePotentialMapping=ON during CMake config
+# Purpose:
+# CMakeLists.txt for the experimental ug plugin membrane_potential_mapping, 
+# here fter we refer to the plugin by the abbreviation mpm in general.
 #
-# created by: Stephan Grein, adopted by Sebastian Reiter and Martin Scherer
-# on 02. Feb, 2012
-# see: docs for additional informations
-# prerequisites for usage with VRL/ugshell: 
-#      a working NEURON, NeuGen and NeuTria installation is needed on runtime,
-#      additional make sure that ugshell is linked against libpython.so 
-#      (see ldd ugshell for further)
+# Remark: 
+# Adapted by a CMakeLists file from Sebastian Reiter and Andreas Vogel.
+
+# Notes:
+#   I) Activate plugin by -DMembranePotentialMapping=ON 
+#  II) Activate the boost testsuites by -DMPMTestsuite=ON
+# III) Activate NEURON API by -DMPMNEURON=/path/to/your/local/neuron/install
+#  IV) Decide which NEURON version to use (either HEAD or pre 7.3 branch) by
+#      -DMPMNEURON_REVISION=ON or -DMPMNEURON_REVISION=OFF
+#   V) For now one needs to activate at a minimum the ANN C++ external library 
+#  VI) SHELLTYPE must be readline for now
+
+# Author: Stephan Grein
+# Created: 2nd of February, 2012
+# See: docs directory for additional informations on the mpm plugin
 #
 ################################################################################
 
-# minimum required CMake version for project below
+# minimum required CMake version for our project below
 cmake_minimum_required(VERSION 2.6)
 
 # specify project name
 project(MEMBRANE_POTENTIAL_MAPPING)
 
-# default values
+# default values for CMake variables
 set(MPMTestsuite ON)
 set(MPMVGCC ON)
 set(MPMOpenMP OFF)
@@ -30,20 +39,19 @@ message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM
 
 # enable the boost testsuite
 option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
-message(STATUS "Info: Testsuite:   " ${MPMTestsuite} " (options are: ON, OFF)")
+message(STATUS "Info: Testsuite:       " ${MPMTestsuite} " (options are: ON, OFF)")
 
 # which channel type
 option(MPMVGCC "Build VGCC:    " ${MPMVGCC})
-message(STATUS "Info: VGCC:        " ${MPMVGCC} " (options are: ON, OFF)")
+message(STATUS "Info: VGCC:            " ${MPMVGCC} " (options are: ON, OFF)")
 
-# build with openmp
+# build with openmp 
 option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
-message(STATUS "Info: OpenMP:      " ${MPMOpenMP} " (options are: ON, OFF)")
-message(STATUS "")
+message(STATUS "Info: OpenMP:          " ${MPMOpenMP} " (options are: ON, OFF)")
 
 # use head NEURON revision or pre 7.3
 option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_REVISION})
-message(STATUS "Info: NEURON head revision: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
+message(STATUS "Info: NEURON head rev: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
 message(STATUS "")
 
 # check for the presence of the NEURON API
@@ -60,7 +68,11 @@ else (NOT MPMNEURON)
    # check for NEURON API revision (head or pre 7.3)
    if (MPMNEURON_REVISION)
       add_definitions(-DMPMNEURON_REVISION)
+       set(MPMNEURON_REVISION_NAME "post 7.3 (head)")
+   else(MPMNEURON_REVISION)
+       set(MPMNEURON_REVISION_NAME "pre 7.3")
    endif(MPMNEURON_REVISION)
+   
    
    # determine system, i. e. windows, linux or mac and set appropriate linking order 
    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -73,29 +85,34 @@ else (NOT MPMNEURON)
    
    # set the libraries for neuron
    set(NEURON_LIBRARY_PATH 
-                           ${MPMNEURON}/src/oc/modlreg.o
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
-                           ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
-   message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API. Don't forget that SHELLTYPE readline is required.")
+       ${MPMNEURON}/src/oc/modlreg.o
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
+       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
+       
+   # status report    
+   message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
+   
    # additional include directories
    include_directories(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
+   
    # definition for usage in source code, if we have no NEURON API then we just use the membrane potential mapping plugin without NEURON API dependent features for convenience
    add_definitions(-DMPMNEURON)
-   # output information on success
-   message(STATUS "NEURON API is on (by -DMPMNEURON), you can use the full NEURON hoc language in Lua now.")
-   message(STATUS "")
+   
+   # output information on success or failure
+   message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
+   
 endif(NOT MPMNEURON)
 
 # include the definitions and dependencies for ug-plugins.
@@ -170,6 +187,7 @@ if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
 else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	include_directories(${ANNLIB}/include)		
+	message(STATUS "ANN Library API is on (by -ANNLIB=${ANNLIB}).")
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 # decide if you want to build the boost testsuite executable (MPMTestsuite)
@@ -190,6 +208,13 @@ endif(${MPMOpenMP} STREQUAL "ON")
 
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
+    if(${MPMNEURON} STREQUAL "ON")
+       ExportDefinitions(-DMPMNEURON)
+       if(${MPMNEURON_REVISION} STREQUAL "ON")
+           ExportDefinitions(-DMPMNEURON_REVISION)
+       endif(${MPMNEURON_REVISION} STREQUAL "ON")
+    endif(${MPMNEURON} STREQUAL "ON")
+    
 # decide which build of the plugin you want to build
     if(${MPMVGCC} STREQUAL "ON")
 	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
@@ -224,8 +249,3 @@ else(buildEmbeddedPlugins)
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)
-
-# warn of future obsolete VGCC components in this plugin
-message(WARNING "The MembranePotentialMapping's VGCC implementation and unit tests will be unified in voltage_gated_channels in future.")
-
-# ENDOF CMAKE membrane_potential_mapping
