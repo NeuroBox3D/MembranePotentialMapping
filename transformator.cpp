@@ -500,14 +500,18 @@ bool Transformator::init() {
 }
 
 bool Transformator::init(int argc, char* argv[], char* env[]) {
-	 // init ivocmain (hoc) interpreter
-	 int init = ivocmain(argc, argv, env);
-
+   const char* a[] = {0};
+   const char* e[] = {0};
+   
+   #ifdef MPMNEURON_REVISION
+	 int init = ivocmain(0, a, e);
+   #else
+   int init = ivocmain(ARGC, ARGV, ENV);
+   #endif
 	 // check for success
 	 if (init != 0) {
 		 UG_THROW("ivocmain (hoc interpreter) could not be initialized by Transformator::init." << std::endl);
 	 }
-
 	 // return status
 	 return true;
  }

@@ -39,13 +39,14 @@ message(STATUS "")
 
 option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_VERSION})
 message(STATUS "Info: NEURON revisvion: " ${MPMNEURON_VERSION} " (options are: ON, OFF)")
+message(STATUS "")
 
 # check for NEURON api
 if (NOT MPMNEURON)
    message(STATUS "NEURON API is off, you can turn it on by -DMPMNEURON=/path/to/NEURON/install")
 else (NOT MPMNEURON)
    # TODO: check for architecture (64 bit or 32 bit on x86 systems). hack: works only if target == build host ...
-      set(MPMNEURON_ARCH "i686")
+      set(MPMNEURON_ARCH "x86_64")
    # TODO: make this more convenient later
       if (MPMNEURON_REVISION)
          add_definitions(-DMPMNEURON_REVISION)
