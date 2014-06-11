@@ -6,6 +6,9 @@
  *  \author Stephan Grein
  */
 
+#ifndef __H__UG__PLASMA_MEMBRANE__MVEC_IMPL__
+#define __H__UG__PLASMA_MEMBRANE__MVEC_IMPL__
+
 /* standard and boost includes */
 #include <boost/lexical_cast.hpp>
 #include <numeric> /*!< required for std::inner_product */
@@ -228,3 +231,4 @@ template <class T, size_t i> mvec<T, i>& mvec<T, i>::operator%=(const mvec<T, i>
 
 	return *this;
 }
+#endif // __H__UG__PLASMA_MEMBRANE__MVEC_IMPL__

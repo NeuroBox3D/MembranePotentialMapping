@@ -56,12 +56,8 @@ namespace ug {
 			   std::string grp(parentGroup);
 			   grp.append("Neuro/");
 
-				// define algebra
-				typedef typename TAlgebra::vector_type vector_type;
-				typedef typename TAlgebra::matrix_type matrix_type;
-
-				// define the grid function depending on domain and algebra
-				typedef GridFunction<TDomain, TAlgebra> TGridFunction;
+			   // define the grid function depending on domain and algebra
+			   typedef GridFunction<TDomain, TAlgebra> TGridFunction;
 
 			   // typedefs
 			   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;

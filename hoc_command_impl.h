@@ -4,6 +4,9 @@
  *      Author: stephan
  */
 
+#ifndef __H__UG__PLASMA_MEMBRANE__HOC_COMMAND_IMPL__
+#define __H__UG__PLASMA_MEMBRANE__HOC_COMMAND_IMPL__
+
 #include "hoc_command.h"
 
 namespace ug {
@@ -28,3 +31,4 @@ namespace ug {
 		}
 	}
 }
+#endif //  __H__UG__PLASMA_MEMBRANE__HOC_COMMAND_IMPL__
