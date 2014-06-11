@@ -6,6 +6,7 @@
  * TODO: cleanup code in general again
  *
  * TODO: use mathvector of ug and introduce template arg
+ * TODO: eliminate code duplication as a next step
  *
  *  Created on: Nov 6, 2013
  *      Author: stephangrein

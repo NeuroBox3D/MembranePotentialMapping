@@ -1,12 +1,12 @@
-/*
+/*!
  * transformator_impl.h
  *
  *  Created on: Mar 17, 2014
  *      Author: stephan
  */
 
-#ifndef TRANSFORMATOR_IMPL_H_
-#define TRANSFORMATOR_IMPL_H_
+#ifndef __H__UG__PLASMA_MEMBRANE__TRANSFORMATOR_IMPL__
+#define __H__UG__PLASMA_MEMBRANE__TRANSFORMATOR_IMPL__
 
 #include "transformator.h"
 
@@ -44,10 +44,7 @@ namespace ug {
 		void Transformator::integrate_feedbacks(TGridFunction& u, const char*cmp, const char* subsets, int quadOrder)  {
 			mIntegrals .push_back( Integral(u, cmp, subsets, quadOrder));
 		}
-
-
-
 	}
 }
 
-#endif /* TRANSFORMATOR_IMPL_H_ */
+#endif // __H__UG__PLASMA_MEMBRANE__TRANSFORMATOR_IMPL__

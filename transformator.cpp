@@ -1,7 +1,6 @@
 /*!
  * transformator.cpp
  *
- * TODO: eliminate code duplication as a next step
  *
  *  Created on: Nov 6, 2013
  *      Author: stephangrein
@@ -16,9 +15,6 @@
 #include "oc2iv.h"
 #include "ocjump.cpp"
 #include "ivocmain.cpp"
-//#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/oc2iv.h"
-//#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/ocjump.cpp"
-//#include "/Users/stephan/Code/git/neuron/nrn-7.3/src/ivoc/ivocmain.cpp"
 
 // necessary stdlib includes
 #include <string>
