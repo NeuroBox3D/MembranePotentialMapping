@@ -115,6 +115,11 @@ else (NOT MPMNEURON)
    
 endif(NOT MPMNEURON)
 
+# dont build testsuite in the embedded case
+if(buildEmbeddedPlugins)
+   set(MPMTestsuite OFF)
+endif(buildEmbeddedPlugins)
+
 # include the definitions and dependencies for ug-plugins.
 include("../../../cmake/ug_plugin_includes.cmake")
 
