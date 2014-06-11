@@ -188,6 +188,7 @@ if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 	include_directories(${ANNLIB}/include)		
 	message(STATUS "ANN Library API is on (by -ANNLIB=${ANNLIB}).")
+	message(STATUS "")
 endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 # decide if you want to build the boost testsuite executable (MPMTestsuite)
