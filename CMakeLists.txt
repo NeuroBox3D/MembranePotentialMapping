@@ -73,7 +73,6 @@ else (NOT MPMNEURON)
        set(MPMNEURON_REVISION_NAME "pre 7.3")
    endif(MPMNEURON_REVISION)
    
-   
    # determine system, i. e. windows, linux or mac and set appropriate linking order 
    if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       set(MPMNEURON_SYSTEM_EXT "dll")
@@ -83,7 +82,7 @@ else (NOT MPMNEURON)
       set(MPMNEURON_SYSTEM_EXT "dylib")
    endif()
    
-   # set the libraries for neuron
+   # set the libraries for NEURON
    set(NEURON_LIBRARY_PATH 
        ${MPMNEURON}/src/oc/modlreg.o
        ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
@@ -100,16 +99,26 @@ else (NOT MPMNEURON)
        ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
        ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
        ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
-       
-   # status report    
-   message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
    
-   # additional include directories
-   include_directories(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
-   
+   # set the includes for NEURON
+   set(NEURON_INCLUDE_PATH
+         ${MPMNEURON} 
+         ${MPMNEURON}/include
+         ${MPMNEURON}/src
+         ${MPMNEURON}/src/ivoc
+         ${MPMNEURON}/include/nrn 
+         ${MPMNEURON}/src/ivos
+         ${MPMNEURON}/src/oc)
+
+   # use additional includes for NEURON
+   include_directories(${NEURON_INCLUDE_PATH})
+
    # definition for usage in source code, if we have no NEURON API then we just use the membrane potential mapping plugin without NEURON API dependent features for convenience
    add_definitions(-DMPMNEURON)
    
+   # status report - NEURON arch and OS
+   message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
+
    # output information on success or failure
    message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
    
@@ -148,33 +157,33 @@ set(SOURCES_default
                      )
                      
 else(NOT MPMNEURON)
-set(SOURCES_simple
+   # simple sources for VGCCs
+   set(SOURCES_simple
 			         vm2ug.cpp
 			         plugin_main.cpp
 			         bg_simple/bg.cpp
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
-                     bg_simple/spannung.cpp
-                     a_u_x/a_u_x_bridge.cpp
-                     transformator.cpp
-                     hoc_command.cpp
-                     )
+               bg_simple/spannung.cpp
+               a_u_x/a_u_x_bridge.cpp
+               transformator.cpp
+               hoc_command.cpp)
 
-set(SOURCES_default  
-                     vm2ug.cpp 
-                     plugin_main.cpp
-                     bg_default/spannung.cpp
-                     bg_default/my_commands.cpp
-                     bg_default/bg.cpp
-                     bg_default/solve.cpp
-                     bg_default/gating.cpp
-                     a_u_x/a_u_x_bridge.cpp
-                     transformator.cpp
-                     hoc_command.cpp
-                     )
-
+   # default sources for VGCCs 
+   set(SOURCES_default  
+               vm2ug.cpp 
+               plugin_main.cpp
+               bg_default/spannung.cpp
+               bg_default/my_commands.cpp
+               bg_default/bg.cpp
+               bg_default/solve.cpp
+               bg_default/gating.cpp
+               a_u_x/a_u_x_bridge.cpp
+               transformator.cpp
+               hoc_command.cpp)
 endif(NOT MPMNEURON)
+
 # set sources for unit tests
 set(SOURCES_TEST unit_tests/src/tests.cpp)
 		
@@ -185,6 +194,7 @@ if(NOT ANNLIB)
 	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
 endif(NOT ANNLIB)
 
+# add include directoris for ANNLIB
 find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
 include_directories(${ANNLIB}/include)
 
@@ -214,8 +224,11 @@ endif(${MPMOpenMP} STREQUAL "ON")
 
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
+      ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
+      ExportDependencies(${NEURON_LIBRARY_PATH})
+  # detect if NEURON API should be used
     if(${MPMNEURON} STREQUAL "ON")
-       ExportDefinitions(-DMPMNEURON)
+      ExportDefinitions(-DMPMNEURON)
        if(${MPMNEURON_REVISION} STREQUAL "ON")
            ExportDefinitions(-DMPMNEURON_REVISION)
        endif(${MPMNEURON_REVISION} STREQUAL "ON")
@@ -223,22 +236,21 @@ if(buildEmbeddedPlugins)
     
 # decide which build of the plugin you want to build
     if(${MPMVGCC} STREQUAL "ON")
-	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
-	   ExportDependencies(${ANNLIB}/lib/libANN.a)
+	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
+	    ExportDependencies(${ANNLIB}/lib/libANN.a)
    ExportDefinitions(-DMPMVGCC)
    ExportIncludes(${ANNLIB}/include)
 	else(${MPMVGCC} STREQUAL "ON")
-	    EXPORTSOURCES(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
-	  ExportDependencies(${ANNLIB}/lib/libANN.a)
-   ExportDefinitions(-DMPMVGCC)
-   ExportIncludes(${ANNLIB}/include)
+	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
+	    ExportDependencies(${ANNLIB}/lib/libANN.a)
+      ExportDefinitions(-DMPMVGCC)
+      ExportIncludes(${ANNLIB}/include)
 	endif(${MPMVGCC} STREQUAL "ON")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite ug4 ${NEURON_LIBRARY_PATH}) 
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
-
 
 # decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
     if(${MPMVGCC} STREQUAL "ON")
