@@ -761,6 +761,16 @@ std::vector<number> Transformator::execute_hoc_stmts(const std::vector<std::stri
 	return val;
 }
 
+bool Transformator::fadvance() {
+	bool ret = hoc_valid_stmt("fadvance()", 0);
+
+	if (!ret) {
+		UG_LOG("Could not execute the fadvance() command in Transformator::fadvance()." << std::endl);
+	}
+
+	return ret;
+}
+
 size_t Transformator::get_limit() const {
 	return m_limit;
 }

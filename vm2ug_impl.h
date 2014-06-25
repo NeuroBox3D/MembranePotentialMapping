@@ -19,7 +19,6 @@
 namespace ug {
 	/* begin namespace mpm */
 	namespace membrane_potential_mapping {
-#ifndef MPMNEURON
 		template<class T> number Vm2uG<T>::interp_bilin_vms(const T& timestep,
 				number node[], number cutoff, int k) {
 			/* need at least four nearest neighbors for bilinear interpolation */
@@ -90,7 +89,7 @@ namespace ug {
 									for (size_t t = 0; t < 3; t++)
 										mysigma.push_back(sigma * n[t]);
 
-									mvecd3 pointOnPlane = u + mysigma; /* Lotfußpunkt on the plane, orthogonale Projektion */
+									mvecd3 pointOnPlane = u + mysigma; /* Lotfu��punkt on the plane, orthogonale Projektion */
 
 									number dist = (pointOnPlane - u).norm(EUCLIDEAN);
 
@@ -286,7 +285,6 @@ namespace ug {
 			}
 			return Vm_intp;
 		}
-#endif
 
 		template <class T> Vm2uG<T>::Vm2uG(const std::string& dataFileBaseName_, const std::string& dataFileExt_, bool promise_) {
 		   dim = 3;
@@ -357,14 +355,12 @@ namespace ug {
 					this->isTreeBuild = true;
 				}
 		}
-#else
+#endif
 
 		template <class T> void Vm2uG<T>::buildTree(const T& timestep) {
 
 		   if (this->isTreeBuild) {
-#ifndef MPMNEURON
 			  rebuildTree(timestep);
-#endif
 		   }
 
 		   static std::ifstream dataStream;
@@ -397,7 +393,6 @@ namespace ug {
 		   this->timestep = genHash(timestep);
 		   this->isTreeBuild = true;
 		}
-#endif
 
 
 
@@ -434,9 +429,7 @@ namespace ug {
 			  #endif
 		   } else {
 			  this->timestep = timestep;
-#ifndef MPMNEURON
 			  rebuildTree(timestep);
-#endif
 			  #ifdef _OPENMP
 			  #pragma omp parallel
 			  {
@@ -481,7 +474,6 @@ namespace ug {
 
 		   return uGs;
 		}
-#ifndef MPMNEURON
 		template <class T> uGPoint<T> Vm2uG<T>::vm_t(const T& timestep, number node[]) { // BOUNDARY NODE from uG
 		if (!this->isTreeBuild) buildTree(timestep);
 		   if (genHash(timestep) == this->timestep) { // timestep
@@ -532,7 +524,8 @@ namespace ug {
 		   }
 		   return vm_t_many(timestep, nodes);
 		}
-#else
+
+#ifdef MPMNEURON
 		template <class T> number Vm2uG<T>::vm_t(number node[]) {
 			if (!this->isTreeBuild) {
 				buildTree();
@@ -550,7 +543,6 @@ namespace ug {
 		   this->k = k;
 		}
 
-#ifndef MPMNEURON
 		template <class T> void Vm2uG<T>::setDim(short int dim) {
 		   this->dim = dim;
 		   this->promise = false;
@@ -561,7 +553,6 @@ namespace ug {
 		   this->timestep = genHash(timestep);
 		   rebuildTree(timestep);
 		}
-#endif
 
 		template <class T> void Vm2uG<T>::setMaxPts(int maxPts) {
 		   this->maxPts = maxPts;
@@ -576,7 +567,6 @@ namespace ug {
 		   this->promise = promise;
 		}
 
-#ifndef MPMNEURON
 		template <class T> void Vm2uG<T>::setdataFileBaseName(const std::string& dataFile) {
 		   this->dataFileBaseName = dataFile;
 		   rebuildTree(this->timestep);
@@ -586,24 +576,12 @@ namespace ug {
 		   this->dataFileExt = dataFileExt;
 		   rebuildTree(this->timestep);
 		}
-#endif
 
 
 		template <class T> bool Vm2uG<T>::areSame(number a, number b) {
 		   return std::fabs(a - b) < std::numeric_limits<number>::epsilon();
 		}
 
-#ifdef MPMNEURON
-		template <class T> long Vm2uG<T>::genHash(number timestep) {
-			std::locale loc;
-			const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
-			std::ostringstream s;
-			s << timestep;
-			std::string tmp = (this->dataFileBaseName+s.str()+this->dataFileExt).c_str();
-			return coll.hash(tmp.data(),tmp.data()+tmp.length());
-
-		}
-#else
 		template <class T> long Vm2uG<T>::genHash(const T& timestep) {
 			std::locale loc;
 			const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
@@ -612,9 +590,7 @@ namespace ug {
 			std::string tmp = (this->dataFileBaseName+s.str()+this->dataFileExt).c_str();
 			return coll.hash(tmp.data(),tmp.data()+tmp.length());
 		}
-#endif
 
-#ifndef MPMNEURON
 		template <class T> void Vm2uG<T>::rebuildTree(const T& timestep) {
 		   //std::cout << "tree needs rebuild!" << std::endl;
 		   // tree needs to be rebuild if indices and or datapoints vary during timestepping (default: promise=false, i.e. we need to rebuild all)
@@ -658,7 +634,8 @@ namespace ug {
 
 		   this->timestep=genHash(timestep);
 		}
-#else
+
+#ifdef MPMNEURON
 		template <class T> void Vm2uG<T>::rebuildTree() {
 			if (!promise) {
 				delete [] nnIdx;

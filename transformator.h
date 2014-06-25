@@ -294,6 +294,19 @@ namespace ug {
 				number get_hoc_variable_sec(const std::string& var, const std::string& sec);
 
 				/*!
+				 * Next timestep
+				 */
+				bool fadvance();
+
+				/*!
+				 * get the transformator
+				 */
+				SmartPtr<Transformator> get_transformator() {
+					SmartPtr<Transformator> temp(this);
+					return temp;
+				}
+
+				/*!
 				 * \brief execute multiple single hoc statements
 				 *
 				 * Please note, if any value is returned from hoc, we will return it as a vector of doubles

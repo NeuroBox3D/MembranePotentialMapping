@@ -53,8 +53,7 @@ namespace ug {
 			DomainAlgebra(ug::bridge::Registry& reg, const std::string& parentGroup)
 			{
 			   // group membership of the membrane_potential_mapping plugin
-			   std::string grp(parentGroup);
-			   grp.append("Neuro/");
+			   std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 
 			   // define the grid function depending on domain and algebra
 			   typedef GridFunction<TDomain, TAlgebra> TGridFunction;
@@ -74,23 +73,18 @@ namespace ug {
 
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
-#ifdef MPMNEURON
-				   .add_constructor<void (*)(SmartPtr<Transformator>)>("Transformation setup")
-#endif
-				  .add_constructor<void (*)(const std::string&, const std::string&, bool)>("Initial timestep|load-dialog|endings=[\"csv\", \"txt\"];description=\"Timestep files\"#Suffix|selection|value=[\"csv\", \"txt\"]#Static Nodes|selection|value=[True, False]")
-			#ifdef MPMNEURON
-				  .add_method("build_tree", (void (TVm2uG::*)()) (&TVm2uG::buildTree), grp)
-			#endif
-#ifndef MPMNEURON
+			  	  .add_constructor<void (*)(const std::string&, const std::string&, bool)>("Initial timestep|load-dialog|endings=[\"csv\", \"txt\"];description=\"Timestep files\"#Suffix|selection|value=[\"csv\", \"txt\"]#Static Nodes|selection|value=[True, False]")
+				#ifdef MPMNEURON
+				  .add_constructor<void (*)(SmartPtr<Transformator>)>("Transformation setup")
+				#endif
+				  .add_method("build_tree", static_cast<void (TVm2uG::*)(const std::string&)>(&TVm2uG::buildTree), grp)
 				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number, const std::string&)) (&TVm2uG::get_potential), "Potential|default", "x|default#y|default#z|default#Timestep|default", grp)
-#else
-				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number)) (&TVm2uG::get_potential), grp)
-#endif
-#ifndef MPMNEURON
-				  .add_method("build_tree", &TVm2uG::buildTree, grp)
 				  .add_method("get_potential_lin", &TVm2uG::get_potential_lin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
 				  .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
-#endif
+				#ifdef MPMNEURON
+				  .add_method("build_tree", (void (TVm2uG::*)()) (&TVm2uG::buildTree), grp)
+				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number)) (&TVm2uG::get_potential), grp)
+				#endif
 				  .set_construct_as_smart_pointer(bSmartPointer);
 
 
@@ -147,6 +141,8 @@ namespace ug {
 	    			.add_method("set_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, number value, const std::string& section))(&TTransformator::set_hoc_variable_sec), "sucess or failure", "variable|value|section", grp)
 	    			.add_method("get_hoc_variable", (bool (TTransformator::*)(const std::string& var))(&TTransformator::get_hoc_variable), "sucess or failure", "variable", grp)
 	    			.add_method("get_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, const std::string& section))(&TTransformator::get_hoc_variable_sec), "sucess or failure", "variable|section", grp)
+	    			.add_method("fadvance", (bool (TTransformator::*)())(&TTransformator::fadvance), "success or failure", "fadvance", grp)
+	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "", grp)
 					.set_construct_as_smart_pointer(bSmartPointer);
 
 #endif
@@ -161,12 +157,12 @@ namespace ug {
 	extern "C" void
 	InitUGPlugin_MembranePotentialMapping(bridge::Registry& reg, std::string& parentGroup)
 	{
-		parentGroup.append("MembranePotentialMapping");
+	    std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 		typedef membrane_potential_mapping::Functionality Functionality;
 
 		#if defined(UG_DIM_3)
 			try {
-				bridge::RegisterDomain3dAlgebraDependent<Functionality>(reg, parentGroup);
+				bridge::RegisterDomain3dAlgebraDependent<Functionality>(reg, grp);
 			} UG_REGISTRY_CATCH_THROW(parentGroup);
 		#else
 			UG_WARNING("Reasonable usage of MPM plugin assured with DIM=3.")

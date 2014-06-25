@@ -192,7 +192,7 @@ namespace ug {
 
 #ifdef MPMNEURON
 			  void buildTree();
-#else
+#endif
 			  			  /*!
 			   * \brief builds the tree with timestep
 			   *
@@ -200,7 +200,6 @@ namespace ug {
 			   * \return \c void
 			   */
 			  void buildTree(const T& timestep);
-#endif
 
 
 			  /*!
@@ -347,10 +346,9 @@ namespace ug {
 			   *
 			   * \return \c void
 			   */
-#ifndef MPMNEURON
 			  void rebuildTree(const T& timestep);
 
-#else
+#ifdef MPMNEURON
 			  void rebuildTree();
 #endif
 
@@ -361,11 +359,7 @@ namespace ug {
 			   *
 			   * \return \c number the hashcode (runtime: log(n))
 			   */
-#ifdef MPMNEURON
-			  long genHash(double timestep);
-#else
 			  long genHash(const T& timestep);
-#endif
 
 			  /*!
 			   * \brief check if two numbers can be considered equal (with accuracy < eps)
