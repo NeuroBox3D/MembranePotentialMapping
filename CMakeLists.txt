@@ -8,11 +8,12 @@
 
 # Notes:
 #   I) Activate plugin by -DMembranePotentialMapping=ON 
-#  II) Activate the boost testsuites by -DMPMTestsuite=ON
+#  II) Activate the boost testsuite by -DMPMTestsuite=ON
 # III) Activate NEURON API by -DMPMNEURON=/path/to/your/local/neuron/install
 #  IV) Decide which NEURON version to use (either HEAD or pre 7.3 branch) by
 #      -DMPMNEURON_REVISION=ON or -DMPMNEURON_REVISION=OFF
 #   V) For now one needs to activate at a minimum the ANN C++ external library 
+#      by -DANNLIB=/path/to/your/local/annlib/install
 
 # Author: Stephan Grein
 # Created: 2nd of February, 2012
@@ -144,8 +145,8 @@ set(SOURCES_simple
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
-               bg_simple/spannung.cpp
-               a_u_x/a_u_x_bridge.cpp)
+                     bg_simple/spannung.cpp
+                     a_u_x/a_u_x_bridge.cpp)
 
 set(SOURCES_default  
                      vm2ug.cpp 
@@ -166,10 +167,10 @@ else(NOT MPMNEURON)
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
-               bg_simple/spannung.cpp
-               a_u_x/a_u_x_bridge.cpp
-               transformator.cpp
-               hoc_command.cpp)
+                     bg_simple/spannung.cpp
+                     a_u_x/a_u_x_bridge.cpp
+                     transformator.cpp
+                     hoc_command.cpp)
 
    # default sources for VGCCs 
    set(SOURCES_default  
@@ -234,21 +235,21 @@ if(buildEmbeddedPlugins)
 
       ExportDefinitions(-DMPMNEURON)
 
-      # if we need head revision set it
+      # if we need head revision set it (this needs to be fixed in mpm plugin code!)
       if(${MPMNEURON_REVISION} STREQUAL "ON")
           ExportDefinitions(-DMPMNEURON_REVISION)
       endif(${MPMNEURON_REVISION} STREQUAL "ON")
 
    endif(MPMNEURON)
  
-   # exports for vm2ug
+   # exports for vm2ug (libann) and borg graham style
    ExportDependencies(${ANNLIB}/lib/libANN.a)
-   ExportDefinitions(-DMPMVGCC)
    ExportIncludes(${ANNLIB}/include)
    
 # decide which build of the plugin you want to build
     if(${MPMVGCC} STREQUAL "ON")
 	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
+      ExportDefinitions(-DMPMVGCC)
 	else(${MPMVGCC} STREQUAL "ON")
 	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
 	endif(${MPMVGCC} STREQUAL "ON")

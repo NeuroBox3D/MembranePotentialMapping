@@ -149,8 +149,6 @@ namespace ug {
 	    			.add_method("get_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, const std::string& section))(&TTransformator::get_hoc_variable_sec), "sucess or failure", "variable|section", grp)
 					.set_construct_as_smart_pointer(bSmartPointer);
 
-				//reg.add_class_<THC>("HocCmd", grp)
-					//.add_constructor<void (*)()>("");
 #endif
 			}
 		// end of functionality which is to be exported
