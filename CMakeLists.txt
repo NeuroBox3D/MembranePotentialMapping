@@ -13,7 +13,6 @@
 #  IV) Decide which NEURON version to use (either HEAD or pre 7.3 branch) by
 #      -DMPMNEURON_REVISION=ON or -DMPMNEURON_REVISION=OFF
 #   V) For now one needs to activate at a minimum the ANN C++ external library 
-#  VI) SHELLTYPE must be readline for now
 
 # Author: Stephan Grein
 # Created: 2nd of February, 2012
@@ -27,8 +26,8 @@ cmake_minimum_required(VERSION 2.6)
 # specify project name
 project(MEMBRANE_POTENTIAL_MAPPING)
 
-# default values for CMake variables
-set(MPMTestsuite ON)
+# default values for cmake options
+set(MPMTestsuite OFF)
 set(MPMVGCC ON)
 set(MPMOpenMP OFF)
 set(MPMNEURON_REVISION OFF)
@@ -109,6 +108,9 @@ else (NOT MPMNEURON)
          ${MPMNEURON}/include/nrn 
          ${MPMNEURON}/src/ivos
          ${MPMNEURON}/src/oc)
+         
+   # NEURON required linking to readline (this fixes the issue, that SHELLTYPE=readline was required previously!)
+   include(FindReadline.cmake)
 
    # use additional includes for NEURON
    include_directories(${NEURON_INCLUDE_PATH})
@@ -122,12 +124,13 @@ else (NOT MPMNEURON)
    # output information on success or failure
    message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
    
+   # check for readline support
+   if (READLINE_FOUND)
+       message(STATUS "Readline library was found (${READLINE_LIBRARY})")
+   else(READLINE_FOUND)
+       message(STATUS "Readline library not found - you need SHELLTYPE readline now.")
+   endif(READLINE_FOUND)
 endif(NOT MPMNEURON)
-
-# dont build testsuite in the embedded case
-if(buildEmbeddedPlugins)
-   set(MPMTestsuite OFF)
-endif(buildEmbeddedPlugins)
 
 # include the definitions and dependencies for ug-plugins.
 include("../../../cmake/ug_plugin_includes.cmake")
@@ -141,9 +144,8 @@ set(SOURCES_simple
 			         bg_simple/my_commands.cpp
 			         bg_simple/solve.cpp
 			         bg_simple/gating.cpp
-                     bg_simple/spannung.cpp
-                     a_u_x/a_u_x_bridge.cpp
-                     )
+               bg_simple/spannung.cpp
+               a_u_x/a_u_x_bridge.cpp)
 
 set(SOURCES_default  
                      vm2ug.cpp 
@@ -153,8 +155,7 @@ set(SOURCES_default
                      bg_default/bg.cpp
                      bg_default/solve.cpp
                      bg_default/gating.cpp
-                     a_u_x/a_u_x_bridge.cpp
-                     )
+                     a_u_x/a_u_x_bridge.cpp)
                      
 else(NOT MPMNEURON)
    # simple sources for VGCCs
@@ -224,27 +225,32 @@ endif(${MPMOpenMP} STREQUAL "ON")
 
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
-      ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
-      ExportDependencies(${NEURON_LIBRARY_PATH})
   # detect if NEURON API should be used
-    if(${MPMNEURON} STREQUAL "ON")
+   if (MPMNEURON)
+      ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
+
+      ExportDependencies(${NEURON_LIBRARY_PATH})
+      ExportDependencies(${READLINE_LIBRARY})
+
       ExportDefinitions(-DMPMNEURON)
-       if(${MPMNEURON_REVISION} STREQUAL "ON")
-           ExportDefinitions(-DMPMNEURON_REVISION)
-       endif(${MPMNEURON_REVISION} STREQUAL "ON")
-    endif(${MPMNEURON} STREQUAL "ON")
-    
+
+      # if we need head revision set it
+      if(${MPMNEURON_REVISION} STREQUAL "ON")
+          ExportDefinitions(-DMPMNEURON_REVISION)
+      endif(${MPMNEURON_REVISION} STREQUAL "ON")
+
+   endif(MPMNEURON)
+ 
+   # exports for vm2ug
+   ExportDependencies(${ANNLIB}/lib/libANN.a)
+   ExportDefinitions(-DMPMVGCC)
+   ExportIncludes(${ANNLIB}/include)
+   
 # decide which build of the plugin you want to build
     if(${MPMVGCC} STREQUAL "ON")
 	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
-	    ExportDependencies(${ANNLIB}/lib/libANN.a)
-   ExportDefinitions(-DMPMVGCC)
-   ExportIncludes(${ANNLIB}/include)
 	else(${MPMVGCC} STREQUAL "ON")
 	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
-	    ExportDependencies(${ANNLIB}/lib/libANN.a)
-      ExportDefinitions(-DMPMVGCC)
-      ExportIncludes(${ANNLIB}/include)
 	endif(${MPMVGCC} STREQUAL "ON")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
@@ -259,8 +265,12 @@ else(buildEmbeddedPlugins)
     else(${MPMVGCC} STREQUAL "ON")
         add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMVGCC} STREQUAL "ON")
-    
-	target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${NEURON_LIBRARY_PATH})
+
+   if (${SHELLTYPE} STREQUAL "readline")
+	   target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${NEURON_LIBRARY_PATH})
+   else(${SHELLTYPE} STREQUAL "readline")
+	   target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
+   endif(${SHELLTYPE} STREQUAL "readline")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4)
