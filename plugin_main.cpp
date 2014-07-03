@@ -145,6 +145,9 @@ namespace ug {
 	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "HOC Interpreter", grp)
 					.set_construct_as_smart_pointer(bSmartPointer);
 
+				// TODO: make Transformator / (renamed to HOC interpreter soon) a singleton -> provide get_instance() as singleton => we can supply this into the hoc command classes (make subclasses of base hoc command class, e. g. loadfile, loadstim, maybe iclamp and vclamp etc).
+				// TODO: hoc_command get's just a pointer from the transformator / (renamed to HOC Interpreter soon) -> hoc_command class implements common commands then ...
+
 #endif
 			}
 		// end of functionality which is to be exported
