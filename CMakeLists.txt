@@ -32,6 +32,7 @@ set(MPMTestsuite OFF)
 set(MPMVGCC ON)
 set(MPMOpenMP OFF)
 set(MPMNEURON_REVISION OFF)
+set(MPMNEURON_STATIC OFF)
 
 # show optional arguments for the plugin
 message(STATUS "")
@@ -52,6 +53,9 @@ message(STATUS "Info: OpenMP:          " ${MPMOpenMP} " (options are: ON, OFF)")
 # use head NEURON revision or pre 7.3
 option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_REVISION})
 message(STATUS "Info: NEURON head rev: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
+
+option(MPMNEURON_STATIC "Use static NEURON build?" ${MPMNEURON_STATIC})
+message(STATUS "Info: NEURON static:   " ${MPMNEURON_STATIC} " (options are: ON, OFF)")
 message(STATUS "")
 
 # check for the presence of the NEURON API
@@ -82,7 +86,14 @@ else (NOT MPMNEURON)
       set(MPMNEURON_SYSTEM_EXT "dylib")
    endif()
    
-   # set the libraries for NEURON
+   # static libraries to use? (remember to compile NEURON static!)
+   if (MPMNEURON_STATIC)
+      set(MPMNEURON_SYSTEM_EXT "a")
+      # for now set the library manually in the static case (TODO: this is just for testing purposes, in general you dont need this line) remove this later
+      set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/")
+   endif(MPMNEURON_STATIC)
+
+
    set(NEURON_LIBRARY_PATH 
        ${MPMNEURON}/src/oc/modlreg.o
        ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 

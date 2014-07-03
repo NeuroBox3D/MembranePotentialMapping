@@ -115,8 +115,8 @@ namespace ug {
 					/// registry of Transformator
 				reg.add_class_<TTransformator>("Transformator", grp)
 					.add_constructor<void (*)()>("")
-					.add_method("load_geom", (void (TTransformator::*)(const std::string&))(&TTransformator::load_geom), "", "hoc geometry", grp)
-					.add_method("load_stim", (void (TTransformator::*)(const std::string&))(&TTransformator::load_stim), "", "hoc stimulation protocol", grp)
+					.add_method("load_geom", (void (TTransformator::*)(const std::string&))(&TTransformator::load_geom), "", "hoc geometry|load-dialog", grp)
+					.add_method("load_stim", (void (TTransformator::*)(const std::string&))(&TTransformator::load_stim), "", "hoc stimulation protocol|load-dialog", grp)
 					.add_method("get_sections", (size_t (TTransformator::*)())(&TTransformator::get_sections), "number of sections", "", grp)
 					.add_method("get_total_points", (size_t (TTransformator::*)())(&TTransformator::get_total_points), "number of total points", "", grp)
 					.add_method("get_t", (number (TTransformator::*)())(&TTransformator::get_t), "t", "", grp)
@@ -124,7 +124,7 @@ namespace ug {
 					.add_method("get_tstop", (number (TTransformator::*)())(&TTransformator::get_tstop), "tstop", "", grp)
 					.add_method("get_tstart", (number (TTransformator::*)())(&TTransformator::get_tstart), "tstart", "", grp)
 					.add_method("get_finitialize", (number (TTransformator::*)())(&TTransformator::get_finitialize), "finitialize", "", grp)
-					.add_method("setup_hoc", (void (TTransformator::*)(number, number, number, number))(&TTransformator::setup_hoc), "", "tstart|tstop|dt|finitialize", grp)
+					.add_method("setup_hoc", (void (TTransformator::*)(number, number, number, number))(&TTransformator::setup_hoc), "", "tstart#tstop#dt#finitialize", grp)
 					.add_method("extract_vms", (void (TTransformator::*)(size_t, size_t))(&TTransformator::extract_vms), "", "limit", grp)
 					.add_method("purge", (void (TTransformator::*)())(&TTransformator::purge), "", "reinit", grp)
 					.add_method("print_setup", (void (TTransformator::*)(bool))(&TTransformator::print_setup), "", "prints setup", grp)
@@ -142,7 +142,7 @@ namespace ug {
 	    			.add_method("get_hoc_variable", (bool (TTransformator::*)(const std::string& var))(&TTransformator::get_hoc_variable), "sucess or failure", "variable", grp)
 	    			.add_method("get_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, const std::string& section))(&TTransformator::get_hoc_variable_sec), "sucess or failure", "variable|section", grp)
 	    			.add_method("fadvance", (bool (TTransformator::*)())(&TTransformator::fadvance), "success or failure", "fadvance", grp)
-	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "", grp)
+	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "HOC Interpreter", grp)
 					.set_construct_as_smart_pointer(bSmartPointer);
 
 #endif
