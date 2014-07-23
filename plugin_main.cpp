@@ -67,8 +67,9 @@ namespace ug {
 				const bool bSmartPointer = true;
 
 			   // registry of auxiliarities (\see aux/edge_utilities.h)
-			   reg.add_function("get_edge_sum", (number &membrane_potential_mapping::aux::EdgeSum<TDomain>), "", grp);
-			   reg.add_function("get_edge_sum_sq", (number &membrane_potential_mapping::aux::EdgeSumSq<TDomain>), "", grp);
+				reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum), "", grp);
+			    reg.add_function("get_edge_sum_sq", static_cast<number (*)(TDomain&, ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSumSq), "", grp);
+
 
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
@@ -144,7 +145,7 @@ namespace ug {
 	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "HOC Interpreter", grp)
 #ifdef MPMNEURON_REVISION
 	    			.add_method("get_section_names_all", (std::vector<std::string> (TTransformator::*)())(&TTransformator::get_all_sections), "", "", grp)
-#endif MPMNEURON_REVISION
+#endif
 					.set_construct_as_smart_pointer(bSmartPointer);
 
 				// TODO: this could be obsolete below ...
