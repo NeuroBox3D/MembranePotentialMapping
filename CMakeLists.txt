@@ -31,8 +31,8 @@ project(MEMBRANE_POTENTIAL_MAPPING)
 set(MPMTestsuite OFF)
 set(MPMVGCC ON)
 set(MPMOpenMP OFF)
-set(MPMNEURON_REVISION OFF)
-set(MPMNEURON_STATIC OFF)
+set(MPMNEURON_REVISION ON)
+set(MPMNEURON_STATIC ON)
 
 # show optional arguments for the plugin
 message(STATUS "")
@@ -86,13 +86,13 @@ else (NOT MPMNEURON)
       set(MPMNEURON_SYSTEM_EXT "dylib")
    endif()
    
-   # static libraries to use? (remember to compile NEURON static!)
+   # static libraries to use? (remember to compile NEURON static!) -> override in case we have static build...
    if (MPMNEURON_STATIC)
       set(MPMNEURON_SYSTEM_EXT "a")
       # for now set the library manually in the static case (TODO: this is just for testing purposes, in general you dont need this line) remove this later
-      set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/")
+      # set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time)
+      # set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/") -> my dynamic build with pre head revision (with memacs and ncurses at run time must be present)
    endif(MPMNEURON_STATIC)
-
 
    set(NEURON_LIBRARY_PATH 
        ${MPMNEURON}/src/oc/modlreg.o

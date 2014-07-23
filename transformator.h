@@ -261,6 +261,13 @@ namespace ug {
 				size_t get_limit() const;
 
 				/*!
+				 * \brief get all sections of current file
+				 */
+#ifdef MPMNEURON_REVISION
+				std::vector<std::string> get_all_sections();
+#endif
+
+				/*!
 				 * \brief adjust hoc run protocol / setup
 				 */
 				void setup_hoc(number tstart, number tstop, number dt, number finitialize=-75.0);

@@ -15,6 +15,7 @@
 #include "oc2iv.h"
 #include "ocjump.cpp"
 #include "ivocmain.cpp"
+#include "section.h"
 
 // necessary stdlib includes
 #include <string>
@@ -34,6 +35,8 @@ extern bool hoc_valid_stmt(const char* stmt, Object* ob);
 extern int ivocmain(int, char**, char**);
 #else
 extern int ivocmain(int, const char**, const char**);
+extern const char* secname(Section*);
+extern Section* chk_access(void);
 #endif
 //void ivoc_cleanup() { return; } // UNDEF this afterwards TODO (when fixing includes in ivoc.cpp it becomes available!!!)
 extern double hoc_ac_;
@@ -976,6 +979,23 @@ void Transformator::print_setup(bool verbose) {
 		std::cout << "--------------------------------------------------------------------------------" << std::endl;
 	}
 }
+
+
+		/////////////////////////////////////////////////////////
+		/// get_all_sections
+	    /////////////////////////////////////////////////////////
+		#ifdef MPMNEURON_REVISION
+		std::vector<std::string> Transformator::get_all_sections() {
+			std::vector<std::string> temp;
+			// TODO: how to get all section names properly...
+			Section* sec = chk_access();
+			//char* name_of_section = secname(sec);
+
+	//		const char* name = secname(sec);
+
+			return temp;
+		}
+		#endif
 
 
 		/////////////////////////////////////////////////////////
