@@ -26,7 +26,6 @@
 #endif
 #ifdef MPMNEURON
 #include "transformator.h"
-#include "hoc_command.h"
 #endif
 
 #include "a_u_x/edge_utilities.h"

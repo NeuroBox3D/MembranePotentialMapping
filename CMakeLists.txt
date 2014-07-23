@@ -180,8 +180,7 @@ else(NOT MPMNEURON)
 			         bg_simple/gating.cpp
                      bg_simple/spannung.cpp
                      a_u_x/a_u_x_bridge.cpp
-                     transformator.cpp
-                     hoc_command.cpp)
+                     transformator.cpp)
 
    # default sources for VGCCs 
    set(SOURCES_default  
@@ -193,8 +192,7 @@ else(NOT MPMNEURON)
                bg_default/solve.cpp
                bg_default/gating.cpp
                a_u_x/a_u_x_bridge.cpp
-               transformator.cpp
-               hoc_command.cpp)
+               transformator.cpp)
 endif(NOT MPMNEURON)
 
 # set sources for unit tests
