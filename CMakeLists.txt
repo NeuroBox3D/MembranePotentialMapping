@@ -89,9 +89,11 @@ else (NOT MPMNEURON)
    # static libraries to use? (remember to compile NEURON static!) -> override in case we have static build...
    if (MPMNEURON_STATIC)
       set(MPMNEURON_SYSTEM_EXT "a")
-      # for now set the library manually in the static case (TODO: this is just for testing purposes, in general you dont need this line) remove this later
-      # set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time)
+      # for now set the library manually in the static case (this is just for testing purposes, in general you dont need this line) remove this later
+      # set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time
+      #                                                     -> this  means build NEURON without memacs support at configure
       # set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/") -> my dynamic build with pre head revision (with memacs and ncurses at run time must be present), note this okay for non-VRL builds
+      # note we could check for static build, then remove from NEURON_LIBRARY_PATH the memacs, but this is not necessary since a non-available lib/file will be ignored by cmake
    endif(MPMNEURON_STATIC)
 
    set(NEURON_LIBRARY_PATH 
