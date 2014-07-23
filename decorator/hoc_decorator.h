@@ -1,6 +1,5 @@
 /*!
  * hoc_decorator.h
- * TODO: PIMPL classes and decorators can be refactored to structs!
  *
  *  Created on: Jul 11, 2014
  *      Author: stephan
