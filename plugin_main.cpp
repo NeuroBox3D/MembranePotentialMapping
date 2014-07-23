@@ -67,8 +67,8 @@ namespace ug {
 				const bool bSmartPointer = true;
 
 			   // registry of auxiliarities (\see aux/edge_utilities.h)
-			   reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum<TDomain>), "", grp);
-			   reg.add_function("get_edge_sum_sq", static_cast<number (*)(TDomain&, ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSumSq<TDomain>), "", grp);
+			   reg.add_function("get_edge_sum", (number &membrane_potential_mapping::aux::EdgeSum<TDomain>), "", grp);
+			   reg.add_function("get_edge_sum_sq", (number &membrane_potential_mapping::aux::EdgeSumSq<TDomain>), "", grp);
 
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
