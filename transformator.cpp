@@ -16,6 +16,7 @@
 #include "ocjump.cpp"
 #include "ivocmain.cpp"
 #include "section.h"
+// #include "cabcode.c" -> depends on python probably
 
 // necessary stdlib includes
 #include <string>
@@ -37,6 +38,7 @@ extern int ivocmain(int, char**, char**);
 extern int ivocmain(int, const char**, const char**);
 extern const char* secname(Section*);
 extern Section* chk_access(void);
+// extern Section* nrn_noerr_access(); -> depends on python probably
 #endif
 //void ivoc_cleanup() { return; } // UNDEF this afterwards TODO (when fixing includes in ivoc.cpp it becomes available!!!)
 extern double hoc_ac_;
@@ -988,9 +990,13 @@ void Transformator::print_setup(bool verbose) {
 		std::vector<std::string> Transformator::get_all_sections() {
 			std::vector<std::string> temp;
 			// TODO: how to get all section names properly...
-			Section* sec = chk_access();
+			Section* sec = chk_access(); // TODO: needs check for section presence at least once section should be present (get_num_sections() to be called here probaly)
+			//Section* sec = nrn_noerr_access();
 			//char* name_of_section = secname(sec);
 
+			if (sec == NULL) {
+				std::cout << "No section available or accessed!" << std::endl;
+			}
 	//		const char* name = secname(sec);
 
 			return temp;
