@@ -12,7 +12,6 @@ using namespace ug::membrane_potential_mapping::decorator;
 /////////////////////////////////////////////////////////
 /// perform
 /////////////////////////////////////////////////////////
-bool perform() {
-	std::cout << "ParallelCommand invoked" << std::endl;
-	return true;
+bool ParallelCommand::perform() {
+	return m_impl->perform();
 }

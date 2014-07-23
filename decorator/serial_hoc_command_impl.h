@@ -11,7 +11,7 @@
 namespace ug {
 	namespace membrane_potential_mapping {
 		namespace decorator {
-			class SerialCommandImpl {
+			struct SerialCommandImpl {
 			/// private data structure to perform the command
 			private:
 

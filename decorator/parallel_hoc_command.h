@@ -15,6 +15,8 @@ namespace ug {
 			 * \brief parallel command class
 			 */
 			class ParallelCommand : BaseCommand {
+			private:
+				std::unique_ptr<ParallelCommandImpl> m_impl;
 			public:
 				/*!
 				 * \brief default ctor

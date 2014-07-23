@@ -11,13 +11,19 @@
 namespace ug {
 	namespace membrane_potential_mapping {
 		namespace decorator {
-			class ClampDecorator : BaseDecorator {
+			struct ClampDecorator : BaseDecorator {
+			public:
 				/*!
 				 * \brief default ctor
 				 */
-				ClampDecorator();
+				ClampDecorator(std::unique_ptr<BaseCommand> cmd);
 
 				bool perform();
+
+			private:
+				std::unique_ptr<BaseCommand> m_baseCommand;
+				std::unique_ptr<ClampDecoratorImpl> m_impl;
+
 			};
 		}
 	}

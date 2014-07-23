@@ -11,12 +11,15 @@
 namespace ug {
 	namespace membrane_potential_mapping {
 		namespace decorator {
-			class PlainDecorator : BaseDecorator {
+			struct PlainDecorator : BaseDecorator {
 			public:
 				/*!
 				 * \brief default ctor
 				 */
 				PlainDecorator(std::unique_ptr<BaseCommand> cmd);
+
+			private:
+				std::unique_ptr<BaseCommand> m_baseCommand;
 
 			};
 		}

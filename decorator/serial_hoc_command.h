@@ -25,9 +25,7 @@ namespace ug {
 				/*!
 				 * \brief perform command
 				 */
-				bool perform() {
-					return m_impl->perform();
-				}
+				bool perform();
 			};
 		}
 	}

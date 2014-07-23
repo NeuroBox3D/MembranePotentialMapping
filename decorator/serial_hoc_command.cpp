@@ -12,8 +12,7 @@ using namespace ug::membrane_potential_mapping::decorator;
 /// perform
 /////////////////////////////////////////////////////////
 bool SerialCommand::perform() {
-	std::cout << "SerialCommand invoked" << std::endl;
-	return true;
+	return m_impl->perform();
 }
 
 

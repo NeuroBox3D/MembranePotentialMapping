@@ -9,5 +9,9 @@
 
 using namespace ug::membrane_potential_mapping::decorator;
 
+bool ParallelCommand::perform() {
+	std::cout << "Parallel Command invoked" << std::endl;
+	return true;
+}
 
 

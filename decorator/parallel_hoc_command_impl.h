@@ -11,7 +11,7 @@
 namespace ug {
 	namespace membrane_potential_mapping {
 		namespace decorator {
-			class ParallelCommandImpl {
+			struct ParallelCommandImpl {
 			/// private data structure to perform the command
 			private:
 

@@ -16,9 +16,9 @@ namespace ug {
 			/*!
 			 * \brief base decorator
 			 */
-			class BaseDecorator : BaseCommand {
+			struct BaseDecorator : BaseCommand {
 			private:
-				std::unique_ptr<BaseCommand> m_command_impl;
+				std::unique_ptr<BaseCommand> m_baseCommand;
 
 			public:
 				/*!
