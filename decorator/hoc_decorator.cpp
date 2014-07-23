@@ -5,6 +5,12 @@
  *      Author: stephan
  */
 
+#include "hoc_command.h"
 
+using namespace ug::membrane_potential_mapping::decorator;
+
+bool BaseDecorator::perform() {
+	return m_baseCommand->perform();
+}
 
 
