@@ -139,8 +139,8 @@ namespace ug {
 	    			.add_method("execute_hoc_stmt", (number (TTransformator::*)(const std::string& stmt))(&TTransformator::execute_hoc_stmt), "success or failure", "any valid hoc statement", grp)
 	    			.add_method("set_hoc_variable", (bool (TTransformator::*)(const std::string& var, number value))(&TTransformator::set_hoc_variable), "sucess or failure", "variable|value", grp)
 	    			.add_method("set_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, number value, const std::string& section))(&TTransformator::set_hoc_variable_sec), "sucess or failure", "variable|value|section", grp)
-	    			.add_method("get_hoc_variable", (bool (TTransformator::*)(const std::string& var))(&TTransformator::get_hoc_variable), "sucess or failure", "variable", grp)
-	    			.add_method("get_hoc_variable_section", (bool (TTransformator::*)(const std::string& var, const std::string& section))(&TTransformator::get_hoc_variable_sec), "sucess or failure", "variable|section", grp)
+	    			.add_method("get_hoc_variable", (number (TTransformator::*)(const std::string& var))(&TTransformator::get_hoc_variable), "sucess or failure", "variable", grp)
+	    			.add_method("get_hoc_variable_section", (number (TTransformator::*)(const std::string& var, const std::string& section))(&TTransformator::get_hoc_variable_sec), "sucess or failure", "variable|section", grp)
 	    			.add_method("fadvance", (bool (TTransformator::*)())(&TTransformator::fadvance), "success or failure", "fadvance", grp)
 	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "HOC Interpreter", grp)
 #ifdef MPMNEURON_REVISION
@@ -148,6 +148,7 @@ namespace ug {
 #endif MPMNEURON_REVISION
 					.set_construct_as_smart_pointer(bSmartPointer);
 
+				// TODO: this could be obsolete below ...
 				// TODO: make Transformator / (renamed to HOC interpreter soon) a singleton -> provide get_instance() as singleton => we can supply this into the hoc command classes (make subclasses of base hoc command class, e. g. loadfile, loadstim, maybe iclamp and vclamp etc).
 				// TODO: hoc_command get's just a pointer from the transformator / (renamed to HOC Interpreter soon) -> hoc_command class implements common commands then ...
 #endif

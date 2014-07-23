@@ -231,22 +231,22 @@ namespace ug {
 				size_t get_total_points() const;
 
 				/*!
-				 * ���\brief get tstart
+				 * \brief get tstart
 				 */
 				number get_tstart();
 
 				/*!
-				 * ���brief get tstart
+				 * \brief get tstart
 				 */
 				number get_tstop();
 
 				/*!
-				 * ���\brief get tstart
+				 * \brief get tstart
 				 */
 				number get_dt();
 
 				/*!
-				 * ���\brief get tstart
+				 * \brief get tstart
 				 */
 				number get_finitialize() const;
 
@@ -256,7 +256,7 @@ namespace ug {
 				number get_t();
 
 				/*!
-				 * ���\brief get timestep
+				 * \brief get timestep
 				 */
 				size_t get_limit() const;
 
@@ -333,7 +333,7 @@ namespace ug {
 
 
 				/*!
-				 * ���brief returns the vms for limit next timesteps
+				 * \brief returns the vms for limit next timesteps
 				 */
 				std::vector<std::vector<std::pair<std::vector<number>, number > > > get_vms(size_t limit=1) const;
 
