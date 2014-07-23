@@ -1,6 +1,9 @@
 /*!
  * transformator.cpp
  *
+ * TODO: use ForAllSections(sec) construct to replace the cumbersome for loop constructs in the other methods if necessary!*
+ * NOTE: Section* sec = chk_access() and secname(sec) will give the currently accessed session, this could be handy in future, e. g. for the clamp constructs
+ * TODO: find out why purge does not work as expected!!! exit() is called on quit() hoc command, this is not what we want in advance
  *
  *  Created on: Nov 6, 2013
  *      Author: stephangrein
@@ -17,6 +20,8 @@
 #include "ivocmain.cpp"
 #include "section.h"
 // #include "cabcode.c" -> depends on python probably
+// extern void hoc_final_exit();
+// extern void ivoc_final_exit();
 
 // necessary stdlib includes
 #include <string>
@@ -521,7 +526,7 @@ void Transformator::prepare() {
 	 // add initializing statements
 	 m_stmts.clear();
 	 m_stmts.push_back("objref current_section");
-	 m_stmts.push_back("current_section_index = 0"); // TODO: was this correct here?
+	 m_stmts.push_back("current_section_index = 0"); // TODO: was this correct here previously we excluded this!?
 	 m_stmts.push_back("current_section = new SectionList()");
 	 m_stmts.push_back("forall { current_section_index = current_section_index + 1 }");
 	 m_stmts.push_back("hoc_ac_ = current_section_index");
@@ -932,6 +937,9 @@ std::vector<std::vector<std::pair<std::vector<number>, number> > > Transformator
 }
 
 void Transformator::purge() {
+	m_vms.clear(); // TODO: was this necessary here? previously this was not in here ...
+
+
 	hoc_valid_stmt("forall pt3dclear()", 0);
 	hoc_valid_stmt("forall delete_section()", 0);
 	m_sections = 0;
@@ -943,6 +951,8 @@ void Transformator::purge() {
 		if (ret != 1) {
 			UG_LOG("Could not purge the hoc interpreter by Transformator::purge. " << std::endl);
 		}
+	//	hoc_final_exit();
+ //ivoc_final_exit();
 }
 
 void Transformator::print_setup(bool verbose) {
@@ -989,41 +999,26 @@ void Transformator::print_setup(bool verbose) {
 	    /////////////////////////////////////////////////////////
 		#ifdef MPMNEURON_REVISION
 		std::vector<std::string> Transformator::get_all_sections() {
-			hoc_valid_stmt("{current_section.remove(current_section)}", 0);
-			// number of sections currently in interpreter
+			// number of sections known to the current instance of the hoc interpreter
 			size_t no_sections = m_sections;
 
-			if (no_sections == 0) {
-				UG_LOG("Transformator::get_all_sections: #sections is zero -> therefore we have no sections!");
+			// store the section names we retrieve below
+			std::vector<std::string> section_names;
+
+			if (m_sections == 0) {
+				UG_LOG("Transformator::get_all_sections: #sections is zero -> therefore we have no sections and no section names!");
 				return std::vector<std::string>();
 			}
 
-			for (int k = 0; k < no_sections; k++) {
-				hoc_valid_stmt("j = 0", 0);
-				std::stringstream cmd;
-				//cmd << "forall{ if (j == " << k << ") { {current_section.append()} {break} } { j = j + 1} }";
-				//hoc_valid_stmt(cmd.str().c_str(), 0);
-				cmd.str("");
-				Section* sec = chk_access(); // TODO: needs check for section presence at least once section should be present (get_num_sections() to be called here probaly)
-				std::cout << secname(sec) << std::endl;
-				cmd << "delete_section()";
-				hoc_valid_stmt(cmd.str().c_str(), 0);
-
+			// qsec, sec are required somehow for the looping
+			hoc_Item* qsec;
+			Section* sec;
+			ForAllSections(sec) // omit opening brace due to MACRO definition! {
+				section_names.push_back(secname(sec));
 			}
 
-			std::vector<std::string> temp;
-			// TODO: iterate over all sections
-			// TODO: how to get all section names properly...
-			//Section* sec = nrn_noerr_access();
-		//	const char* name_of_section = secname(sec);
-		//	temp.push_back(name_of_section);
-
-			/*if (sec == NULL) {
-				std::cout << "No section available or accessed!" << std::endl;
-			}*/
-	//		const char* name = secname(sec);
-
-			return temp;
+			// return all names of present sections
+			return section_names;
 		}
 		#endif
 
