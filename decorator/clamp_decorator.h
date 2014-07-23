@@ -25,6 +25,20 @@ namespace ug {
 				std::unique_ptr<ClampDecoratorImpl> m_impl;
 
 			};
+
+			/// TODO: does this work? would be handy if it would for VRL
+			class ClampDecoratedCommand : ClampDecorator {
+			private:
+				const std::unique_ptr<BaseCommand> cmd = new SerialCommand();
+			public:
+				ClampDecoratedCommand() {
+					this->ClampDecorator(cmd);
+				}
+
+				bool perform() {
+					return this->ClampDecorator::perform();
+				}
+			};
 		}
 	}
 }

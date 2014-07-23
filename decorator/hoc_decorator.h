@@ -1,6 +1,6 @@
 /*!
  * hoc_decorator.h
- *
+ * TODO: inheric in most parent class the hoc interpreter...
  *  Created on: Jul 11, 2014
  *      Author: stephan
  */
