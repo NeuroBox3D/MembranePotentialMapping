@@ -15,6 +15,9 @@
 #   V) For now one needs to activate at a minimum the ANN C++ external library 
 #      by -DANNLIB=/path/to/your/local/annlib/install
 
+# Known bugs: 
+#  I) static build won't allow mod files for now, figure out why this is the case
+
 # Author: Stephan Grein
 # Created: 2nd of February, 2012
 # See: docs directory for additional informations on the mpm plugin
@@ -91,7 +94,8 @@ else (NOT MPMNEURON)
       set(MPMNEURON_SYSTEM_EXT "a")
       # for now set the library manually in the static case (this is just for testing purposes, in general you dont need this line) remove this later
       # set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time
-      #                                                     -> this  means build NEURON without memacs support at configure
+      #                                                     -> this means build NEURON without memacs support at configure (this is just some terminal cursor support, which we dont need anyways)
+      #                                                     -> TODO: if build static, NEURON won't load compiled mechanisms (i. e. mod files), we need a way to figure out why
       # set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/") -> my dynamic build with pre head revision (with memacs and ncurses at run time must be present), note this okay for non-VRL builds
       # note we could check for static build, then remove from NEURON_LIBRARY_PATH the memacs, but this is not necessary since a non-available lib/file will be ignored by cmake
    endif(MPMNEURON_STATIC)
