@@ -698,7 +698,7 @@ void Transformator::setup_hoc(number tstart, number tstop, number dt, number fin
 
 bool Transformator::set_hoc_variable(const std::string& var, number value) {
 	std::stringstream ss;
-	// include <iomanip>
+	ss.precision(std::numeric_limits<number>::digits10);
 	// TODO bug here: http://www.cplusplus.com/reference/sstream/stringstream/ uses std::
 	//http://www.cplusplus.com/reference/iomanip/setprecision/
 	ss << var << " = " << value;

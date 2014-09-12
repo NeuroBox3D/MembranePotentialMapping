@@ -17,6 +17,8 @@
 
 # Known bugs: 
 #  I) static build won't allow mod files for now, figure out why this is the case
+# II) stringstream's default precision is float, we need to introduce setprecision
+#     parameter in all fiels if necessary ...
 
 # Author: Stephan Grein
 # Created: 2nd of February, 2012
