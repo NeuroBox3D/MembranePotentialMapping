@@ -7,7 +7,8 @@
  * \author Stephan Grein
  * \date July, 2011
  *
- * Notes: Migrate to the UG internal kd-tree
+ * Notes:
+ * TODO: Migrate to the UG internal kd-tree for dismissing the ANNLIB
  * TODO: Code optimization	and cleanup (cctor calls, typename vs. class for templates)
  * TODO: introduce template parameter for DIM in mapper
  * TODO: code cleanup
