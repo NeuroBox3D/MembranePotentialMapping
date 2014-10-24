@@ -60,7 +60,7 @@ char* Transformator::ENV[] = {0};
 /////////////////////////////////////////////////////////
 void Transformator::feedback(const char* uCmp, const char* subset, const char* subset_vol, double density) {
 			ug::GridSubsetHandler sh(*mGrid);
-			size_t si = sh.get_subset_index(subset_vol);
+			// size_t si = sh.get_subset_index(subset_vol);
 			mGrid->attach_to_vertices(ug::aPosition);
 			ug::Grid::VertexAttachmentAccessor<ug::APosition3> aaPos(*mGrid, ug::aPosition);
 
@@ -122,7 +122,7 @@ void Transformator::feedback(const char* uCmp, const char* subset, const char* s
 
 void Transformator::feedbacks(const char* uCmp, const char* subset, const char* subset_vol, double density) {
 			ug::GridSubsetHandler sh(*mGrid);
-			size_t si = sh.get_subset_index(subset_vol);
+			// size_t si = sh.get_subset_index(subset_vol);
 			mGrid->attach_to_vertices(ug::aPosition);
 			ug::Grid::VertexAttachmentAccessor<ug::APosition3> aaPos(*mGrid, ug::aPosition);
 
@@ -296,7 +296,7 @@ void Transformator::set_feedbacks() {
 /////////////////////////////////////////////////////////
 void Transformator::init_feedback(const char* uCmp, const char* subset, const char* subset_vol, double density, const char* channel) {
 			ug::GridSubsetHandler sh(*mGrid);
-			size_t si = sh.get_subset_index(subset_vol);
+			// size_t si = sh.get_subset_index(subset_vol);
 			mGrid->attach_to_vertices(ug::aPosition);
 			ug::Grid::VertexAttachmentAccessor<ug::APosition3> aaPos(*mGrid, ug::aPosition);
 
@@ -354,7 +354,7 @@ void Transformator::init_feedback(const char* uCmp, const char* subset, const ch
 // init feedbacks
 void Transformator::init_feedbacks(const char* uCmp, const char* subset, const char* subset_vol, double density, const char* channel) {
 			ug::GridSubsetHandler sh(*mGrid);
-			size_t si = sh.get_subset_index(subset_vol);
+			// size_t si = sh.get_subset_index(subset_vol);
 			mGrid->attach_to_vertices(ug::aPosition);
 			ug::Grid::VertexAttachmentAccessor<ug::APosition3> aaPos(*mGrid, ug::aPosition);
 
@@ -393,7 +393,7 @@ void Transformator::init_feedbacks(const char* uCmp, const char* subset, const c
 										number z3d = hoc_ac_;
 										// iterate over all triangles in subset 0
 										for(TetrahedronIterator iter = sh.begin<Tetrahedron>(0); iter != sh.end<Tetrahedron>(0); ++iter) {
-											Tetrahedron* h = *iter;
+											// Tetrahedron* h = *iter;
 											ug::vector3 neuron_point(x3d, y3d, z3d);
 													for (std::vector<ug::vector3>::const_iterator cit = mNeuronPoints.begin(); cit != mNeuronPoints.end(); cit++) {
 
@@ -418,7 +418,7 @@ void Transformator::init_feedbacks(const char* uCmp, const char* subset, const c
 /////////////////////////////////////////////////////////
 void Transformator::adjust_resistivity_obstacle(const char* uCmp, const char* subset, double Rai) {
 				ug::GridSubsetHandler sh(*mGrid);
-				size_t si = sh.get_subset_index(subset);
+				//size_t si = sh.get_subset_index(subset);
 				mGrid->attach_to_vertices(ug::aPosition);
 				ug::Grid::VertexAttachmentAccessor<ug::APosition3> aaPos(*mGrid, ug::aPosition);
 
@@ -1007,7 +1007,7 @@ void Transformator::print_setup(bool verbose) {
 			// store the section names we retrieve below
 			std::vector<std::string> section_names;
 
-			if (m_sections == 0) {
+			if (no_sections == 0) {
 				UG_LOG("Transformator::get_all_sections: #sections is zero -> therefore we have no sections and no section names!");
 				return std::vector<std::string>();
 			}
