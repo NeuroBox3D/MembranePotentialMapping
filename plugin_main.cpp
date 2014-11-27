@@ -67,8 +67,8 @@ namespace ug {
 				const bool bSmartPointer = true;
 
 			   // registry of auxiliarities (\see aux/edge_utilities.h)
-				reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum), "", grp);
-			    reg.add_function("get_edge_sum_sq", static_cast<number (*)(TDomain&, ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSumSq), "", grp);
+				//reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum), "", grp);
+			   // reg.add_function("get_edge_sum_sq", static_cast<number (*)(TDomain&, ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSumSq), "", grp);
 
 
 			   // registry of Vm2uG (\see vm2ug.h)
@@ -85,8 +85,7 @@ namespace ug {
 				  .add_method("build_tree", (void (TVm2uG::*)()) (&TVm2uG::buildTree), grp)
 				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number)) (&TVm2uG::get_potential), grp)
 				#endif
-				  .set_construct_as_smart_pointer(bSmartPointer);
-
+				 .set_construct_as_smart_pointer(bSmartPointer);
 
 			   // registry of BG (\see bg.h)
 			   reg.add_class_<TBG>("BorgGraham", grp)
