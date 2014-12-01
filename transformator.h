@@ -265,6 +265,7 @@ namespace ug {
 				 */
 #ifdef MPMNEURON_REVISION
 				std::vector<std::string> get_all_sections();
+				std::string get_all_sections_as_string();
 #endif
 
 				/*!

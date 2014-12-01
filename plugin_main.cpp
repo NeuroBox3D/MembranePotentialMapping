@@ -144,12 +144,15 @@ namespace ug {
 	    			.add_method("get_transformator", (SmartPtr<TTransformator> (TTransformator::*)())(&TTransformator::get_transformator), "", "HOC Interpreter", grp)
 #ifdef MPMNEURON_REVISION
 	    			.add_method("get_section_names_all", (std::vector<std::string> (TTransformator::*)())(&TTransformator::get_all_sections), "", "", grp)
+	    			.add_method("get_section_names_as_string", (std::string (TTransformator::*)())(&TTransformator::get_all_sections_as_string), "", "", grp)
 #endif
 					.set_construct_as_smart_pointer(bSmartPointer);
 
 				// TODO: this could be obsolete below ...
 				// TODO: make Transformator / (renamed to HOC interpreter soon) a singleton -> provide get_instance() as singleton => we can supply this into the hoc command classes (make subclasses of base hoc command class, e. g. loadfile, loadstim, maybe iclamp and vclamp etc).
 				// TODO: hoc_command get's just a pointer from the transformator / (renamed to HOC Interpreter soon) -> hoc_command class implements common commands then ...
+
+				// TODO:Dont register all stuff for vrl .... necessarily
 #endif
 			}
 		// end of functionality which is to be exported

@@ -1022,5 +1022,36 @@ void Transformator::print_setup(bool verbose) {
 			// return all names of present sections
 			return section_names;
 		}
+
+	std::string Transformator::get_all_sections_as_string() {
+					// number of sections known to the current instance of the hoc interpreter
+					size_t no_sections = m_sections;
+
+					// store the section names we retrieve below
+					std::vector<std::string> section_names;
+
+					if (no_sections == 0) {
+						UG_LOG("Transformator::get_all_sections: #sections is zero -> therefore we have no sections and no section names!");
+						return "";
+					}
+
+					// qsec, sec are required somehow for the looping
+					hoc_Item* qsec;
+					Section* sec;
+					ForAllSections(sec) // omit opening brace due to MACRO definition! {
+						section_names.push_back(secname(sec));
+					}
+
+					std::stringstream ss;
+					for (std::vector<std::string>::const_iterator it = section_names.begin(); it != section_names.end(); it++) {
+						ss << *it << ";";
+					}
+
+					// return all names of present sections
+					return ss.str();
+				}
+
+
+
 		#endif
 
