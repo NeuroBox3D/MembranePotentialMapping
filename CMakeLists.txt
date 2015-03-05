@@ -6,6 +6,10 @@
 # Remark: 
 # Adapted by a CMakeLists file from Sebastian Reiter and Andreas Vogel.
 
+# Import note:
+# get v7.3 of nrn from http://www.neuron.yale.edu/ftp/neuron/versions/v7.3/
+# this is supposed to work on all common platforms now
+
 # Notes:
 #   I) Activate plugin by -DMembranePotentialMapping=ON 
 #  II) Activate the boost testsuite by -DMPMTestsuite=ON
@@ -128,6 +132,9 @@ else (NOT MPMNEURON)
          ${MPMNEURON}/include/nrn 
          ${MPMNEURON}/src/ivos
          ${MPMNEURON}/src/oc)
+
+   message(STATUS "Note: NEURON v7.3 is recommended!")
+   message(STATUS "Note: SHELLTYPE=readline is recommended!")
          
    # NEURON required linking to readline (this fixes the issue, that SHELLTYPE=readline was required previously!)
    include(FindReadline.cmake)
