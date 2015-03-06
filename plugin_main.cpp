@@ -70,7 +70,6 @@ namespace ug {
 				//reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum), "", grp);
 			   // reg.add_function("get_edge_sum_sq", static_cast<number (*)(TDomain&, ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSumSq), "", grp);
 
-
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
 			  	  .add_constructor<void (*)(const std::string&, const std::string&, bool)>("Initial timestep|load-dialog|endings=[\"csv\", \"txt\"];description=\"Timestep files\"#Suffix|selection|value=[\"csv\", \"txt\"]#Static Nodes|selection|value=[True, False]")
@@ -168,12 +167,15 @@ namespace ug {
 	    std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 		typedef membrane_potential_mapping::Functionality Functionality;
 
+		/// Note:
+		/// functionality only implemented for 3D: in case of necessity for 2D/1D implementation
+		/// one needs to adapt slightly the get_potential and build_tree functions, since they
+		/// rely on 3D points and 1D time data in CSV files, or in case of NEURON interpreter
+		/// embedded within Vm2uG - if you have other data you may adapt all functions of Vm2uG
 		#if defined(UG_DIM_3)
 			try {
 				bridge::RegisterDomain3dAlgebraDependent<Functionality>(reg, grp);
 			} UG_REGISTRY_CATCH_THROW(parentGroup);
-		#else
-			UG_WARNING("Reasonable usage of MPM plugin assured with DIM=3.")
 		#endif
 	}
 // end namespace ug
