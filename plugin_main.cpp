@@ -77,10 +77,10 @@ namespace ug {
 				  .add_constructor<void (*)(SmartPtr<Transformator>)>("Transformation setup")
 				#endif
 				  .add_method("build_tree", static_cast<void (TVm2uG::*)(const std::string&)>(&TVm2uG::buildTree), grp)
-				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number, const std::string&)) (&TVm2uG::get_potential), "Potential|default", "x|default#y|default#z|default#Timestep|default", grp)
-				  .add_method("get_potential_lin", &TVm2uG::get_potential_lin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
-				  .add_method("get_potential_bilin", &TVm2uG::get_potential_bilin, "Potential|default", "x|default#y|default#z|default#Timestep|default#k|default")
-				#ifdef MPMNEURON
+				  .add_method("get_potential", static_cast<number (TVm2uG::*)(number, number, number, const std::string&)> (&TVm2uG::get_potential), "Potential|default", "x|default#y|default#z|default#Timestep|default", grp)
+				  .add_method("get_potential_lin", static_cast<number (TVm2uG::*)(number, number, number, const std::string&, number, size_t)> (&TVm2uG::get_potential_lin), "Potential|default", "x|default#y|default#z|default#Timestep|default#cutoff|default#k|default")
+				  .add_method("get_potential_bilin", static_cast<number (TVm2uG::*)(number, number, number, const std::string&, number, size_t)> (&TVm2uG::get_potential_bilin), "Potential|default", "x|default#y|default#z|default#Timestep|default#cutoff|default#k|default")
+				 #ifdef MPMNEURON
 				  .add_method("build_tree", (void (TVm2uG::*)()) (&TVm2uG::buildTree), grp)
 				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number)) (&TVm2uG::get_potential), grp)
 				#endif

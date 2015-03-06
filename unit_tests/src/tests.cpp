@@ -357,7 +357,7 @@ BOOST_AUTO_TEST_CASE(build_tree) {
 
 	BOOST_REQUIRE_MESSAGE(vm2ug, "Vm2uG<string> instance cannot be constructed");
 	vm2ug->buildTree("timestep0.000000.csv");
-	BOOST_CHECK_MESSAGE(vm2ug->treeBuild(), "tree could not be rebuild");
+	BOOST_CHECK_MESSAGE(vm2ug->treeBuilt(), "tree could not be rebuild");
 
 }
 #endif
@@ -368,7 +368,7 @@ BOOST_AUTO_TEST_CASE(get_potential) {
 
 	BOOST_REQUIRE_MESSAGE(vm2ug, "Vm2uG<string> instance cannot be constructed");
 	vm2ug->buildTree("timestep0.000000.csv");
-	BOOST_CHECK_MESSAGE(vm2ug->treeBuild(), "tree could not be rebuild");
+	BOOST_CHECK_MESSAGE(vm2ug->treeBuilt(), "tree could not be rebuild");
 	BOOST_CHECK_MESSAGE(vm2ug->get_potential(0,0,0, "timestep0.000000.csv") == -75.0, "initial potential should be -75.0");
 
 }

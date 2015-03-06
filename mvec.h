@@ -74,6 +74,16 @@ namespace ug {
 					inline mvec<T, i>& operator-=(const mvec<T, i>& rhs);
 					inline mvec<T, i>& operator%=(const mvec<T, i>& rhs);
 
+					// multiply scalar
+					inline mvec<T, i> operator*(const T a) const
+					{
+						mvec<T,i> ret;
+						for (size_t j = 0; j < this->size(); ++j)
+							ret.push_back((*this)[j] * a);
+						return ret;
+					}
+
+
 				private:
 					/*!
 					 * \brief adds to vectors component-wise

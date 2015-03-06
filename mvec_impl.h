@@ -29,10 +29,14 @@ template <class T, size_t i> mvec<T, i>::mvec() {
 
 /* main constructor */
 template<class T, size_t i> mvec<T, i>::mvec(const std::vector<T>& init) {
-   this->reserve(i);
+	this->reserve(i);
+	size_t min_sz = std::min(init.size(), i);
+	for (size_t j = 0; j < min_sz; ++j)
+		this->push_back(init[j]);
 
-   for (typename std::vector<T>::const_iterator cit = init.begin(); cit < init.end(); cit++)
-		this->push_back(boost::lexical_cast<T>(*cit));
+	if (i > min_sz)
+		for (size_t j = min_sz; j < i; ++j)
+			this->push_back(init[j]);
 }
 
 /* default destructor */
