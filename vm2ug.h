@@ -147,13 +147,11 @@ template <class T> class Vm2uG {
 
 #ifdef MPMNEURON
 		number get_potential(number x, number y, number z) {
-			MathVector<3> node;
-			node[1] = x; node[2] = y; node[3] = z;
-			return get_potential(node);
+			number node[] = {x, y, z};
+			return vm_t(node);
 		}
 
-		template <size_t dim>
-		number get_potential(const MathVector<dim>& coords)
+		number get_potential(const number coords[])
 		{
 			return vm_t(coords);
 		}

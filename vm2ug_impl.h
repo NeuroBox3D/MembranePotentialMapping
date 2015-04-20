@@ -608,7 +608,11 @@ template <class T> number Vm2uG<T>::vm_t(number node[]) {
 		buildTree();
 	}
 
-	readPt(node);
+	ug::MathVector<3> point;
+	point.x() = node[0];
+	point.y() = node[1];
+	point.z() = node[2];
+	readPt(point);
 
 	this->kdTree->annkSearch(queryPt, this->k, this->nnIdx, this->dists, this->eps);
 
