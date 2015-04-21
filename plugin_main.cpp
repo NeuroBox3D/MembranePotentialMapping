@@ -31,6 +31,8 @@
 #include "a_u_x/edge_utilities.h"
 #include "a_u_x/a_u_x_bridge.cpp"
 
+#include "kdtree/kdtree.h"
+
 #include <lib_disc/function_spaces/grid_function.h>
 #include <bridge/util_domain_algebra_dependent.h>
 #include "lib_disc/domain.h"
@@ -62,6 +64,7 @@ namespace ug {
 			   typedef membrane_potential_mapping::bg::BG TBG;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
 			   //typedef membrane_potential_mapping::HocCommand THC;
+
 
 				// do we want to use smartpointers?
 				const bool bSmartPointer = true;
@@ -166,6 +169,17 @@ namespace ug {
 	{
 	    std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 		typedef membrane_potential_mapping::Functionality Functionality;
+
+		/// registry only for dim = 3
+	#ifdef UG_DIM_3
+	   typedef membrane_potential_mapping::KDTree<3, double> TKDTree;
+	   reg.add_class_<TKDTree>("KDTree")
+		   .add_method("add_node_with_meta", &TKDTree::add_node_with_meta)
+	   	   .add_method("query_node", &TKDTree::query_node);
+	#endif
+
+
+
 
 		/// Note:
 		/// functionality only implemented for 3D: in case of necessity for 2D/1D implementation
