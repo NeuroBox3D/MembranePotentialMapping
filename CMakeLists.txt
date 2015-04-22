@@ -213,72 +213,24 @@ endif(NOT MPMNEURON)
 # set sources for unit tests
 set(SOURCES_TEST unit_tests/src/tests.cpp)
 		
+# get the path to annlib and set annlib include path
+option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
 
-## ANN (requirement for vm2ug) #################################################
+if(NOT ANNLIB)
+	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
+endif(NOT ANNLIB)
 
-# get the path to annlib and set annlib include path and linker options
-option(ANN "Sets the path in which ann shall be searched." OFF)
+# add include directoris for ANNLIB
+find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
+include_directories(${ANNLIB}/include)
 
-if(ANN)
-    # the user can suply a ANN for his own compiled ANN   
-    set(INTERNAL_ANN_PATH "${ANN}")
-    message(STATUS "Info: ANN is ON, using user provided path ${ANN}")
-else(ANN)
-    UGInstall("ANN" INTERNAL_ANN_PATH)   	 
-    message(STATUS "Info: ANN is ON, using uginstall provided path ${INTERNAL_ANN_PATH}")    
-endif(ANN)
-
-
-# find includes
-FIND_PATH(ANN_INCLUDE_DIR ANN/ANN.h PATHS ${INTERNAL_ANN_PATH}/include)
-IF (ANN_INCLUDE_DIR STREQUAL "ANN_INCLUDE_DIR-NOTFOUND")
-	MESSAGE(FATAL_ERROR "ERROR: Could not find ANN header file ANN.h in ${INTERNAL_ANN_PATH}/include.")
-ELSE (ANN_INCLUDE_DIR STREQUAL "ANN_INCLUDE_DIR-NOTFOUND")
-	MESSAGE(STATUS "Info: ANN include:   ${ANN_INCLUDE_DIR}/ANN/ANN.h")
-ENDIF (ANN_INCLUDE_DIR STREQUAL "ANN_INCLUDE_DIR-NOTFOUND")
-
-# find libraries
-SET(ANN_NAMES ${ANN_NAMES} ANN)
-FIND_LIBRARY(ANN_LIBRARY NAMES ${ANN_NAMES} PATHS ${INTERNAL_ANN_PATH}/lib)
-IF (ANN_LIBRARY STREQUAL "ANN_LIBRARY-NOTFOUND")
-	MESSAGE(FATAL_ERROR "ERROR: Could not find ANN libraries.")
-ELSE (ANN_LIBRARY STREQUAL "ANN_LIBRARY-NOTFOUND")
-	MESSAGE(STATUS "Info: ANN library:   ${ANN_LIBRARY}")
-ENDIF (ANN_LIBRARY STREQUAL "ANN_LIBRARY-NOTFOUND")
-
-IF (ANN_LIBRARY AND ANN_INCLUDE_DIR)
-	SET(ANN_LIBRARIES ${ANN_LIBRARY})
-	SET(ANN_FOUND "YES")
-ELSE (ANN_LIBRARY AND ANN_INCLUDE_DIR)
-	SET(ANN_FOUND "NO")
-ENDIF (ANN_LIBRARY AND ANN_INCLUDE_DIR)
-
-IF (ANN_FOUND)
-	include_directories(${ANN_INCLUDE_DIR})
-	set(linkLibraries ${linkLibraries} ${ANN_LIBRARY})
-endif(ANN_FOUND)
-
-#### previous detection method (not working well enough) ####
-## get the path to annlib and set annlib include path
-#option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
-#
-#if(NOT ANNLIB)
-#	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
-#endif(NOT ANNLIB)
-#
-## add include directoris for ANNLIB
-#find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
-#include_directories(${ANNLIB}/include)
-#
-#if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-#	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
-#else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-#	include_directories(${ANNLIB}/include)		
-#	message(STATUS "ANN Library API is on (by -ANNLIB=${ANNLIB}).")
-#	message(STATUS "")
-#endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-
-################################################################################
+if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
+else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
+	include_directories(${ANNLIB}/include)		
+	message(STATUS "ANN Library API is on (by -ANNLIB=${ANNLIB}).")
+	message(STATUS "")
+endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 # decide if you want to build the boost testsuite executable (MPMTestsuite)
 if(${MPMTestsuite} STREQUAL "ON")
@@ -315,19 +267,16 @@ if(buildEmbeddedPlugins)
    endif(MPMNEURON)
  
    # exports for vm2ug (libann) and borg graham style
-   exportDependencies(${ANN_LIBRARY})
-   exportIncludes(${ANN_INCLUDE_DIR})
-   #ExportDependencies(${ANNLIB}/lib/libANN.a)	# <-- old
-   #ExportIncludes(${ANNLIB}/include)			# <-- old
+   ExportDependencies(${ANNLIB}/lib/libANN.a)
+   ExportIncludes(${ANNLIB}/include)
    
 # decide which build of the plugin you want to build
-    if("${MPMVGCC}" STREQUAL "ON")
-		add_definitions(-DMPMVGCC)
-		ExportDefinitions(-DMPMVGCC)
-		ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
-	else("${MPMVGCC}" STREQUAL "ON")
-		ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
-	endif("${MPMVGCC}" STREQUAL "ON")
+    if(${MPMVGCC} STREQUAL "ON")
+	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
+      ExportDefinitions(-DMPMVGCC)
+	else(${MPMVGCC} STREQUAL "ON")
+	    ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
+	endif(${MPMVGCC} STREQUAL "ON")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite ug4 ${NEURON_LIBRARY_PATH}) 
@@ -343,13 +292,13 @@ else(buildEmbeddedPlugins)
     endif(${MPMVGCC} STREQUAL "ON")
 
    if (${SHELLTYPE} STREQUAL "readline")
-	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
+	   target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${NEURON_LIBRARY_PATH})
    else(${SHELLTYPE} STREQUAL "readline")
-	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
+	   target_link_libraries(MembranePotentialMapping ug4 ${ANNLIB_LIBS} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
    endif(${SHELLTYPE} STREQUAL "readline")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${linkLibraries})
+		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4)
 	endif(${MPMTestsuite} STREQUAL "ON")
 	
 endif(buildEmbeddedPlugins)
