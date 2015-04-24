@@ -35,7 +35,7 @@ namespace ug {
 		template <size_t dim, typename M>
 		class KDTree {
 		private:
-        	kd_node<dim, M> nodes[1];
+        	std::vector<kd_node<dim, M> >nodes;
 			int m_visited;
 
 		public:
@@ -139,6 +139,16 @@ namespace ug {
                 return n;
 			}
 
+			kd_node<dim, M>* make_tree(const std::vector<kd_node<dim, M> >& nodes, int len, int i) {
+				kd_node<dim, M> snodes[nodes.size()];
+				int count = 0;
+				for (typename std::vector<kd_node<dim, M> >::const_iterator cit = nodes.begin(); cit != nodes.end(); cit++) {
+					snodes[count] = *cit;
+					count++;
+				}
+				return make_tree(snodes, len, i);
+			}
+
         /*!
          * \brief get nearest neighbor in tree wrt to a query point (euclidean distance is used)
          */
@@ -182,15 +192,22 @@ namespace ug {
 
 #ifdef UG_DIM_3
         	void add_node_with_meta(const MathVector<dim>& vec, M* m) {
-        		/// add exactly one node
-        		struct kd_node<dim, M> a;
-        		a.m_meta = m;
+        		/// add a node
+        		struct kd_node<dim, M> node;
 
         		for (int i = 0; i < dim-1; i++) {
-        			a.m_coords[0]= vec[i];
+        			node.m_coords[0] = vec[i];
         		}
 
-        		this->nodes[0] = a;
+        		node.m_meta = m;
+
+        		this->nodes.push_back(node);
+        	}
+
+        	bool build_tree() {
+        		struct kd_node<dim, M>* root;
+        		root = make_tree(this->nodes, sizeof(this->nodes) / sizeof(this->nodes[0]), 0);
+        		return (root != NULL);
         	}
 
         	M query_node(const MathVector<dim>& vec) {
