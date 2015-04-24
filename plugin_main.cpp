@@ -176,7 +176,7 @@ namespace ug {
 	   reg.add_class_<TKDTree>("KDTree")
 		   .add_method("add_node_with_meta", &TKDTree::add_node_with_meta)
 	   	   .add_method("query_node", &TKDTree::query_node)
-	   	   .add_method("build_tree", &TKDTree::build_tree)
+	   	   .add_method("build_tree", &TKDTree::build_tree);
 	#endif
 
 
