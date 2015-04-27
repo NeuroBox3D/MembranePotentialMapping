@@ -481,6 +481,32 @@ Transformator::Transformator(int argc, char* argv[], char* env[]) : m_sections(0
 	init();
 }
 
+Transformator::Transformator(const char* modFiles) :  m_sections(0), m_totalPoints(0), m_finitialize(0.0), m_tstart(0), m_tstop(0), m_dt(0), m_t(0), m_limit(0) {
+	init(modFiles);
+}
+
+bool Transformator::init(const char* modFiles) {
+	// init ivocmain (hoc) interpreter
+   #ifdef MPMNEURON_REVISION
+	 const char* args[] = { modFiles };
+	 const char* env[] = {0};
+	 int init = ivocmain(1, args, env);
+   #else
+	 std::stringstream ss;
+	 ss << modFiles;
+	 char* args[] = { const_cast<char*>(ss.str().c_str()) };
+	 char* env[] = {0};
+	 int init = ivocmain(1, ARGV, ENV);
+   #endif
+
+	  // check for success
+	 if (init != 0) {
+		 UG_THROW("ivocmain (hoc interpreter) could not be initialized by Transformator::init." << std::endl);
+	 }
+
+ return true;
+}
+
 Transformator::~Transformator() {
 	purge();
 }

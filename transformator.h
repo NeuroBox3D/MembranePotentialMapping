@@ -190,7 +190,7 @@ namespace ug {
 				Transformator();
 
 				/*!
-				 * \brief enhanced ctor
+				 * \brief enhanced ctor I
 				 *
 				 * \param[in] argc number of command line arguments
 				 * \param[in] argv commanad line arguments as "strings"
@@ -202,6 +202,14 @@ namespace ug {
 				 * be necessary in some really rare cases.
 				 */
 				Transformator(int argc, char* argv[], char* env[]);
+
+				/*!
+				 * \brief enhanced ctor II - supply mod files as argument
+				 *
+				 * Example: supply "-dll path/to/foo.so -dll path/to/bar.so"
+				 *
+				 */
+				Transformator(const char* modFiles);
 
 				/*!
 				 * \brief dtor
@@ -364,6 +372,11 @@ namespace ug {
 				 * \return \c success status
 				 */
 				bool init(int argc, char* argv[], char* env[]);
+
+				/*!
+				 * \brief initializes teh hoc interpreter with the mod files
+				 */
+				bool init(const char* modFiles);
 
 				/*!
 				 * \brief prepare the hoc interpreter for command execution
