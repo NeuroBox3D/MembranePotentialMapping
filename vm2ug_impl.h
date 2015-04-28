@@ -412,7 +412,6 @@ void Vm2uG<T>::readPts(const std::vector<MathVector<dim> >& nodes)
 #endif
 }
 
-
 #ifdef MPMNEURON
 template <class T> void Vm2uG<T>::buildTree() {
 	if (this->isTreeBuilt) {

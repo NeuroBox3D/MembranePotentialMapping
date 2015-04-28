@@ -27,6 +27,7 @@
 #include "common/common.h"
 #include "common/util/smart_pointer.h"
 
+//#include "kdtree/kd_tree.h"
 // FIXME: below fails if EMBEDDED_PLUGINGS=ON -> why?
 // comment: hmm, works fine for me (mbreit)
 #include "ANN/ANN.h"
@@ -44,6 +45,8 @@ namespace membrane_potential_mapping {
 template <class T> class Vm2uG;
 class sPoint;
 class uGPoint;
+
+template <size_t dim, typename M> class kd_tree;
 
 template <class T> std::ostream& operator<< (std::ostream& output, const Vm2uG<T>& p);
 std::ostream& operator<< (std::ostream& output, const sPoint& p);

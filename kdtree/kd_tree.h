@@ -11,6 +11,7 @@
 
 /// includes
 #include "kd_node.h"
+#include "common/math/ugmath.h"
 
 /* \defgroup mpm_plugin Membrane Potential Mapping plugin
  * \ingroup plugins_experimental
@@ -89,7 +90,7 @@ namespace ug {
 			 * \param[in] vec node to be added
 			 * \param[in] m meta data
 			 */
-        	void add_node_meta(const MathVector<dim>& vec, number m);
+        	void add_node_meta(const MathVector<dim, number>& vec, number m);
 
         	/*!
         	 * \brief add a node w/o meta data
