@@ -76,11 +76,11 @@ namespace ug {
 			   typedef membrane_potential_mapping::bg::BG TBG;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
 
-		       /// registry of KDTree
+		       /// registry of KDTree for meta data number (i. e. double or float)
 		       typedef typename membrane_potential_mapping::kd_tree<TDomain::dim, number> TKDTree;
 		       typedef typename membrane_potential_mapping::kd_node<TDomain::dim, number> TKDNode;
-				using namespace ug::bridge;
-				string suffix = GetDomainSuffix<TDomain>();
+			   using namespace ug::bridge;
+			   string suffix = GetDomainSuffix<TDomain>();
 
 				reg.add_class_<TKDNode>(std::string("KDNode").append(suffix), grp)
 				   .template add_constructor<void (*)()>("", "", "");

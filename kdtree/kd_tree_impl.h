@@ -26,7 +26,7 @@ namespace ug {
 		/// ctor
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
-		kd_tree<dim, M>::kd_tree() : m_visited(0), root(NULL), wps(NULL) {
+		kd_tree<dim, M>::kd_tree() : m_visited(0), m_pRoot(NULL), m_pWps(NULL) {
 		}
 
 	    /////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ namespace ug {
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
 		kd_tree<dim, M>::~kd_tree() {
-			delete root;
-			delete wps;
+			delete m_pRoot;
+			delete m_pWps;
 		}
 
 
@@ -187,13 +187,13 @@ namespace ug {
         bool kd_tree<dim, M>::build_tree() {
        		/// allocate nodes
        		size_t numNodes = nodes.size();
-       		this->wps = (kd_node<dim, M>*)malloc(sizeof(kd_node<dim, M>)*numNodes);
-       		for (size_t i = 0; i < numNodes; i++) this->wps[i] = nodes[i];
+       		this->m_pWps = (kd_node<dim, M>*)malloc(sizeof(kd_node<dim, M>)*numNodes);
+       		for (size_t i = 0; i < numNodes; i++) this->m_pWps[i] = nodes[i];
        		this->nodes.clear();
 
        		/// make the tree and indicate success or not
-       		root = make_tree(this->wps, numNodes, 0);
-       		if (root) return true;
+       		m_pRoot = make_tree(this->m_pWps, numNodes, 0);
+       		if (m_pRoot) return true;
        		else return false;
        	}
 
@@ -206,7 +206,7 @@ namespace ug {
         	M meta = 0;
 
         	/// check if tree has been build
-        	if (!root) {
+        	if (!m_pRoot) {
         		UG_DLOGN(MPM_KDTREE, 0, "KDTree not build for dim=" << dim);
         	} else {
         		/// build query
@@ -216,7 +216,7 @@ namespace ug {
         		/// query tree
         		kd_node<dim, M>* found = NULL;
         		M best_dist = 0;
-        		nearest(root, &query, 0, &found, &best_dist);
+        		nearest(m_pRoot, &query, 0, &found, &best_dist);
 
         		/// debug output
         		UG_DLOGN(MPM_KDTREE, 0, "Best distance for query [" << query << "]: " << std::sqrt(best_dist));

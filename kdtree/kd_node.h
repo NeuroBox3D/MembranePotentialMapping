@@ -27,7 +27,8 @@ namespace ug {
 
            /*!
             * \brief pretty print point coordinates with meta
-            * \function operator<<
+            * \param[out] out standard outputstream
+            * \param[in] node a kd_node
             */
            friend std::ostream& operator<<(std::ostream &out, const kd_node<dim, M>& node) {
         	   for (size_t i = 0; i < dim-1; i++) out << node.m_coords[i] << ", ";

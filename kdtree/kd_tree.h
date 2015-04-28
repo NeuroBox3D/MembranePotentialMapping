@@ -26,8 +26,8 @@ namespace ug {
 		private:
 			int m_visited;
         	std::vector<kd_node<dim, M> > nodes;
-        	kd_node<dim, M>* root;
-    		kd_node<dim, M>* wps;
+        	kd_node<dim, M>* m_pRoot;
+    		kd_node<dim, M>* m_pWps;
 
 		public:
 			/*!
@@ -43,37 +43,57 @@ namespace ug {
 		private:
 			/*!
 			 * \brief euclidean distance in dim-d
+			 * \param[in] a kd_node
+			 * \param[in] b kd_node
+			 * \param[out] M distance
 			 */
 			M dist(kd_node<dim, M>* a, kd_node<dim, M> *b) const;
 
 			/*!
 			 * \brief swap nodes
+			 * \param[in] x kd_node
+			 * \param[in] y kd_node
 			 */
 			void swap(kd_node<dim, M>* x, kd_node<dim, M>* y);
 
 			/*!
 			 * \brief find median
+			 * \param[in] start of kd_nodes
+			 * \param[in] end of kd_nodes
+			 * \param[in] idx index
+			 * \param[out] kd_node representing median
 			 */
 			kd_node<dim, M>* find_median(kd_node<dim, M> *start, kd_node<dim, M> *end, int idx);
 
 			/*!
 			 * \brief generates a kd tree from a list of kd nodes
+			 * \param[in] t list of kd_nodes
+			 * \param[in] len length of kd_nodes
+			 * \param[in] i index
+			 * \param[out] kd_node root
 			 */
 			kd_node<dim, M>* make_tree(kd_node<dim, M>* t, int len, int i);
 
 			/*!
 			 * \brief get nearest neighbor in tree wrt to a query point (euclidean distance is used)
+			 * \param[in] root kd_tree root
+			 * \param[in] i index
+			 * \param[out] best kd_nodes's best node
+			 * \param[out] best_dist associated distance to best node (see above)
 			 */
 			void nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, int i, kd_node<dim, M> **best, M *best_dist);
 
        public:
 			/*!
 			 * \brief add a node w meta data
+			 * \param[in] vec node to be added
+			 * \param[in] m meta data
 			 */
         	void add_node_meta(const MathVector<dim>& vec, number m);
 
         	/*!
         	 * \brief add a node w/o meta data
+			 * \param[in] vec node to be added
         	 */
         	void add_node(const MathVector<dim>& vec);
 
@@ -84,6 +104,8 @@ namespace ug {
 
         	/*!
         	 * \brief query the tree for the nearest neighbor
+        	 * \param[in] vec query node
+        	 * \param[out] M meta data
         	 */
         	M query(const MathVector<dim, M>& vec);
          };
