@@ -11,6 +11,12 @@
 
 /// includes
 #include <cstdlib>
+#include <common/log.h>
+
+////////////////////////////////////////////////////////////////////////
+/// debug ids
+////////////////////////////////////////////////////////////////////////
+ug::DebugID MPM_KDTREE("MPM_DID.kdtree");
 
 /* \defgroup mpm_plugin Membrane Potential Mapping plugin
  * \ingroup plugins_experimental
@@ -19,14 +25,26 @@
 namespace ug {
 	namespace membrane_potential_mapping {
 		/*!
-		 * \brief simple kd node
+		 * \brief simple kd node with meta attachment
 		 */
 		template <size_t dim, typename M>
         struct kd_node {
-           number m_coords[dim];
+           M m_coords[dim];
+           M m_meta;
            kd_node<dim, M>* left;
            kd_node<dim, M>* right;
-           M* m_meta;
+
+           /*!
+            * \brief pretty print point coordinates with meta
+            * \function operator<<
+            */
+           friend std::ostream& operator<<(std::ostream &out, const kd_node& node) {
+        	   for (size_t i = 0; i < dim-1; i++) {
+        		   out << node.m_coords[i] << ", ";
+        	   }
+        	   out << node.m_coords[dim] << "(" << *node.m_meta << ")";
+        	   return out;
+           }
         };
 
 		/*!
@@ -38,13 +56,13 @@ namespace ug {
 			int m_visited;
         	std::vector<kd_node<dim, M> > nodes;
         	kd_node<dim, M>* root;
-    		kd_node<dim, number>* wps;
+    		kd_node<dim, M>* wps;
 
 		public:
 			/*!
 			 * \brief ctor
 			 */
-			KDTree() : m_visited(0), root(NULL) {
+			KDTree() : m_visited(0), root(NULL), wps(NULL) {
 
 			}
 
@@ -59,8 +77,8 @@ namespace ug {
 			/*!
 			 * \brief euclidean distance in dim-d
 			 */
-			number dist(kd_node<dim, M>* a, kd_node<dim, M> *b) const {
-				number t, d = 0;
+			M dist(kd_node<dim, M>* a, kd_node<dim, M> *b) const {
+				M t, d = 0;
                 size_t dimension = dim;
                 while (dimension--) {
                         t = a->m_coords[dimension] - b->m_coords[dimension];
@@ -73,7 +91,7 @@ namespace ug {
 			 * \brief swap nodes
 			 */
 			void swap(kd_node<dim, M>* x, kd_node<dim, M>* y) {
-                number temp[dim];
+                M temp[dim];
                 memcpy(temp,  x->m_coords, sizeof(temp));
                 memcpy(x->m_coords, y->m_coords, sizeof(temp));
                 memcpy(y->m_coords, temp,  sizeof(temp));
@@ -82,8 +100,7 @@ namespace ug {
 			/*!
 			 * \brief find median
 			 */
-			struct kd_node<dim, M>* find_median(kd_node<dim, M> *start,
-				   kd_node<dim, M> *end, int idx) {
+			kd_node<dim, M>* find_median(kd_node<dim, M> *start, kd_node<dim, M> *end, int idx) {
                 if (end <= start) {
                         return NULL;
                 }
@@ -93,7 +110,7 @@ namespace ug {
                 }
 
                 kd_node<dim, M> *p, *store, *md = start + (end - start) / 2;
-                number pivot;
+                M pivot;
 
                 while (1) {
                         pivot = md->m_coords[idx];
@@ -158,10 +175,10 @@ namespace ug {
 			 * \brief get nearest neighbor in tree wrt to a query point (euclidean distance is used)
 			 */
 			void nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, int i,
-                     kd_node<dim, M> **best, number *best_dist) {
-                number d;
-                number dx;
-                number dx_squared;
+                     kd_node<dim, M> **best, M *best_dist) {
+                M d;
+                M dx;
+                M dx_squared;
 
                 if (!root) {
                 	return;
@@ -197,13 +214,13 @@ namespace ug {
 
 		public:
 			/*!
-			 * \brief add a vector with meta data to the tree
+			 * \brief add a node w meta data
 			 */
-        	void add_vec_with_meta(const MathVector<dim>& vec, M* m) {
-        		struct kd_node<dim, M> node;
+        	void add_node_meta(const MathVector<dim>& vec, M m) {
+        		kd_node<dim, M> node;
 
         		for (int i = 0; i < dim; i++) {
-        			node.m_coords[0] = vec[i];
+        			node.m_coords[i] = vec[i];
         		}
 
         		node.m_meta = m;
@@ -211,82 +228,66 @@ namespace ug {
         		this->nodes.push_back(node);
         	}
 
-
         	/*!
-        	 * \brief builds the tree from the stored nodes
+        	 * \brief add a node w/o meta data
         	 */
-        	bool build_tree() {
-        		root = make_tree(this->nodes, sizeof(this->nodes) / sizeof(this->nodes[0]), 0);
-        		return (root != NULL);
+        	void add_node(const MathVector<dim>& vec) {
+        		kd_node<dim, M> node;
+
+        		for (int i = 0; i < dim; i++) {
+        			node.m_coords[i] = vec[i];
+        		}
+
+        		this->nodes.push_back(node);
         	}
 
-        	/*!
+           	/*!
         	 * \brief query the tree with a given vector for the nearest neighbor and return the attached metadata
         	 */
-        	M* build_tree(const MathVector<dim>& vec) {
-        		struct kd_node<dim, M> query;
-        		for (int i = 0; i < dim; i++) {
-        			std::cout << "there" << std::endl;
-        			query.m_coords[0] = vec[i];
+        	bool build_tree() {
+        		kd_node<dim, M> wp[this->nodes.size()];
+
+       			this->wps = (kd_node<dim, M>*)malloc(sizeof(kd_node<dim, M>)*nodes.size());
+
+        		for (int i = 0; i < nodes.size(); i++) {
+        			wp[i] = nodes[i];
+        			this->wps[i] = wp[i];
         		}
 
-        		std::cout << "Here" << std::endl;
-
-              		int i;
-        		/// if wps go out of scope we have memory corruption -> aka seg faults, store tree within the class
-        			kd_node<dim, number> wp[this->nodes.size()];
-        			kd_node<dim, number> a, b, q;
-        		for (int i = 0; i < dim; i++) {
-   //     			a.m_coords[i] = 0;
- //       			b.m_coords[i] = 1;
-        			q.m_coords[i] = vec[i];
-        		}
- //       		wp[0] = a;
-   //     		wp[1] = b;
-       			this->wps = (kd_node<dim, number>*)malloc(sizeof(kd_node<dim, number>)*nodes.size());
-        			for (int i = 0; i < nodes.size(); i++) {
-        				wp[i] = nodes[i];
-        				this->wps[i] = wp[i];
-        			}
-
-       		//	this->wps[0] = a;
-       			//this->wps[1] = b;
-
-        			kd_node<dim, number> *found;
-        			double best_dist;
-
- //       			root = make_tree(this->wps, sizeof(this->wps) / sizeof(this->wps[1]), 0);
        			root = make_tree(this->wps, nodes.size(), 0);
-        			found = 0;
-        			nearest(root, &q, 0, &found, &best_dist);
-        			std::cout << "best_distance: " << best_dist;
-
-        			found = 0;
-        			nearest(root, &q, 0, &found, &best_dist);
-        			std::cout << "best_distance: " << best_dist;
-
-        			found = 0;
-        			nearest(root, &q, 0, &found, &best_dist);
-        			std::cout << "best_distance: " << best_dist;
-
-        			query_vec_only(vec);
-
+       			if (root) return true;
+       			else return false;
         	}
 
-        	void query_vec_only(const MathVector<dim, number>& vec) {
-        		struct kd_node<dim, M> query;
-        		        		for (int i = 0; i < dim; i++) {
-        		        			std::cout << "there" << std::endl;
-        		        			query.m_coords[i] = vec[i];
-        		        		}
-        			kd_node<dim, number> *found;
-        			double best_dist = 0;
-        		found = 0;
+        	/*!
+        	 * \brief query the tree for the nearest neighbor
+        	 */
+        	M query(const MathVector<dim, M>& vec) {
+        		/// meta value
+        		M meta = 0;
+
+        		/// check if tree has been build
         		if (!root) {
-        			std::cout << "root not available!" << std::endl;
-        		}
+        			UG_DLOGN(MPM_KDTREE, 0, "KDTree not build for dim=" << dim);
+        		} else {
+        			/// build query
+        			kd_node<dim, M> query;
+        			for (int i = 0; i < dim; i++)
+        				query.m_coords[i] = vec[i];
+
+        			/// query tree
+        			kd_node<dim, M>* found = NULL;
+        			M best_dist = 0;
         			nearest(root, &query, 0, &found, &best_dist);
-        			std::cout << "best_distance: " << best_dist;
+
+        			/// debug output
+        			UG_DLOGN(MPM_KDTREE, 0, "Best distance for query [" << query << "]: " << std::sqrt(best_dist));
+        			UG_DLOGN(MPM_KDTREE, 0, "Found point [" << found << "]";)
+        			meta = found->m_meta;
+        		}
+
+        		/// return the meta value
+        		return meta;
         	}
          };
 	} // namespace synapse_provider

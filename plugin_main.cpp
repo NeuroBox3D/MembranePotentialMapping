@@ -78,8 +78,6 @@ namespace ug {
 			   typedef membrane_potential_mapping::bg::BG TBG;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
 
-
-
 		       /// registry of KDTree
 		       typedef typename membrane_potential_mapping::KDTree<TDomain::dim, number> TKDTree;
 		       typedef typename membrane_potential_mapping::kd_node<TDomain::dim, number> TKDNode;
@@ -91,9 +89,10 @@ namespace ug {
 
 				reg.add_class_<TKDTree>(std::string("KDTree").append(suffix), grp)
 				   .template add_constructor<void (*)()>("", "", "")
-		    	   .add_method("add_vec_with_meta", (void (TKDTree::*)(const MathVector<TDomain::dim, number>&, number)) &TKDTree::add_vec_with_meta)
-		    	   .add_method("build_tree", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::build_tree)
-		    	   .add_method("query_vec_only", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::query_vec_only);
+		    	   .add_method("add_node_meta", (void (TKDTree::*)(const MathVector<TDomain::dim, number>&, number))(&TKDTree::add_node_meta), grp)
+		    	   .add_method("add_node", (void (TKDTree::*)(const MathVector<TDomain::dim, number>&))(&TKDTree::add_node), grp)
+		    	   .add_method("build_tree", (bool (TKDTree::*)()) &TKDTree::build_tree)
+		    	   .add_method("query", (number (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::query);
 
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
