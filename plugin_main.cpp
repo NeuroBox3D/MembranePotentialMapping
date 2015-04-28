@@ -28,12 +28,10 @@
 #include "transformator.h"
 #endif
 
-#include "kdtree/kdtree.h"
+#include "kdtree/kd_tree.h"
 
 #include "a_u_x/edge_utilities.h"
 #include "a_u_x/a_u_x_bridge.cpp"
-
-#include "kdtree/kdtree.h"
 
 #include <lib_disc/function_spaces/grid_function.h>
 #include <bridge/util_domain_algebra_dependent.h>
@@ -79,7 +77,7 @@ namespace ug {
 			   typedef membrane_potential_mapping::Transformator TTransformator;
 
 		       /// registry of KDTree
-		       typedef typename membrane_potential_mapping::KDTree<TDomain::dim, number> TKDTree;
+		       typedef typename membrane_potential_mapping::kd_tree<TDomain::dim, number> TKDTree;
 		       typedef typename membrane_potential_mapping::kd_node<TDomain::dim, number> TKDNode;
 				using namespace ug::bridge;
 				string suffix = GetDomainSuffix<TDomain>();
