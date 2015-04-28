@@ -28,6 +28,8 @@
 #include "transformator.h"
 #endif
 
+#include "kdtree/kdtree.h"
+
 #include "a_u_x/edge_utilities.h"
 #include "a_u_x/a_u_x_bridge.cpp"
 
@@ -37,6 +39,18 @@
 #include <bridge/util_domain_algebra_dependent.h>
 #include "lib_disc/domain.h"
 #include "lib_disc/common/function_group.h"
+#include <bridge/util.h>
+#include <bridge/util_domain_dependent.h>
+#include <registry/registry.h>
+
+#include <bridge/util.h>
+#include <bridge/util_domain_dependent.h>
+#include <common/error.h>
+#include <common/ug_config.h>
+#include <common/log.h>
+#include <registry/registry.h>
+#include <registry/error.h>
+
 
 // begin namespace ug
 namespace ug {
@@ -63,15 +77,23 @@ namespace ug {
 			   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 			   typedef membrane_potential_mapping::bg::BG TBG;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
-			   //typedef membrane_potential_mapping::HocCommand THC;
 
 
-				// do we want to use smartpointers?
-				const bool bSmartPointer = true;
 
-			   // registry of auxiliarities (\see aux/edge_utilities.h)
-				//reg.add_function("get_edge_sum", static_cast<number (*)(TDomain&,  ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSum), "", grp);
-			   // reg.add_function("get_edge_sum_sq", static_cast<number (*)(TDomain&, ISubsetHandler&, int, int)> (&membrane_potential_mapping::aux::EdgeSumSq), "", grp);
+		       /// registry of KDTree
+		       typedef typename membrane_potential_mapping::KDTree<TDomain::dim, number> TKDTree;
+		       typedef typename membrane_potential_mapping::kd_node<TDomain::dim, number> TKDNode;
+				using namespace ug::bridge;
+				string suffix = GetDomainSuffix<TDomain>();
+
+				reg.add_class_<TKDNode>(std::string("KDNode").append(suffix), grp)
+				   .template add_constructor<void (*)()>("", "", "");
+
+				reg.add_class_<TKDTree>(std::string("KDTree").append(suffix), grp)
+				   .template add_constructor<void (*)()>("", "", "")
+		    	   .add_method("add_vec_with_meta", (void (TKDTree::*)(const MathVector<TDomain::dim, number>&, number)) &TKDTree::add_vec_with_meta)
+		    	   .add_method("query_vec", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::query_vec)
+		    	   .add_method("query_vec_only", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::query_vec_only);
 
 			   // registry of Vm2uG (\see vm2ug.h)
 			   reg.add_class_<TVm2uG>("MembranePotentialMapper", grp)
@@ -87,7 +109,7 @@ namespace ug {
 				  .add_method("build_tree", (void (TVm2uG::*)()) (&TVm2uG::buildTree), grp)
 				  .add_method("get_potential", (number (TVm2uG::*)(number, number, number)) (&TVm2uG::get_potential), grp)
 				#endif
-				 .set_construct_as_smart_pointer(bSmartPointer);
+				 .set_construct_as_smart_pointer(true);
 
 			   // registry of BG (\see bg.h)
 			   reg.add_class_<TBG>("BorgGraham", grp)
@@ -110,7 +132,7 @@ namespace ug {
 				  #else
 				  .add_method("dCa", &TBG::dCa, "derivative if no calcium concentration is considered|default", "", grp)
 				  #endif
-				  .set_construct_as_smart_pointer(bSmartPointer);
+				  .set_construct_as_smart_pointer(true);
 
 #ifdef MPMNEURON
 					/// registry of Transformator
@@ -148,13 +170,13 @@ namespace ug {
 	    			.add_method("get_section_names_all", (std::vector<std::string> (TTransformator::*)())(&TTransformator::get_all_sections), "", "", grp)
 	    			.add_method("get_section_names_as_string", (std::string (TTransformator::*)())(&TTransformator::get_all_sections_as_string), "", "", grp)
 #endif
-					.set_construct_as_smart_pointer(bSmartPointer);
+					.set_construct_as_smart_pointer(true);
 
 				// TODO: this could be obsolete below ...
 				// TODO: make Transformator / (renamed to HOC interpreter soon) a singleton -> provide get_instance() as singleton => we can supply this into the hoc command classes (make subclasses of base hoc command class, e. g. loadfile, loadstim, maybe iclamp and vclamp etc).
 				// TODO: hoc_command get's just a pointer from the transformator / (renamed to HOC Interpreter soon) -> hoc_command class implements common commands then ...
 
-				// TODO:Dont register all stuff for vrl .... necessarily
+				// NOTE: Dont register all stuff for vrl .... necessarily
 #endif
 			}
 		// end of functionality which is to be exported
@@ -169,18 +191,6 @@ namespace ug {
 	{
 	    std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 		typedef membrane_potential_mapping::Functionality Functionality;
-
-		/// registry only for dim = 3
-	#ifdef UG_DIM_3
-	   typedef membrane_potential_mapping::KDTree<3, double> TKDTree;
-	   reg.add_class_<TKDTree>("KDTree")
-		   .add_method("add_node_with_meta", &TKDTree::add_node_with_meta)
-	   	   .add_method("query_node", &TKDTree::query_node)
-	   	   .add_method("build_tree", &TKDTree::build_tree);
-	#endif
-
-
-
 
 		/// Note:
 		/// functionality only implemented for 3D: in case of necessity for 2D/1D implementation
