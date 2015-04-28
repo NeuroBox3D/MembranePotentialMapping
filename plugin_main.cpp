@@ -92,7 +92,7 @@ namespace ug {
 				reg.add_class_<TKDTree>(std::string("KDTree").append(suffix), grp)
 				   .template add_constructor<void (*)()>("", "", "")
 		    	   .add_method("add_vec_with_meta", (void (TKDTree::*)(const MathVector<TDomain::dim, number>&, number)) &TKDTree::add_vec_with_meta)
-		    	   .add_method("query_vec", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::query_vec)
+		    	   .add_method("build_tree", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::build_tree)
 		    	   .add_method("query_vec_only", (number* (TKDTree::*)(const MathVector<TDomain::dim>&)) &TKDTree::query_vec_only);
 
 			   // registry of Vm2uG (\see vm2ug.h)

@@ -169,7 +169,7 @@ namespace ug {
 
                 d = dist(root, nd);
                 dx = root->m_coords[i] - nd->m_coords[i];
-                dx_squared = std::pow(d, 2);
+                dx_squared = dx * dx;
 
                 m_visited++;
 
@@ -234,24 +234,29 @@ namespace ug {
 
               		int i;
         		/// if wps go out of scope we have memory corruption -> aka seg faults, store tree within the class
-        			kd_node<dim, number> wp[2];
+        			kd_node<dim, number> wp[this->nodes.size()];
         			kd_node<dim, number> a, b, q;
         		for (int i = 0; i < dim; i++) {
-        			a.m_coords[i] = 0;
-        			b.m_coords[i] = 1;
-        			q.m_coords[i] = 2;
+   //     			a.m_coords[i] = 0;
+ //       			b.m_coords[i] = 1;
+        			q.m_coords[i] = vec[i];
         		}
-        		wp[0] = a;
-        		wp[1] = b;
-        			this->wps = (kd_node<dim, number>*)malloc(sizeof(kd_node<dim, number>)*2);
-        			this->wps[0] = a;
-        			this->wps[1] = b;
+ //       		wp[0] = a;
+   //     		wp[1] = b;
+       			this->wps = (kd_node<dim, number>*)malloc(sizeof(kd_node<dim, number>)*nodes.size());
+        			for (int i = 0; i < nodes.size(); i++) {
+        				wp[i] = nodes[i];
+        				this->wps[i] = wp[i];
+        			}
+
+       		//	this->wps[0] = a;
+       			//this->wps[1] = b;
 
         			kd_node<dim, number> *found;
         			double best_dist;
 
  //       			root = make_tree(this->wps, sizeof(this->wps) / sizeof(this->wps[1]), 0);
-       			root = make_tree(this->wps, 2, 0);
+       			root = make_tree(this->wps, nodes.size(), 0);
         			found = 0;
         			nearest(root, &q, 0, &found, &best_dist);
         			std::cout << "best_distance: " << best_dist;
@@ -282,9 +287,6 @@ namespace ug {
         		}
         			nearest(root, &query, 0, &found, &best_dist);
         			std::cout << "best_distance: " << best_dist;
-
-
-
         	}
          };
 	} // namespace synapse_provider
