@@ -165,6 +165,7 @@ include("../../../cmake/ug_plugin_includes.cmake")
 if(NOT MPMNEURON)
 # set the sources 
 set(SOURCES_simple
+                     kdtree/kd_tree.cpp
 			         vm2ug.cpp
 			         plugin_main.cpp
 			         bg_simple/bg.cpp
@@ -175,6 +176,7 @@ set(SOURCES_simple
                      a_u_x/a_u_x_bridge.cpp)
 
 set(SOURCES_default  
+                     kdtree/kd_tree.cpp
                      vm2ug.cpp 
                      plugin_main.cpp
                      bg_default/spannung.cpp
@@ -187,6 +189,7 @@ set(SOURCES_default
 else(NOT MPMNEURON)
    # simple sources for VGCCs
    set(SOURCES_simple
+                     kdtree/kd_tree.cpp
 			         vm2ug.cpp
 			         plugin_main.cpp
 			         bg_simple/bg.cpp
@@ -199,6 +202,7 @@ else(NOT MPMNEURON)
 
    # default sources for VGCCs 
    set(SOURCES_default  
+               kdtree/kd_tree.cpp
                vm2ug.cpp 
                plugin_main.cpp
                bg_default/spannung.cpp

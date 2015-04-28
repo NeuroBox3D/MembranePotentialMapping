@@ -1,0 +1,16 @@
+/*
+ * kd_tree.cpp
+ *
+ *  Created on: Apr 28, 2015
+ *      Author: stephan
+ */
+
+
+namespace ug {
+	namespace membrane_potential_mapping {
+		////////////////////////////////////////////////////////////////////////
+		/// debug ids
+		////////////////////////////////////////////////////////////////////////
+		ug::DebugID MPM_KDTREE("MPM_DID.kdtree");
+	}
+}

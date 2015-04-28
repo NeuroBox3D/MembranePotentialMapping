@@ -15,11 +15,6 @@
 #include "kd_node.h"
 #include "kd_tree.h"
 
-////////////////////////////////////////////////////////////////////////
-/// debug ids
-////////////////////////////////////////////////////////////////////////
-ug::DebugID MPM_KDTREE("MPM_DID.kdtree");
-
 namespace ug {
 	namespace membrane_potential_mapping {
 	    /////////////////////////////////////////////////////////
@@ -165,7 +160,7 @@ namespace ug {
 		template <size_t dim, typename M>
         void kd_tree<dim, M>::add_node_meta(const MathVector<dim>& vec, number m) {
         	kd_node<dim, M> node;
-        	for (int i = 0; i < dim; i++) node.m_coords[i] = vec[i];
+        	for (size_t i = 0; i < dim; i++) node.m_coords[i] = vec[i];
         	node.m_meta = m;
         	this->nodes.push_back(node);
         }
@@ -176,7 +171,7 @@ namespace ug {
 		template <size_t dim, typename M>
         void kd_tree<dim, M>::add_node(const MathVector<dim>& vec) {
         	kd_node<dim, M> node;
-        	for (int i = 0; i < dim; i++) node.m_coords[i] = vec[i];
+        	for (size_t i = 0; i < dim; i++) node.m_coords[i] = vec[i];
         	this->nodes.push_back(node);
 		}
 
@@ -211,7 +206,7 @@ namespace ug {
         	} else {
         		/// build query
         		kd_node<dim, M> query;
-        		for (int i = 0; i < dim; i++) query.m_coords[i] = vec[i];
+        		for (size_t i = 0; i < dim; i++) query.m_coords[i] = vec[i];
 
         		/// query tree
         		kd_node<dim, M>* found = NULL;

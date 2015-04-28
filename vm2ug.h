@@ -27,7 +27,7 @@
 #include "common/common.h"
 #include "common/util/smart_pointer.h"
 
-//#include "kdtree/kd_tree.h"
+#include "kdtree/kd_tree.h"
 // FIXME: below fails if EMBEDDED_PLUGINGS=ON -> why?
 // comment: hmm, works fine for me (mbreit)
 #include "ANN/ANN.h"
