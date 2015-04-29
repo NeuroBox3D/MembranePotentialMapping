@@ -68,13 +68,16 @@ namespace ug {
 			   // group membership of the membrane_potential_mapping plugin
 			   std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 
-			   // define the grid function depending on domain and algebra
-			   typedef GridFunction<TDomain, TAlgebra> TGridFunction;
 
 			   // typedefs
 			   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
 			   typedef membrane_potential_mapping::bg::BG TBG;
+
+#ifdef MPMNEURON
+			   /// define the grid function depending on domain and algebra
+			   typedef GridFunction<TDomain, TAlgebra> TGridFunction;
 			   typedef membrane_potential_mapping::Transformator TTransformator;
+#endif
 
 		       /// registry of KDTree for meta data number (i. e. double or float)
 		       typedef typename membrane_potential_mapping::kd_tree<TDomain::dim, number> TKDTree;
@@ -132,7 +135,7 @@ namespace ug {
 				  .set_construct_as_smart_pointer(true);
 
 #ifdef MPMNEURON
-					/// registry of Transformator
+				/// registry of Transformator
 				reg.add_class_<TTransformator>("Transformator", grp)
 					.add_constructor<void (*)()>("")
 					.add_method("load_geom", (void (TTransformator::*)(const std::string&))(&TTransformator::load_geom), "", "hoc geometry|load-dialog", grp)

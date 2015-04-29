@@ -14,6 +14,9 @@
 #include <common/log.h>
 #include "kd_node.h"
 #include "kd_tree.h"
+#include <common/debug_id.h>
+
+extern ug::DebugID MPM_KDTREE;
 
 namespace ug {
 	namespace membrane_potential_mapping {
