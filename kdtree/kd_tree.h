@@ -64,7 +64,7 @@ namespace ug {
 			 * \param[in] idx index
 			 * \param[out] kd_node representing median
 			 */
-			kd_node<dim, M>* find_median(kd_node<dim, M> *start, kd_node<dim, M> *end, int idx);
+			kd_node<dim, M>* find_median(kd_node<dim, M> *start, kd_node<dim, M> *end, size_t idx);
 
 			/*!
 			 * \brief generates a kd tree from a list of kd nodes
@@ -73,7 +73,7 @@ namespace ug {
 			 * \param[in] i index
 			 * \param[out] kd_node root
 			 */
-			kd_node<dim, M>* make_tree(kd_node<dim, M>* t, int len, int i);
+			kd_node<dim, M>* make_tree(kd_node<dim, M>* t, size_t len, size_t i);
 
 			/*!
 			 * \brief get nearest neighbor in tree wrt to a query point (euclidean distance is used)
@@ -82,7 +82,7 @@ namespace ug {
 			 * \param[out] best kd_nodes's best node
 			 * \param[out] best_dist associated distance to best node (see above)
 			 */
-			void nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, int i, kd_node<dim, M> **best, M *best_dist);
+			void nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, size_t i, kd_node<dim, M> **best, M *best_dist);
 
        public:
 			/*!
