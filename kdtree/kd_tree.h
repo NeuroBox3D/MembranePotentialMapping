@@ -21,6 +21,8 @@ namespace ug {
 	namespace membrane_potential_mapping {
 		/*!
 		 * \brief pretty simplistic KD Tree
+		 * Note the worst case runtime for building the static kd tree,
+		 * is dominated by the utilized sorting algorithm and here O(n * log(n))
 		 */
 		template <size_t dim, typename M>
 		class kd_tree {
@@ -58,7 +60,11 @@ namespace ug {
 			void swap(kd_node<dim, M>* x, kd_node<dim, M>* y);
 
 			/*!
-			 * \brief find median
+			 * \brief find median by median-of-medians, a quickselect method
+			 * Note the runtime and memory complexity:
+			 * 		- worst case runtime: O(n) and
+			 * 		- worst case memory: O(1)
+			 *
 			 * \param[in] start of kd_nodes
 			 * \param[in] end of kd_nodes
 			 * \param[in] idx index
