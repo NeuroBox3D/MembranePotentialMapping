@@ -65,6 +65,9 @@ namespace ug {
 			template <typename TDomain, typename TAlgebra> static void
 			DomainAlgebra(ug::bridge::Registry& reg, const std::string& parentGroup)
 			{
+
+				string tag = GetDomainTag<TDomain>();
+
 			   // group membership of the membrane_potential_mapping plugin
 			   std::string grp("/UG4/Plugins/Neuro/MembranePotentialMapping/");
 
@@ -84,9 +87,10 @@ namespace ug {
 		       typedef typename membrane_potential_mapping::kd_node<TDomain::dim, number> TKDNode;
 			   using namespace ug::bridge;
 			   string suffix = GetDomainSuffix<TDomain>();
-
-				reg.add_class_<TKDNode>(std::string("KDNode").append(suffix), grp)
+			   std::string name = std::string("KDNode").append(suffix);
+				reg.add_class_<TKDNode>(name, grp)
 				   .template add_constructor<void (*)()>("", "", "");
+				reg.add_class_to_group(name, std::string("KDNode"), tag);
 
 				reg.add_class_<TKDTree>(std::string("KDTree").append(suffix), grp)
 				   .template add_constructor<void (*)()>("", "", "")
