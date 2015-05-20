@@ -202,7 +202,7 @@ namespace ug {
 				// Transformator
 				{
 					typedef membrane_potential_mapping::Transformator TTransformator;
-					std::string name("Transformator");
+					std::string name = std::string("Transformator").append(suffix);
 					reg.add_class_<TTransformator>(name, grp)
 						.add_constructor<void (*)()>("")
 						.add_method("load_geom", (void (TTransformator::*)(const std::string&))(&TTransformator::load_geom),
