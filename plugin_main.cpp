@@ -54,6 +54,9 @@
 namespace ug {
 	// begin namespace mpm
 	namespace membrane_potential_mapping {
+
+		using namespace ug::bridge;
+
 		/*!
 		 * \defgroup mpm_plugin Membrane Potential Mapping plugin
 		 * \ingroup plugins_experimental
