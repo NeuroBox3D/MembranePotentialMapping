@@ -136,7 +136,7 @@ namespace ug {
 			 * @param reg		registry
 			 * @param grp		group for sorting of functionality
 			 */
-			template <int dim>
+			template <size_t dim>
 			static void Dimension(Registry& reg, std::string grp)
 			{
 				std::string suffix = GetDimensionSuffix<dim>();
@@ -144,7 +144,7 @@ namespace ug {
 
 				// KD node
 				{
-					typedef typename membrane_potential_mapping::kd_node<dim, number> TKDNode;
+					typedef kd_node<dim, number> TKDNode;
 					std::string name = std::string("KDNode").append(suffix);
 					reg.add_class_<TKDNode>(name, grp)
 					   .template add_constructor<void (*)()>("", "", "");
@@ -153,7 +153,7 @@ namespace ug {
 
 				// KD tree
 				{
-					typedef typename membrane_potential_mapping::kd_tree<dim, number> TKDTree;
+					typedef kd_tree<dim, number> TKDTree;
 					std::string name = std::string("KDTree").append(suffix);
 					reg.add_class_<TKDTree>(name, grp)
 						.template add_constructor<void (*)()>("", "", "")
@@ -287,16 +287,14 @@ namespace ug {
 		/// one needs to adapt slightly the get_potential and build_tree functions, since they
 		/// rely on 3D points and 1D time data in CSV files, or in case of NEURON interpreter
 		/// embedded within Vm2uG - if you have other data you may adapt all functions of Vm2uG
-		#if defined(UG_DIM_3)
-			try
-			{
-				// register domain/algebra first as transformator is needed in vm2ug
-				RegisterDomain3dAlgebraDependent<Functionality>(reg, grp);	// only 3d supported
-				RegisterDimensionDependent<Functionality>(reg, grp);
-				RegisterCommon<Functionality>(reg, grp);
-			}
-			UG_REGISTRY_CATCH_THROW(grp);
-		#endif
+		try
+		{
+			// register domain/algebra first as transformator is needed in vm2ug
+			RegisterDomain3dAlgebraDependent<Functionality>(reg, grp);	// only 3d supported
+			RegisterDimensionDependent<Functionality>(reg, grp);
+			RegisterCommon<Functionality>(reg, grp);
+		}
+		UG_REGISTRY_CATCH_THROW(grp);
 
 
 	} // end namspace membrane_potential_mapping
