@@ -152,15 +152,18 @@ namespace ug {
 				}
 
 				// KD tree
+				// FIXME: The methods that are commented out break API compilation in VRL
+				// due to the usage of MathVector<dim> as parameter (which is not supported)
+				// in a grouped class (grouped by this dim parameter)!
 				{
 					typedef kd_tree<dim, number> TKDTree;
 					std::string name = std::string("KDTree").append(suffix);
 					reg.add_class_<TKDTree>(name, grp)
 						.template add_constructor<void (*)()>("", "", "")
-						.add_method("add_node_meta", (void (TKDTree::*)(const MathVector<dim, number>&, number))(&TKDTree::add_node_meta), grp)
-						.add_method("add_node", (void (TKDTree::*)(const MathVector<dim, number>&))(&TKDTree::add_node), grp)
-						.add_method("build_tree", (bool (TKDTree::*)()) &TKDTree::build_tree)
-						.add_method("query", (number (TKDTree::*)(const MathVector<dim>&)) &TKDTree::query);
+						//.add_method("add_node_meta", (void (TKDTree::*)(const MathVector<dim, number>&, number))(&TKDTree::add_node_meta), grp)
+						//.add_method("add_node", (void (TKDTree::*)(const MathVector<dim, number>&))(&TKDTree::add_node), grp)
+						.add_method("build_tree", (bool (TKDTree::*)()) &TKDTree::build_tree);
+						//.add_method("query", (number (TKDTree::*)(const MathVector<dim>&)) &TKDTree::query);
 					reg.add_class_to_group(name, std::string("KDTree"), tag);
 				}
 			}
