@@ -161,10 +161,13 @@ namespace ug {
 					reg.add_class_<TKDTree>(name, grp)
 						.template add_constructor<void (*)()>("", "", "")
 						#ifdef UG_FOR_LUA
-						.add_method("add_node_meta", (void (TKDTree::*)(const MathVector<dim, number>&, number))(&TKDTree::add_node_meta), grp)
-						.add_method("add_node", (void (TKDTree::*)(const MathVector<dim, number>&))(&TKDTree::add_node), grp)
+						// Unfortunately, UG_FOR_LUA is also active when TARGET=vrl.
+						// However, MathVector ist still not supported as parameter type in the VRL.
+						// Therefore, this code is commented out.
+						//.add_method("add_node_meta", (void (TKDTree::*)(const MathVector<dim, number>&, number))(&TKDTree::add_node_meta), grp)
+						//.add_method("add_node", (void (TKDTree::*)(const MathVector<dim, number>&))(&TKDTree::add_node), grp)
 						.add_method("build_tree", (bool (TKDTree::*)()) &TKDTree::build_tree)
-						.add_method("query", (number (TKDTree::*)(const MathVector<dim>&)) &TKDTree::query)
+						//.add_method("query", (number (TKDTree::*)(const MathVector<dim>&)) &TKDTree::query)
 						#endif
 						;
 					reg.add_class_to_group(name, std::string("KDTree"), tag);
