@@ -24,12 +24,20 @@ namespace ug {
 		private:
 			//// non-static members
 			kd_tree<dim, M> m_kdtree;
+			size_t m_delimIndex;
 
 			/// common typedefs
 			typedef typename std::vector<std::pair<MathVector<dim, number>, M> >::const_iterator CITVPMNM;
 			typedef typename std::vector<std::pair<std::vector<number>, M> >::const_iterator CITVPVNM;
 
 		public:
+			/*!
+			 * \brief ctor
+			 */
+			Mapper() : m_kdtree(kd_tree<dim, M>()), m_delimIndex(0) {
+
+			}
+
 			/*!
 			 * \brief build an empty tree
 			 */
@@ -46,7 +54,7 @@ namespace ug {
 			 * \param[in] filename where the points are stored (with meta data)
 			 * \param[in] delimiter in the file to separate values
 			 */
-			void build_tree(const std::string& filename, const char& delim);
+			void build_tree(const std::string& filename, const std::string& delim);
 
 			/*!
 			 * \brief build populated tree from given vector of pairs
@@ -77,6 +85,7 @@ namespace ug {
 			 * \param[in] query coordinates of a given point
 			 */
 			M get_data_from_nearest_neighbor(const std::vector<number>& query);
+
 		};
 	} /// end namespace mpm
 } /// end namespace ug

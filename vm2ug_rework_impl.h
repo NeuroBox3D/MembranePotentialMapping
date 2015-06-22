@@ -33,6 +33,7 @@ void Mapper<dim, M>::build_tree() {
 //////////////////////////////////////////////////////////
 template <size_t dim, typename M>
 void Mapper<dim, M>::build_tree(const std::vector<std::pair<MathVector<dim, number>, M> >& points) {
+	m_kdtree = kd_tree<dim, M>();
 	for (CITVPMNM it = points.begin(); it != points.end(); ++it) {
 		std::pair<MathVector<dim, number>, M> pair = *it;
 		m_kdtree.add_node_meta(pair.first, pair.second);
@@ -44,23 +45,36 @@ void Mapper<dim, M>::build_tree(const std::vector<std::pair<MathVector<dim, numb
 /// build_tree
 //////////////////////////////////////////////////////////
 template <size_t dim, typename M>
-void Mapper<dim, M>::build_tree(const std::string& filename, const char& delim) {
+void Mapper<dim, M>::build_tree(const std::string& filename, const std::string& delim) {
+	   m_kdtree = kd_tree<dim, M>();
+
 	   std::ifstream file(filename.c_str());
 	   UG_COND_THROW(!file, "Could not open data file: " + filename);
 
 	   std::string line;
-	   while (std::getline(file, line, delim)) {
+	   while (std::getline(file, line)) {
+		   /// read data
 		   MathVector<dim, number> node;
 		   M meta;
-
 	       std::istringstream iss(line);
-	       for (size_t i = 0; i < dim; i++) {
-	    	   iss >> node[i];
-	       }
+	       std::string s;
 
-	       iss >> meta;
+	       /// coordinates
+	       for (size_t i = 0; i < dim; i++) {
+		        if (!getline(iss, s, delim[m_delimIndex])) break;
+		        node[i] = boost::lexical_cast<number>(s);
+		   }
+
+	       /// meta data
+	       if (!getline(iss, s, delim[m_delimIndex])) break;
+	       meta = boost::lexical_cast<M>(s);
+
+	       /// add the node
 	       m_kdtree.add_node_meta(node, meta);
 	   }
+
+	   /// finally build the tree
+	   m_kdtree.build_tree();
 }
 
 //////////////////////////////////////////////////////////
@@ -68,11 +82,12 @@ void Mapper<dim, M>::build_tree(const std::string& filename, const char& delim) 
 //////////////////////////////////////////////////////////
 template <size_t dim, typename M>
 void Mapper<dim, M>::build_tree(const std::vector<std::pair<std::vector<number>, M> >& points) {
+	m_kdtree = kd_tree<dim, M>();
 	for (CITVPVNM it = points.begin(); it != points.end(); ++it) {
 		std::pair<std::vector<number>, M> pair = *it;
 
 		MathVector<dim, number> coords;
-		for (int i = 0; i < dim; i++) {
+		for (size_t i = 0; i < dim; i++) {
 			coords[i] = pair.first[0];
 		}
 
