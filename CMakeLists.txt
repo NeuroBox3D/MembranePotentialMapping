@@ -319,8 +319,8 @@ if(buildEmbeddedPlugins)
    endif(MPMNEURON)
  
    # exports for vm2ug (libann) and borg graham style
-   exportDependencies(${ANN_LIBRARY})
-   exportIncludes(${ANN_INCLUDE_DIR})
+   #exportDependencies(${ANN_LIBRARY})
+   #exportIncludes(${ANN_INCLUDE_DIR})
    #ExportDependencies(${ANNLIB}/lib/libANN.a)	# <-- old
    #ExportIncludes(${ANNLIB}/include)			# <-- old
    
