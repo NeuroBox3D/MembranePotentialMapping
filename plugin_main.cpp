@@ -18,7 +18,7 @@
 #include <lib_disc/domain.h>
 #include <lib_grid/lib_grid.h>
 
-#include "vm2ug.h"
+//#include "vm2ug.h"
 #include "vm2ug_rework.h"
 #ifdef MPMVGCC
 #include "bg_default/bg.h"
@@ -95,6 +95,7 @@ namespace ug {
 						   ;
 				}
 
+				/*
 				// Vm2uG (\see vm2ug.h)
 				{
 				   typedef membrane_potential_mapping::Vm2uG<std::string> TVm2uG;
@@ -117,7 +118,7 @@ namespace ug {
 						.add_method("get_potential", (number (TVm2uG::*)(number, number, number)) (&TVm2uG::get_potential), grp)
 #endif
 						.set_construct_as_smart_pointer(true);
-				}
+				}*/
 
 				// registry of BG (\see bg.h)
 				{

@@ -16,6 +16,8 @@
 
 #include "vm2ug_rework.h"
 
+#include "boost/lexical_cast.hpp"
+
 
 /// using directives
 using namespace ug::membrane_potential_mapping;
