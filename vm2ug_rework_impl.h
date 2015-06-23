@@ -112,11 +112,20 @@ void Mapper<dim, M>::add_node(const std::pair<MathVector<dim, number>, M>& node)
 template <size_t dim, typename M>
 void Mapper<dim, M>::add_node(const std::pair<std::vector<number>, M>& node) {
 	MathVector<dim, number> coords;
+
 	for (int i = 0; i < dim; i++) {
 		coords[i] = node.first[0];
 	}
 
 	m_kdtree.add_node_meta(coords, node.second);
+}
+
+//////////////////////////////////////////////////////////
+/// add_node
+//////////////////////////////////////////////////////////
+template <size_t dim, typename M>
+void Mapper<dim, M>::add_node(const std::vector<number>& node, const M& data) {
+	add_node(std::make_pair<std::vector<number>, M>(node, data));
 }
 
 //////////////////////////////////////////////////////////

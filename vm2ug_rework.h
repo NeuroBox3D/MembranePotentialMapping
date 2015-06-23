@@ -75,6 +75,13 @@ namespace ug {
 			void add_node(const std::pair<std::vector<number>, M>& node);
 
 			/*!
+			 * \brief add a single node with a value
+			 * \param[in] node a single point with meta data
+			 * \param[in] value the meta data
+			 */
+			inline void add_node(const std::vector<number>&, const M& value);
+
+			/*!
 			 * \brief query the tree for the data of the very nearest neighbor
 			 * \param[in] query coordinates of a given point
 			 */
