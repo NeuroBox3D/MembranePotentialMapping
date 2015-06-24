@@ -106,7 +106,8 @@ namespace ug {
 						   .add_constructor()
 						   .add_method("set_transformator", static_cast<void (TMPMMapper::*)(SmartPtr<Transformator>)> (&TMPMMapper::set_transformator), "", "", "")
 						   .add_method("get_vm", static_cast<number (TMPMMapper::*)(number, number, number)> (&TMPMMapper::get_vm), "", "", "")
-						   .add_method("build_tree", static_cast<void (TMPMMapper::*)()> (&TMPMMapper::build_tree), "", "", "");
+						   .add_method("build_tree", static_cast<void (TMPMMapper::*)()> (&TMPMMapper::build_tree), "", "", "")
+						   .add_method("get_mapper", static_cast<SmartPtr<Mapper<3, number> > (TMPMMapper::*)() const> (&TMPMMapper::get_mapper), "", "", "");
 				}
 
 				/*

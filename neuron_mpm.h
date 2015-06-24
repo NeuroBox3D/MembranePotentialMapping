@@ -45,6 +45,13 @@ namespace ug {
 				}
 
 				/*!
+				 * \brief get's the Mapper
+				 */
+				inline SmartPtr<Mapper<3, number> > get_mapper() const {
+					return m_mapper;
+				}
+
+				/*!
 				 * \brief builds the kd-tree on demand
 				 */
 				inline void build_tree() {
