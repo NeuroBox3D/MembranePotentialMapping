@@ -20,6 +20,7 @@
 
 //#include "vm2ug.h"
 #include "vm2ug_rework.h"
+#include "neuron_mpm.h"
 #ifdef MPMVGCC
 #include "bg_default/bg.h"
 #else
@@ -94,6 +95,18 @@ namespace ug {
 						   .add_method("get_data_from_nn_mv", static_cast<number (TMapper::*)(const MathVector<3, number>&)> (&TMapper::get_data_from_nearest_neighbor), grp)
 							#endif
 						   ;
+
+				}
+				/// MPM Mapper
+				{
+				   typedef membrane_potential_mapping::NeuronMPM TMPMMapper;
+				   std::string name("NeuronMPM");
+
+				   reg.add_class_<TMPMMapper>(name, grp)
+						   .add_constructor()
+						   .add_method("set_transformator", static_cast<void (TMPMMapper::*)(SmartPtr<Transformator>)> (&TMPMMapper::set_transformator), "", "", "")
+						   .add_method("get_vm", static_cast<number (TMPMMapper::*)(number, number, number)> (&TMPMMapper::get_vm), "", "", "")
+						   .add_method("build_tree", static_cast<void (TMPMMapper::*)()> (&TMPMMapper::build_tree), "", "", "");
 				}
 
 				/*
