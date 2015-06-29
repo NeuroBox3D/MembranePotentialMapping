@@ -45,6 +45,13 @@ namespace ug {
 				}
 
 				/*!
+				 * \brief get's the NEURON interpreter
+				 */
+				inline SmartPtr<Transformator> get_transformator() const {
+					return m_transformator;
+				}
+
+				/*!
 				 * \brief get's the Mapper
 				 */
 				inline SmartPtr<Mapper<3, number> > get_mapper() const {
