@@ -113,7 +113,7 @@ template <size_t dim, typename M>
 void Mapper<dim, M>::add_node(const std::pair<std::vector<number>, M>& node) {
 	MathVector<dim, number> coords;
 
-	for (int i = 0; i < dim; i++) {
+	for (size_t i = 0; i < dim; i++) {
 		coords[i] = node.first[0];
 	}
 
@@ -142,7 +142,7 @@ M Mapper<dim, M>::get_data_from_nearest_neighbor(const MathVector<dim, number>& 
 template <size_t dim, typename M>
 M Mapper<dim, M>::get_data_from_nearest_neighbor(const std::vector<number>& query) {
 	MathVector<dim, number> coords;
-	for (int i = 0; i < dim; i++) {
+	for (size_t i = 0; i < dim; i++) {
 		coords[i] = query[i];
 	}
 	return m_kdtree.query(coords);
