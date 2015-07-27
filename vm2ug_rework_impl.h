@@ -56,7 +56,7 @@ void Mapper<dim, M>::build_tree(const std::string& filename, const std::string& 
 	   std::string line;
 	   while (std::getline(file, line)) {
 		   /// read data
-		   MathVector<dim, number> node;
+		   MathVector<dim, number> node(0.0);
 		   M meta;
 	       std::istringstream iss(line);
 	       std::string s;
