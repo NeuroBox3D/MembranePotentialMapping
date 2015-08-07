@@ -21,9 +21,11 @@
 #include "../../bg_simple/bg.h"
 #endif
 
-#include "../../vm2ug.h"
+//#include "../../vm2ug.h"
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
+
+#include "../../vm2ug_rework.h"
 
 using namespace boost::unit_test;
 using namespace ug::membrane_potential_mapping;
@@ -341,6 +343,7 @@ BOOST_AUTO_TEST_CASE(test_assignment_vec) {
 
 BOOST_AUTO_TEST_SUITE_END();
 
+/*
 // BOOST Test Suite for testing of vm2ug class
 BOOST_FIXTURE_TEST_SUITE(vm2ug, FixtureVUG<string>);
 
@@ -375,6 +378,7 @@ BOOST_AUTO_TEST_CASE(get_potential) {
 #endif
 
 BOOST_AUTO_TEST_SUITE_END();
+*/
 
 // BOOST Test Suite for testing of bg class
 BOOST_FIXTURE_TEST_SUITE(bg, FixtureBG);
@@ -492,12 +496,62 @@ BOOST_AUTO_TEST_CASE(check_molar_fluxes_cfp) {
 
 BOOST_AUTO_TEST_SUITE_END();
 
-// BOOST Test Suite for avoid warning
+/// BOOST Test Suite for avoid warning
 BOOST_AUTO_TEST_SUITE(dummy);
-
-// dummy test
 BOOST_AUTO_TEST_CASE(dummy) {
 	BOOST_CHECK_SMALL(0.0, SMALL);
+}
+BOOST_AUTO_TEST_SUITE_END();
+
+
+/// vm2ug rework tests
+BOOST_AUTO_TEST_SUITE(MAPPER_REWORK);
+
+/// tests neuron implementation of mpm
+BOOST_AUTO_TEST_CASE(NEURON_MPM) {
+
+}
+
+/// tests vm2ug implementation of mpm
+BOOST_AUTO_TEST_CASE(VM2UG_MPM) {
+
+}
+
+/// tests kdtree
+BOOST_AUTO_TEST_CASE(KDTREE) {
+	using namespace ug;
+	typedef kd_tree<3, number> KDTree3;
+	typedef std::vector<std::pair<MathVector<3>, number> >::const_iterator ITER;
+
+	// rand setup
+	number LO = 0;
+	number HI = 10000;
+	srand (static_cast <unsigned> (time(0)));
+
+	// tree setup
+	SmartPtr<KDTree3> tree(make_sp(new KDTree3()));
+	std::vector<std::pair<MathVector<3>, number> >saved;
+	size_t treeSize = 1e6;
+	size_t numberQuerys = 1e2;
+	size_t portion = treeSize - numberQuerys;
+
+	// popoulate tree
+	for (size_t i = 0; i < treeSize; i++) {
+		MathVector<3> vec(
+				LO + static_cast <number> (rand()) /( static_cast <number> (RAND_MAX/(HI-LO))),
+				LO + static_cast <number> (rand()) /( static_cast <number> (RAND_MAX/(HI-LO))),
+				LO + static_cast <number> (rand()) /( static_cast <number> (RAND_MAX/(HI-LO))));
+		number vm = LO + static_cast <number> (rand()) /( static_cast <number> (RAND_MAX/(HI-LO)));
+		tree->add_node_meta(vec, vm);
+		if ((i % portion) == 0) saved.push_back(make_pair(vec, vm));
+	}
+
+	// build tree
+	tree->build_tree();
+
+	// query tree and assert vms are same
+	for (ITER it = saved.begin(); it != saved.end(); ++it)
+		BOOST_REQUIRE_CLOSE(it->second, tree->query(it->first), 1e-6);
 }
 
 BOOST_AUTO_TEST_SUITE_END();

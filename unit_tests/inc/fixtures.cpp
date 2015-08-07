@@ -9,7 +9,7 @@
 // includes
 #include <boost/test/included/unit_test.hpp>
 
-#include "../../vm2ug.h"
+// #include "../../vm2ug.h"
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
 
@@ -26,17 +26,13 @@ using namespace boost::unit_test;
 
 /**
  * \brief fixture for class Vm2uG
- */
 template <class T> struct FixtureVUG {
 	ug::membrane_potential_mapping::Vm2uG<T>* vm2ug;
-	/**
-	 * \brief construct a fixture for class vm2ug
-	 *
-	 */
 	FixtureVUG() : vm2ug(new ug::membrane_potential_mapping::Vm2uG<T>("","")) { BOOST_TEST_MESSAGE("setup fixture >>vm2ugG<<");}
 	~FixtureVUG() { BOOST_TEST_MESSAGE("teardown fixture >>vm2ug<<"); }
 
 };
+*/
 
 /**
  * \brief fixture for class BG

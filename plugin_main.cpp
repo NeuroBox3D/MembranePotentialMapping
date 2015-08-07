@@ -30,6 +30,8 @@
 #include "neuron_mpm.h"
 #endif
 
+#include "vm2ug_mpm.h"
+
 #include "kdtree/kd_tree.h"
 
 #include "a_u_x/edge_utilities.h"
@@ -112,7 +114,6 @@ namespace ug {
 					.set_construct_as_smart_pointer(true);
 				}
 #endif
-
 				/*
 				// Vm2uG (\see vm2ug.h)
 				{
