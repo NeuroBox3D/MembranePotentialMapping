@@ -32,8 +32,7 @@ namespace ug {
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
 		kd_tree<dim, M>::~kd_tree() {
-			delete m_pRoot;
-			delete m_pWps;
+			delete[] m_pWps;
 		}
 
 	    /////////////////////////////////////////////////////////
@@ -184,7 +183,7 @@ namespace ug {
         bool kd_tree<dim, M>::build_tree() {
        		/// allocate nodes
        		size_t numNodes = nodes.size();
-       		this->m_pWps = (kd_node<dim, M>*)malloc(sizeof(kd_node<dim, M>)*numNodes);
+       		this->m_pWps = new kd_node<dim, M>[numNodes];
        		for (size_t i = 0; i < numNodes; i++) this->m_pWps[i] = nodes[i];
        		this->nodes.clear();
 
