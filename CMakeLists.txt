@@ -275,7 +275,7 @@ set(SOURCES_TEST unit_tests/src/tests.cpp)
 #include_directories(${ANNLIB}/include)
 #
 #if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-#	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the sporecified path: " ${ANNLIB}/lib)
+#	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the specified path: " ${ANNLIB}/lib)
 #else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 #	include_directories(${ANNLIB}/include)		
 #	message(STATUS "ANN Library API is on (by -ANNLIB=${ANNLIB}).")
