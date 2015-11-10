@@ -160,7 +160,7 @@ else (NOT MPMNEURON)
 endif(NOT MPMNEURON)
 
 # include the definitions and dependencies for ug-plugins.
-include("../../../cmake/ug_plugin_includes.cmake")
+include(${UG_ROOT_CMAKE_PATH}/ug_plugin_includes.cmake)
 
 if(NOT MPMNEURON)
 # set the sources 
@@ -328,9 +328,9 @@ if(buildEmbeddedPlugins)
     if("${MPMVGCC}" STREQUAL "ON")
 		add_definitions(-DMPMVGCC)
 		ExportDefinitions(-DMPMVGCC)
-		ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_default})
+		ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES_default})
 	else("${MPMVGCC}" STREQUAL "ON")
-		ExportSources(plugins/experimental/membrane_potential_mapping ${SOURCES_simple})
+		ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES_simple})
 	endif("${MPMVGCC}" STREQUAL "ON")
 	
 	if(${MPMTestsuite} STREQUAL "ON")
