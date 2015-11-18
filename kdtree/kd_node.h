@@ -32,7 +32,7 @@ namespace ug {
             */
            friend std::ostream& operator<<(std::ostream &out, const kd_node<dim, M>& node) {
         	   for (size_t i = 0; i < dim-1; i++) out << node.m_coords[i] << ", ";
-        	   return (out << node.m_coords[dim] << "(" << node.m_meta << ")");
+        	   return (out << node.m_coords[dim-1] << " (" << node.m_meta << ")");
            }
         };
 	} // namespace membrane_potential_mapping

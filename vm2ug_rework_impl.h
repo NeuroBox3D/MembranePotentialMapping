@@ -76,7 +76,8 @@ void Mapper<dim, M>::build_tree(const std::string& filename, const std::string& 
 	   }
 
 	   /// finally build the tree
-	   m_kdtree.build_tree();
+	   if (!m_kdtree.build_tree())
+		   UG_THROW("KD tree could not be built.");
 }
 
 //////////////////////////////////////////////////////////

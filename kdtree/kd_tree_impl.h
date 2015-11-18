@@ -15,6 +15,7 @@
 #include "kd_node.h"
 #include "kd_tree.h"
 #include <common/debug_id.h>
+#include <limits>
 
 extern ug::DebugID MPM_KDTREE;
 
@@ -59,6 +60,9 @@ namespace ug {
                 memcpy(temp,  x->m_coords, sizeof(temp));
                 memcpy(x->m_coords, y->m_coords, sizeof(temp));
                 memcpy(y->m_coords, temp,  sizeof(temp));
+                M meta_tmp = x->m_meta;
+                x->m_meta = y->m_meta;
+                y->m_meta = meta_tmp;
 		}
 
 	    /////////////////////////////////////////////////////////
@@ -70,41 +74,48 @@ namespace ug {
 				return NULL;
             }
 
-             if (end == start + 1) {
-                return start;
-             }
+			if (end == start + 1) {
+				return start;
+			}
 
-             kd_node<dim, M> *p, *store, *md = start + (end - start) / 2;
-             M pivot;
+			kd_node<dim, M> *p, *store, *md = start + (end - start) / 2;
+			M pivot;
 
-             while (1) {
-            	 pivot = md->m_coords[idx];
+			while (1) {
+				pivot = md->m_coords[idx];
 
-                 swap(md, end - 1);
+				swap(md, end - 1);
 
-                 for (store = p = start; p < end; p++) {
-                      if (p->m_coords[idx] < pivot) {
-                             if (p != store) {
-                                   swap(p, store);
-                              }
-                              store++;
-                        }
-                }
+				for (store = p = start; p < end; p++) {
+					if (p->m_coords[idx] < pivot) {
+						if (p != store) {
+							swap(p, store);
+						}
+						store++;
+					}
+				}
 
-                swap(store, end - 1);
+				swap(store, end - 1);
 
-                if (store->m_coords[idx] == md->m_coords[idx]) {
-                	return md;
-                }
+				// all nodes with m_coords[idx] < pivot are now located LEFT to store
+				// all nodes with m_coords[idx] >= pivot are located RIGHT to store (except for store itself)
 
-                if (store > md)	{
-                   	end = store;
-                } else {
-                 	start = store;
-                }
+				// if store is the middle, then it is the median
+				if (store == md)
+					return md;
 
-             }
-             return NULL;
+				// if store is to the right of the middle, then pivot > median;
+				// we can continue with [start, store-1]
+				if (store > md)
+					end = store;
+
+				// if store is to the left of the middle, then pivot <= median;
+				// we can continue with [store+1, end-1]
+				else
+					start = store+1;
+
+			}
+			return NULL;
 		}
 
 	    /////////////////////////////////////////////////////////
@@ -129,30 +140,30 @@ namespace ug {
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
 		void kd_tree<dim, M>::nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, size_t i, kd_node<dim, M> **best, M *best_dist) {
-           M d;
-           M dx;
-           M dx_squared;
+			M d;
+			M dx;
+			M dx_squared;
 
-           if (!root) return;
+			if (!root) return;
 
-           d = dist(root, nd);
-           dx = root->m_coords[i] - nd->m_coords[i];
-           dx_squared = dx * dx;
+			d = dist(root, nd);
+			dx = root->m_coords[i] - nd->m_coords[i];
+			dx_squared = dx * dx;
 
-           m_visited++;
+			m_visited++;
 
-           if (!*best || d < *best_dist) {
-        	   *best_dist = d;
-        	   *best = root;
-           }
+			if (!*best || d < *best_dist) {
+			   *best_dist = d;
+			   *best = root;
+			}
 
-           if (!*best_dist) return;
+			if (!*best_dist) return;
 
-           if (++i >= dim) i = 0;
+			i = (i+1) % dim;
 
-           nearest(dx > 0 ? root->left : root->right, nd, i, best, best_dist);
-           if (dx_squared >= *best_dist) return;
-           nearest(dx > 0 ? root->right : root->left, nd, i, best, best_dist);
+			nearest(dx > 0 ? root->left : root->right, nd, i, best, best_dist);
+			if (dx_squared >= *best_dist) return;
+			nearest(dx > 0 ? root->right : root->left, nd, i, best, best_dist);
         }
 
 	    /////////////////////////////////////////////////////////
@@ -193,6 +204,17 @@ namespace ug {
        		else return false;
        	}
 
+		template <size_t dim, typename M>
+        void kd_tree<dim, M>::print_tree(kd_node<dim, M>* root, size_t lvl) {
+			// traverse in depth and print nodes
+			if (!root) return;
+			UG_LOG(std::string(lvl, ' ')<<"(");
+			for (size_t i = 0; i < dim-1; ++i) UG_LOG(root->m_coords[i] << ", ");
+			UG_LOGN(root->m_coords[dim-1] << "): " << root->m_meta);
+			print_tree(root->left, lvl+1);
+			print_tree(root->right, lvl+1);
+		}
+
 	    /////////////////////////////////////////////////////////
 		/// query
 	    /////////////////////////////////////////////////////////
@@ -201,7 +223,7 @@ namespace ug {
         	/// meta value
         	M meta = 0;
 
-        	/// check if tree has been build
+        	/// check if tree has been built
         	if (!m_pRoot) {
         		UG_DLOGN(MPM_KDTREE, 0, "KDTree not build for dim=" << dim);
         	} else {
@@ -211,7 +233,7 @@ namespace ug {
 
         		/// query tree
         		kd_node<dim, M>* found = NULL;
-        		M best_dist = 0;
+        		M best_dist = std::numeric_limits<M>::max();
         		nearest(m_pRoot, &query, 0, &found, &best_dist);
 
         		/// debug output

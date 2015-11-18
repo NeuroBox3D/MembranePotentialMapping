@@ -110,6 +110,11 @@ namespace ug {
         	bool build_tree();
 
         	/*!
+        	 * @brief print tree
+        	 */
+        	void print_tree(kd_node<dim, M>* root, size_t lvl);
+
+        	/*!
         	 * \brief query the tree for the nearest neighbor
         	 * \param[in] vec query node
         	 * \param[out] M meta data
