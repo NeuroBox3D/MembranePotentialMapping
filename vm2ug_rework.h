@@ -85,13 +85,13 @@ namespace ug {
 			 * \brief query the tree for the data of the very nearest neighbor
 			 * \param[in] query coordinates of a given point
 			 */
-			M get_data_from_nearest_neighbor(const MathVector<dim, number>& query);
+			M get_data_from_nearest_neighbor(const MathVector<dim, number>& query) const;
 
 			/*!
 			 * \brief query the tree for the data of the very nearest neighbor
 			 * \param[in] query coordinates of a given point
 			 */
-			M get_data_from_nearest_neighbor(const std::vector<number>& query);
+			M get_data_from_nearest_neighbor(const std::vector<number>& query) const;
 
 		};
 	} /// end namespace mpm

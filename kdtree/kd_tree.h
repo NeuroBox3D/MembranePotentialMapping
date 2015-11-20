@@ -27,7 +27,7 @@ namespace ug {
 		template <size_t dim, typename M>
 		class kd_tree {
 		private:
-			int m_visited;
+			//int m_visited;
         	std::vector<kd_node<dim, M> > nodes;
         	kd_node<dim, M>* m_pRoot;
     		kd_node<dim, M>* m_pWps;
@@ -88,7 +88,7 @@ namespace ug {
 			 * \param[out] best kd_nodes's best node
 			 * \param[out] best_dist associated distance to best node (see above)
 			 */
-			void nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, size_t i, kd_node<dim, M> **best, M *best_dist);
+			void nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, size_t i, kd_node<dim, M> **best, M *best_dist) const;
 
        public:
 			/*!
@@ -112,14 +112,14 @@ namespace ug {
         	/*!
         	 * @brief print tree
         	 */
-        	void print_tree(kd_node<dim, M>* root, size_t lvl);
+        	void print_tree(kd_node<dim, M>* root, size_t lvl) const;
 
         	/*!
         	 * \brief query the tree for the nearest neighbor
         	 * \param[in] vec query node
         	 * \param[out] M meta data
         	 */
-        	M query(const MathVector<dim, M>& vec);
+        	M query(const MathVector<dim, M>& vec) const;
          };
 	} // namespace membrane_potential_mapping
 } // namespace ug

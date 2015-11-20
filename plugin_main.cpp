@@ -91,10 +91,10 @@ namespace ug {
 						   //.add_method("build_tree_from_memory", static_cast<void (TMapper::*)(const std::vector<std::pair<std::vector<number>, number> >&)> (&TMapper::build_tree), grp)
 						   //.add_method("add_node_with_meta", static_cast<void (TMapper::*)(const std::pair<std::vector<number>, number>&)> (&TMapper::add_node), grp)
 						   .add_method("add_node_with_meta", static_cast<void (TMapper::*)(const std::vector<number>&, const number&)> (&TMapper::add_node), grp)
-						   .add_method("get_data_from_nn", static_cast<number (TMapper::*)(const std::vector<number>&)> (&TMapper::get_data_from_nearest_neighbor), grp)
+						   .add_method("get_data_from_nn", static_cast<number (TMapper::*)(const std::vector<number>&) const> (&TMapper::get_data_from_nearest_neighbor), grp)
 							#ifndef UG_FOR_VRL
 						   //.add_method("add_node_with_meta_mv", static_cast<void (TMapper::*)(const std::pair<MathVector<3, number>, number>&)> (&TMapper::add_node), grp)
-						   .add_method("get_data_from_nn_mv", static_cast<number (TMapper::*)(const MathVector<3, number>&)> (&TMapper::get_data_from_nearest_neighbor), grp)
+						   .add_method("get_data_from_nn_mv", static_cast<number (TMapper::*)(const MathVector<3, number>&) const> (&TMapper::get_data_from_nearest_neighbor), grp)
 							#endif
 						   ;
 

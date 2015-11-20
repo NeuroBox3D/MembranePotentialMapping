@@ -25,7 +25,7 @@ namespace ug {
 		/// ctor
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
-		kd_tree<dim, M>::kd_tree() : m_visited(0), m_pRoot(NULL), m_pWps(NULL) {
+		kd_tree<dim, M>::kd_tree() : m_pRoot(NULL), m_pWps(NULL) {
 		}
 
 	    /////////////////////////////////////////////////////////
@@ -139,7 +139,7 @@ namespace ug {
 		/// make_tree
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
-		void kd_tree<dim, M>::nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, size_t i, kd_node<dim, M> **best, M *best_dist) {
+		void kd_tree<dim, M>::nearest(kd_node<dim, M> *root, kd_node<dim, M> *nd, size_t i, kd_node<dim, M> **best, M *best_dist) const {
 			M d;
 			M dx;
 			M dx_squared;
@@ -150,7 +150,7 @@ namespace ug {
 			dx = root->m_coords[i] - nd->m_coords[i];
 			dx_squared = dx * dx;
 
-			m_visited++;
+			//m_visited++;
 
 			if (!*best || d < *best_dist) {
 			   *best_dist = d;
@@ -205,7 +205,7 @@ namespace ug {
        	}
 
 		template <size_t dim, typename M>
-        void kd_tree<dim, M>::print_tree(kd_node<dim, M>* root, size_t lvl) {
+        void kd_tree<dim, M>::print_tree(kd_node<dim, M>* root, size_t lvl) const {
 			// traverse in depth and print nodes
 			if (!root) return;
 			UG_LOG(std::string(lvl, ' ')<<"(");
@@ -219,7 +219,7 @@ namespace ug {
 		/// query
 	    /////////////////////////////////////////////////////////
 		template <size_t dim, typename M>
-        M kd_tree<dim, M>::query(const MathVector<dim, M>& vec) {
+        M kd_tree<dim, M>::query(const MathVector<dim, M>& vec) const {
         	/// meta value
         	M meta = 0;
 
