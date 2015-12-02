@@ -67,6 +67,8 @@ option(MPMNEURON_STATIC "Use static NEURON build?" ${MPMNEURON_STATIC})
 message(STATUS "Info: NEURON static:   " ${MPMNEURON_STATIC} " (options are: ON, OFF)")
 message(STATUS "")
 
+option(SHELLTYPE "The type of shell that should be used: (options are none, readline)" "none")
+
 # check for the presence of the NEURON API
 if (NOT MPMNEURON)
    message(STATUS "NEURON API is off, you can turn it on by -DMPMNEURON=/path/to/NEURON/install")
@@ -346,7 +348,7 @@ else(buildEmbeddedPlugins)
         add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMVGCC} STREQUAL "ON")
 
-   if (${SHELLTYPE} STREQUAL "readline")
+   if(${SHELLTYPE} STREQUAL "readline")
 	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
    else(${SHELLTYPE} STREQUAL "readline")
 	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
