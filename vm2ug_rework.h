@@ -13,7 +13,6 @@
 /// includes
 #include "kdtree/kd_tree.h"
 
-
 /*! \defgroup mpm_plugin Membrane Potential Mapping plugin
  * \ingroup plugins_experimental
  * \{

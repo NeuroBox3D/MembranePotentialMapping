@@ -7,8 +7,8 @@
  */
 
 /// guard
-#ifndef  __H__UG__MEMBRANE_POTENTIAL_MAPPING__NEURON_MPM__
-#define  __H__UG__MEMBRANE_POTENTIAL_MAPPING__NEURON_MPM__
+#ifndef  __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_MPM__
+#define  __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_MPM__
 
 /// includes
 #include "vm2ug_rework.h"
@@ -78,4 +78,4 @@ namespace ug {
 } /// end namespace ug
 //<! \}
 
-#endif ///  __H__UG__MEMBRANE_POTENTIAL_MAPPING__NEURON_MPM__
+#endif ///  __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_MPM__

@@ -9,6 +9,9 @@
 #ifndef __H__UG__MEMBRANE_POTENTIAL_MAPPING__KD_NODE__
 #define __H__UG__MEMBRANE_POTENTIAL_MAPPING__KD_NODE__
 
+#include <cstddef>
+#include <ostream>
+
 /* \defgroup mpm_plugin Membrane Potential Mapping plugin
  * \ingroup plugins_experimental
  * \{
