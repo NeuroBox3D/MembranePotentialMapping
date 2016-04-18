@@ -23,15 +23,16 @@ namespace ug {
 		/*!
 		 * \brief
 		 */
+		template <size_t dim>
 		class Vm2uGMPM {
 			/// private non-static members
-			SmartPtr<Mapper<3, number> > m_mapper;
+			SmartPtr<Mapper<dim, number> > m_mapper;
 
 			public:
 			/*!
 			 * \brief dtor
 			 */
-			Vm2uGMPM() : m_mapper(make_sp(new Mapper<3, number>())) {
+			Vm2uGMPM() : m_mapper(make_sp(new Mapper<dim, number>())) {
 
 			}
 
@@ -61,7 +62,7 @@ namespace ug {
 			 * \return \c membrane potential
 			 */
 			inline number get_vm(number x, number y, number z) {
-				return get_vm(MathVector<3>(x, y, z));
+				return this->get_vm(MathVector<3>(x, y, z));
 			}
 
 			/*!
@@ -70,7 +71,7 @@ namespace ug {
 			 *
 			 * \return \c membrane potential
 			 */
-			inline number get_vm(const MathVector<3>& vec) {
+			inline number get_vm(const MathVector<dim>& vec) {
 				return m_mapper->get_data_from_nearest_neighbor(vec);
 			}
 		};
