@@ -42,6 +42,7 @@ set(MPMVGCC ON)
 set(MPMOpenMP OFF)
 set(MPMNEURON_REVISION ON)
 set(MPMNEURON_STATIC ON)
+set(SHELLTYPE "none")
 
 # show optional arguments for the plugin
 message(STATUS "")
@@ -49,30 +50,33 @@ message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM
 
 # enable the boost testsuite
 option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
-message(STATUS "Info: Testsuite:       " ${MPMTestsuite} " (options are: ON, OFF)")
+message(STATUS "      Testsuite:       " ${MPMTestsuite} " (options are: ON, OFF)")
 
 # which channel type
 option(MPMVGCC "Build VGCC:    " ${MPMVGCC})
-message(STATUS "Info: VGCC:            " ${MPMVGCC} " (options are: ON, OFF)")
+message(STATUS "      VGCC:            " ${MPMVGCC} " (options are: ON, OFF)")
 
 # build with openmp 
 option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
-message(STATUS "Info: OpenMP:          " ${MPMOpenMP} " (options are: ON, OFF)")
+message(STATUS "      OpenMP:          " ${MPMOpenMP} " (options are: ON, OFF)")
 
 # use head NEURON revision or pre 7.3
 option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_REVISION})
-message(STATUS "Info: NEURON head rev: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
+message(STATUS "      NEURON_REVISION: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
 
 option(MPMNEURON_STATIC "Use static NEURON build?" ${MPMNEURON_STATIC})
-message(STATUS "Info: NEURON static:   " ${MPMNEURON_STATIC} " (options are: ON, OFF)")
-message(STATUS "")
+message(STATUS "      NEURON_STATIC:   " ${MPMNEURON_STATIC} " (options are: ON, OFF)")
 
 option(SHELLTYPE "The type of shell that should be used: (options are none, readline)" "none")
+message(STATUS "      SHELLTYPE:       " ${SHELLTYPE} " (options are none, readline)")
+
 
 # check for the presence of the NEURON API
 if (NOT MPMNEURON)
-   message(STATUS "NEURON API is off, you can turn it on by -DMPMNEURON=/path/to/NEURON/install")
+	message(STATUS "      NEURON:          OFF (turn Neuron API on using -DMPMNEURON=/path/to/NEURON/install")
 else (NOT MPMNEURON)
+	message(STATUS "      NEURON:      " $(MPMNEURON))
+
    # check for 64 or 32 bit - works only if target and build host are identically 
    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
       set(MPMNEURON_ARCH "x86_64")
@@ -160,6 +164,7 @@ else (NOT MPMNEURON)
        message(STATUS "Readline library not found - you need SHELLTYPE readline now.")
    endif(READLINE_FOUND)
 endif(NOT MPMNEURON)
+
 
 # include the definitions and dependencies for ug-plugins.
 include(${UG_ROOT_CMAKE_PATH}/ug_plugin_includes.cmake)
