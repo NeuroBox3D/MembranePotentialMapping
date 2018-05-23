@@ -126,7 +126,7 @@ void Mapper<dim, M>::add_node(const std::pair<std::vector<number>, M>& node) {
 //////////////////////////////////////////////////////////
 template <size_t dim, typename M>
 void Mapper<dim, M>::add_node(const std::vector<number>& node, const M& data) {
-	add_node(std::make_pair<std::vector<number>, M>(node, data));
+	add_node(std::make_pair(node, data));
 }
 
 //////////////////////////////////////////////////////////
