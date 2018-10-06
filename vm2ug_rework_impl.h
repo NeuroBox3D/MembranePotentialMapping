@@ -15,8 +15,9 @@
 #include "boost/lexical_cast.hpp"
 
 
-/// using directives
-using namespace ug::membrane_potential_mapping;
+namespace ug {
+namespace membrane_potential_mapping {
+
 
 //////////////////////////////////////////////////////////
 /// build_tree
@@ -144,4 +145,7 @@ M Mapper<dim, M>::get_data_from_nearest_neighbor(const std::vector<number>& quer
 	}
 	return m_kdtree.query(coords);
 }
+
+} // end namespace mpm
+} // end namespace ug
 

@@ -54,12 +54,12 @@
 #include <registry/error.h>
 
 
+using namespace ug::bridge;
+
 // begin namespace ug
 namespace ug {
 	// begin namespace mpm
 	namespace membrane_potential_mapping {
-
-		using namespace ug::bridge;
 
 		/*!
 		 * \defgroup mpm_plugin Membrane Potential Mapping plugin
