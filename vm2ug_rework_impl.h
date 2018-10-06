@@ -7,12 +7,8 @@
  */
 
 /// includes
-#include <vector>
-#include <utility>
 #include <sstream>
 #include <fstream>
-
-#include "common/math/ugmath.h"
 
 #include "vm2ug_rework.h"
 

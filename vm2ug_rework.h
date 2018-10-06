@@ -11,7 +11,15 @@
 #define  __H__UG__MEMBRANE_POTENTIAL_MAPPING__VM2UG_REWORK__
 
 /// includes
+#include <cstddef>
+#include <vector>
+#include <utility>
+
+#include "common/types.h"  // for number
+#include "common/math/math_vector_matrix/math_vector.h"  // for MathVector
+
 #include "kdtree/kd_tree.h"
+
 
 /*! \defgroup mpm_plugin Membrane Potential Mapping plugin
  * \ingroup plugins_experimental
