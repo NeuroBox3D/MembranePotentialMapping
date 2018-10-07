@@ -18,6 +18,8 @@
 #include <lib_disc/domain.h>
 #include <lib_grid/lib_grid.h>
 
+#include "mpm_config.h"  // for project-specific defines
+
 //#include "vm2ug.h"
 #include "vm2ug_rework.h"
 #ifdef MPMVGCC

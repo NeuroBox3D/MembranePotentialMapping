@@ -15,6 +15,8 @@
 #include "../inc/unit_test_helper.h"
 #include "../inc/fixtures.cpp"
 
+#include "mpm_config.h"  // for project-specific defines
+
 #ifdef MPMVGCC
 #include "../../bg_default/bg.h"
 #else
