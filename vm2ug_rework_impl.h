@@ -7,20 +7,17 @@
  */
 
 /// includes
-#include <vector>
-#include <utility>
 #include <sstream>
 #include <fstream>
-
-#include "common/math/ugmath.h"
 
 #include "vm2ug_rework.h"
 
 #include "boost/lexical_cast.hpp"
 
 
-/// using directives
-using namespace ug::membrane_potential_mapping;
+namespace ug {
+namespace membrane_potential_mapping {
+
 
 //////////////////////////////////////////////////////////
 /// build_tree
@@ -126,7 +123,7 @@ void Mapper<dim, M>::add_node(const std::pair<std::vector<number>, M>& node) {
 //////////////////////////////////////////////////////////
 template <size_t dim, typename M>
 void Mapper<dim, M>::add_node(const std::vector<number>& node, const M& data) {
-	add_node(std::make_pair<std::vector<number>, M>(node, data));
+	add_node(std::make_pair(node, data));
 }
 
 //////////////////////////////////////////////////////////
@@ -148,4 +145,7 @@ M Mapper<dim, M>::get_data_from_nearest_neighbor(const std::vector<number>& quer
 	}
 	return m_kdtree.query(coords);
 }
+
+} // end namespace mpm
+} // end namespace ug
 

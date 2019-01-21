@@ -13,6 +13,8 @@
 #include "../../mvec.h"
 #include "../../common_typedefs.h"
 
+#include "mpm_config.h"  // for project-specific defines
+
 #ifdef MPMVGCC
 #include "../../bg_default/bg.h"
 #else

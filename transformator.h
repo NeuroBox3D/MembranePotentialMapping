@@ -21,6 +21,8 @@
 #include <map>
 #include <iostream>
 
+#include "mpm_config.h"  // for project-specific defines
+
 #include "common/types.h"
 #define nil NULL
 

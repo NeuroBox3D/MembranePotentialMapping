@@ -18,6 +18,8 @@
 #include <lib_disc/domain.h>
 #include <lib_grid/lib_grid.h>
 
+#include "mpm_config.h"  // for project-specific defines
+
 //#include "vm2ug.h"
 #include "vm2ug_rework.h"
 #ifdef MPMVGCC
@@ -54,12 +56,12 @@
 #include <registry/error.h>
 
 
+using namespace ug::bridge;
+
 // begin namespace ug
 namespace ug {
 	// begin namespace mpm
 	namespace membrane_potential_mapping {
-
-		using namespace ug::bridge;
 
 		/*!
 		 * \defgroup mpm_plugin Membrane Potential Mapping plugin

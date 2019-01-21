@@ -77,217 +77,126 @@ if (NOT MPMNEURON)
 else (NOT MPMNEURON)
 	message(STATUS "      NEURON:      " $(MPMNEURON))
 
-   # check for 64 or 32 bit - works only if target and build host are identically 
-   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-      set(MPMNEURON_ARCH "x86_64")
-   else(CMAKE_SIZEOF_VOID_P EQUAL 8)
-      set(MPMNEURON_ARCH "i686")
-   endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	# check for 64 or 32 bit - works only if target and build host are identically 
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(MPMNEURON_ARCH "x86_64")
+	else(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(MPMNEURON_ARCH "i686")
+	endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
    
-   # check for NEURON API revision (head or pre 7.3)
-   if (MPMNEURON_REVISION)
-      add_definitions(-DMPMNEURON_REVISION)
-       set(MPMNEURON_REVISION_NAME "post 7.3 (head)")
-   else(MPMNEURON_REVISION)
-       set(MPMNEURON_REVISION_NAME "pre 7.3")
-   endif(MPMNEURON_REVISION)
+	# check for NEURON API revision (head or pre 7.3)
+	if (MPMNEURON_REVISION)
+		add_definitions(-DMPMNEURON_REVISION)
+		set(MPMNEURON_REVISION_NAME "post 7.3 (head)")
+	else(MPMNEURON_REVISION)
+		set(MPMNEURON_REVISION_NAME "pre 7.3")
+	endif(MPMNEURON_REVISION)
    
-   # determine system, i. e. windows, linux or mac and set appropriate linking order 
-   if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-      set(MPMNEURON_SYSTEM_EXT "dll")
-   elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-      set(MPMNEURON_SYSTEM_EXT "so")
-   elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-      set(MPMNEURON_SYSTEM_EXT "dylib")
-   endif()
+	# determine system, i. e. windows, linux or mac and set appropriate linking order 
+	if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+		set(MPMNEURON_SYSTEM_EXT "dll")
+	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+		set(MPMNEURON_SYSTEM_EXT "so")
+	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+		set(MPMNEURON_SYSTEM_EXT "dylib")
+	endif()
    
-   # static libraries to use? (remember to compile NEURON static!) -> override in case we have static build...
-   if (MPMNEURON_STATIC)
-      set(MPMNEURON_SYSTEM_EXT "a")
-      # for now set the library manually in the static case (this is just for testing purposes, in general you dont need this line) remove this later
-      # set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time
-      #                                                     -> this means build NEURON without memacs support at configure (this is just some terminal cursor support, which we dont need anyways)
-      #                                                     -> TODO: if build static, NEURON won't load compiled mechanisms (i. e. mod files), we need a way to figure out why
-      # set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/") -> my dynamic build with pre head revision (with memacs and ncurses at run time must be present), note this okay for non-VRL builds
-      # note we could check for static build, then remove from NEURON_LIBRARY_PATH the memacs, but this is not necessary since a non-available lib/file will be ignored by cmake
-   endif(MPMNEURON_STATIC)
+	# static libraries to use? (remember to compile NEURON static!) -> override in case we have static build...
+	if (MPMNEURON_STATIC)
+		set(MPMNEURON_SYSTEM_EXT "a")
+		# for now set the library manually in the static case (this is just for testing purposes, in general you dont need this line) remove this later
+		# set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time
+		#                                                     -> this means build NEURON without memacs support at configure (this is just some terminal cursor support, which we dont need anyways)
+		#                                                     -> TODO: if build static, NEURON won't load compiled mechanisms (i. e. mod files), we need a way to figure out why
+		# set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/") -> my dynamic build with pre head revision (with memacs and ncurses at run time must be present), note this okay for non-VRL builds
+		# note we could check for static build, then remove from NEURON_LIBRARY_PATH the memacs, but this is not necessary since a non-available lib/file will be ignored by cmake
+	endif(MPMNEURON_STATIC)
 
-   set(NEURON_LIBRARY_PATH 
-       ${MPMNEURON}/src/oc/modlreg.o
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
-       ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
+	set(NEURON_LIBRARY_PATH 
+		${MPMNEURON}/src/oc/modlreg.o
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
+		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
    
-   # set the includes for NEURON
-   set(NEURON_INCLUDE_PATH
-         ${MPMNEURON} 
-         ${MPMNEURON}/include
-         ${MPMNEURON}/src
-         ${MPMNEURON}/src/ivoc
-         ${MPMNEURON}/include/nrn 
-         ${MPMNEURON}/src/ivos
-         ${MPMNEURON}/src/oc)
+	# set the includes for NEURON
+	set(NEURON_INCLUDE_PATH
+		${MPMNEURON} 
+		${MPMNEURON}/include
+		${MPMNEURON}/src
+		${MPMNEURON}/src/ivoc
+		${MPMNEURON}/include/nrn 
+		${MPMNEURON}/src/ivos
+		${MPMNEURON}/src/oc)
 
-   message(STATUS "Note: NEURON v7.3 is recommended!")
-   message(STATUS "Note: SHELLTYPE=readline is recommended!")
+	message(STATUS "Note: NEURON v7.3 is recommended!")
+	message(STATUS "Note: SHELLTYPE=readline is recommended!")
          
-   # NEURON required linking to readline (this fixes the issue, that SHELLTYPE=readline was required previously!)
-   include(FindReadline.cmake)
+	# NEURON required linking to readline (this fixes the issue, that SHELLTYPE=readline was required previously!)
+	include(FindReadline.cmake)
 
-   # use additional includes for NEURON
-   include_directories(${NEURON_INCLUDE_PATH})
-
-   # definition for usage in source code, if we have no NEURON API then we just use the membrane potential mapping plugin without NEURON API dependent features for convenience
-   add_definitions(-DMPMNEURON)
+	# use additional includes for NEURON
+	include_directories(${NEURON_INCLUDE_PATH})
    
-   # status report - NEURON arch and OS
-   message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
+	# status report - NEURON arch and OS
+	message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
 
-   # output information on success or failure
-   message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
+	# output information on success or failure
+	message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
    
-   # check for readline support
-   if (READLINE_FOUND)
-       message(STATUS "Readline library was found (${READLINE_LIBRARY})")
-   else(READLINE_FOUND)
-       message(STATUS "Readline library not found - you need SHELLTYPE readline now.")
-   endif(READLINE_FOUND)
+	# check for readline support
+	if (READLINE_FOUND)
+		message(STATUS "Readline library was found (${READLINE_LIBRARY})")
+	else(READLINE_FOUND)
+		message(STATUS "Readline library not found - you need SHELLTYPE readline now.")
+	endif(READLINE_FOUND)
 endif(NOT MPMNEURON)
 
 
 # include the definitions and dependencies for ug-plugins.
 include(${UG_ROOT_CMAKE_PATH}/ug_plugin_includes.cmake)
 
-if(NOT MPMNEURON)
 # set the sources 
 set(SOURCES_simple
-                     kdtree/kd_tree.cpp
-			         #vm2ug.cpp
-			         plugin_main.cpp
-			         bg_simple/bg.cpp
-			         bg_simple/my_commands.cpp
-			         bg_simple/solve.cpp
-			         bg_simple/gating.cpp
-                     bg_simple/spannung.cpp
-                     a_u_x/a_u_x_bridge.cpp)
+	kdtree/kd_tree.cpp
+	#vm2ug.cpp
+	plugin_main.cpp
+	bg_simple/bg.cpp
+	bg_simple/my_commands.cpp
+	bg_simple/solve.cpp
+	bg_simple/gating.cpp
+	bg_simple/spannung.cpp
+	a_u_x/a_u_x_bridge.cpp)
 
 set(SOURCES_default  
-                     kdtree/kd_tree.cpp
-                     #vm2ug.cpp 
-                     plugin_main.cpp
-                     bg_default/spannung.cpp
-                     bg_default/my_commands.cpp
-                     bg_default/bg.cpp
-                     bg_default/solve.cpp
-                     bg_default/gating.cpp
-                     a_u_x/a_u_x_bridge.cpp)
-                     
-else(NOT MPMNEURON)
-   # simple sources for VGCCs
-   set(SOURCES_simple
-                     kdtree/kd_tree.cpp
-			         #vm2ug.cpp
-			         plugin_main.cpp
-			         bg_simple/bg.cpp
-			         bg_simple/my_commands.cpp
-			         bg_simple/solve.cpp
-			         bg_simple/gating.cpp
-                     bg_simple/spannung.cpp
-                     a_u_x/a_u_x_bridge.cpp
-                     transformator.cpp)
+	kdtree/kd_tree.cpp
+	#vm2ug.cpp 
+	plugin_main.cpp
+	bg_default/spannung.cpp
+	bg_default/my_commands.cpp
+	bg_default/bg.cpp
+	bg_default/solve.cpp
+	bg_default/gating.cpp
+	a_u_x/a_u_x_bridge.cpp)
 
-   # default sources for VGCCs 
-   set(SOURCES_default  
-               kdtree/kd_tree.cpp
-             #  vm2ug.cpp 
-               plugin_main.cpp
-               bg_default/spannung.cpp
-               bg_default/my_commands.cpp
-               bg_default/bg.cpp
-               bg_default/solve.cpp
-               bg_default/gating.cpp
-               a_u_x/a_u_x_bridge.cpp
-               transformator.cpp)
-endif(NOT MPMNEURON)
+# add NEURON-specific sources
+if (MPMNEURON)
+	set(SOURCES_simple ${SOURCES_simple} transformator.cpp)
+	set(SOURCES_default ${SOURCES_default} transformator.cpp)
+endif (MPMNEURON)
 
 # set sources for unit tests
 set(SOURCES_TEST unit_tests/src/tests.cpp)
-		
-
-## ANN (requirement for vm2ug) #################################################
-#
-## get the path to annlib and set annlib include path and linker options
-#option(ANN "Sets the path in which ann shall be searched." OFF)
-#
-#if(ANN)
-#    # the user can suply a ANN for his own compiled ANN   
-#    set(INTERNAL_ANN_PATH "${ANN}")
-#    message(STATUS "Info: ANN is ON, using user provided path ${ANN}")
-#else(ANN)
-#    UGInstall("ANN" INTERNAL_ANN_PATH)   	 
-#    message(STATUS "Info: ANN is ON, using uginstall provided path ${INTERNAL_ANN_PATH}")    
-#endif(ANN)
-#
-#
-## find includes
-#FIND_PATH(ANN_INCLUDE_DIR ANN/ANN.h PATHS ${INTERNAL_ANN_PATH}/include)
-#IF (ANN_INCLUDE_DIR STREQUAL "ANN_INCLUDE_DIR-NOTFOUND")
-#	MESSAGE(FATAL_ERROR "ERROR: Could not find ANN header file ANN.h in ${INTERNAL_ANN_PATH}/include.")
-#ELSE (ANN_INCLUDE_DIR STREQUAL "ANN_INCLUDE_DIR-NOTFOUND")
-#	MESSAGE(STATUS "Info: ANN include:   ${ANN_INCLUDE_DIR}/ANN/ANN.h")
-#ENDIF (ANN_INCLUDE_DIR STREQUAL "ANN_INCLUDE_DIR-NOTFOUND")
-#
-## find libraries
-#SET(ANN_NAMES ${ANN_NAMES} ANN)
-#FIND_LIBRARY(ANN_LIBRARY NAMES ${ANN_NAMES} PATHS ${INTERNAL_ANN_PATH}/lib)
-#IF (ANN_LIBRARY STREQUAL "ANN_LIBRARY-NOTFOUND")
-#	MESSAGE(FATAL_ERROR "ERROR: Could not find ANN libraries.")
-#ELSE (ANN_LIBRARY STREQUAL "ANN_LIBRARY-NOTFOUND")
-#	MESSAGE(STATUS "Info: ANN library:   ${ANN_LIBRARY}")
-#ENDIF (ANN_LIBRARY STREQUAL "ANN_LIBRARY-NOTFOUND")
-#
-#IF (ANN_LIBRARY AND ANN_INCLUDE_DIR)
-#	SET(ANN_LIBRARIES ${ANN_LIBRARY})
-#	SET(ANN_FOUND "YES")
-#ELSE (ANN_LIBRARY AND ANN_INCLUDE_DIR)
-#	SET(ANN_FOUND "NO")
-#ENDIF (ANN_LIBRARY AND ANN_INCLUDE_DIR)
-#
-#IF (ANN_FOUND)
-#	include_directories(${ANN_INCLUDE_DIR})
-#	set(linkLibraries ${linkLibraries} ${ANN_LIBRARY})
-#endif(ANN_FOUND)
-
-#### previous detection method (not working well enough) ####
-## get the path to annlib and set annlib include path
-#option(ANNLIB "Sets the path in which annlib shall be searched." OFF)
-#
-#if(NOT ANNLIB)
-#	message(FATAL_ERROR "ERROR: libann is required. Please set the option -DANNLIB=path_to_libann.")
-#endif(NOT ANNLIB)
-#
-## add include directoris for ANNLIB
-#find_library(ANNLIB_LIBS NAMES ANN PATHS ${ANNLIB}/lib)
-#include_directories(${ANNLIB}/include)
-#
-#if(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-#	message(FATAL_ERROR "ERROR: Couldn't find ANNLIB in the specified path: " ${ANNLIB}/lib)
-#else(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
-#	include_directories(${ANNLIB}/include)		
-#	message(STATUS "ANN Library API is on (by -ANNLIB=${ANNLIB}).")
-#	message(STATUS "")
-#endif(${ANNLIB_LIBS} STREQUAL "ANNLIB_LIBS-NOTFOUND")
 
 ################################################################################
 
@@ -307,34 +216,28 @@ if (${MPMOpenMP} STREQUAL "ON")
     endif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif(${MPMOpenMP} STREQUAL "ON")
 
+
+
+# This will copy the configurable file config_cmake.h to
+# the final configuration header neti_config.h,
+# setting the #defines as given by the current CMake variables.
+configure_file(config_cmake.h ${CMAKE_BINARY_DIR}/mpm_config.h)
+
+
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
-  # detect if NEURON API should be used
-   if (MPMNEURON)
-      ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
+	# detect if NEURON API should be used
+	if (MPMNEURON)
+		ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
 
-      ExportDependencies(${NEURON_LIBRARY_PATH})
-      ExportDependencies(${READLINE_LIBRARY})
+		ExportDependencies(${NEURON_LIBRARY_PATH})
+		ExportDependencies(${READLINE_LIBRARY})
 
-      ExportDefinitions(-DMPMNEURON)
-
-      # if we need head revision set it (this needs to be fixed in mpm plugin code!)
-      if(${MPMNEURON_REVISION} STREQUAL "ON")
-          ExportDefinitions(-DMPMNEURON_REVISION)
-      endif(${MPMNEURON_REVISION} STREQUAL "ON")
-
-   endif(MPMNEURON)
- 
-   # exports for vm2ug (libann) and borg graham style
-   #exportDependencies(${ANN_LIBRARY})
-   #exportIncludes(${ANN_INCLUDE_DIR})
-   #ExportDependencies(${ANNLIB}/lib/libANN.a)	# <-- old
-   #ExportIncludes(${ANNLIB}/include)			# <-- old
-   
+		# if we need head revision set it (this needs to be fixed in mpm plugin code!)
+	endif(MPMNEURON)
+    
 # decide which build of the plugin you want to build
-    if("${MPMVGCC}" STREQUAL "ON")
-		add_definitions(-DMPMVGCC)
-		ExportDefinitions(-DMPMVGCC)
+	if("${MPMVGCC}" STREQUAL "ON")
 		ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES_default})
 	else("${MPMVGCC}" STREQUAL "ON")
 		ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES_simple})
@@ -344,11 +247,9 @@ if(buildEmbeddedPlugins)
 		target_link_libraries (MPMTestsuite ug4 ${NEURON_LIBRARY_PATH}) 
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
-
-# decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
+	# decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
     if(${MPMVGCC} STREQUAL "ON")
-       add_library(MembranePotentialMapping SHARED ${SOURCES_default})
-       add_definitions(-DMPMVGCC) 
+		add_library(MembranePotentialMapping SHARED ${SOURCES_default})
     else(${MPMVGCC} STREQUAL "ON")
         add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
     endif(${MPMVGCC} STREQUAL "ON")
