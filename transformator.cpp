@@ -668,7 +668,7 @@ void Transformator::setup_hoc(number tstart, number tstop, number dt, number fin
 	size_t no_sections = m_sections;
 	std::vector<std::pair<std::vector<number>, number> > local_vms;
 
-	for (size_t k = 0; k < no_sections+1; k++) {
+	for (size_t k = 0; k < no_sections; k++) {
 		hoc_valid_stmt("j = 0", 0);
 		hoc_valid_stmt("current_section = new SectionList()", 0);
 		std::stringstream cmd;
@@ -898,7 +898,7 @@ void Transformator::extract_vms(size_t limit, size_t steps) {
 		}
 
 		if (ret_outer) {
-			for (size_t k = 0; k <= no_sections; k++) {
+			for (size_t k = 0; k < no_sections; k++) {
 				hoc_valid_stmt("j = 0", 0);
 				hoc_valid_stmt("current_section = new SectionList()", 0);
 				std::stringstream cmd;
