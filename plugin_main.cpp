@@ -89,7 +89,7 @@ namespace ug {
 						   /// TODO register all functions - std::pair seems not to be registered!
 						   .add_constructor<void (*)()>("", "", "")
 						   .add_method("build_tree", static_cast<void (TMapper::*)()> (&TMapper::build_tree), grp)
-						   .add_method("build_tree_from_file", static_cast<void (TMapper::*)(const std::string&, const std::string&)> (&TMapper::build_tree), grp)
+						   .add_method("build_tree_from_file", static_cast<void (TMapper::*)(const std::string&)> (&TMapper::build_tree), grp)
 						   //.add_method("build_tree_from_memory", static_cast<void (TMapper::*)(const std::vector<std::pair<std::vector<number>, number> >&)> (&TMapper::build_tree), grp)
 						   //.add_method("add_node_with_meta", static_cast<void (TMapper::*)(const std::pair<std::vector<number>, number>&)> (&TMapper::add_node), grp)
 						   .add_method("add_node_with_meta", static_cast<void (TMapper::*)(const std::vector<number>&, const number&)> (&TMapper::add_node), grp)

@@ -41,8 +41,8 @@ namespace ug {
 			 * \param[in] filename
 			 * \param[in] delimiter
 			 */
-			inline void build_tree(const std::string& filename, const std::string& delimiter) {
-				m_mapper->build_tree(filename, delimiter);
+			inline void build_tree(const std::string& filename) {
+				m_mapper->build_tree(filename);
 			}
 
 			/*!

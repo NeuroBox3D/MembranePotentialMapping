@@ -44,37 +44,39 @@ void Mapper<dim, M>::build_tree(const std::vector<std::pair<MathVector<dim, numb
 /// build_tree
 //////////////////////////////////////////////////////////
 template <size_t dim, typename M>
-void Mapper<dim, M>::build_tree(const std::string& filename, const std::string& delim) {
-	   m_kdtree = kd_tree<dim, M>();
+void Mapper<dim, M>::build_tree(const std::string& filename) {
+	m_kdtree = kd_tree<dim, M>();
 
-	   std::ifstream file(filename.c_str());
-	   UG_COND_THROW(!file, "Could not open data file: " + filename);
+	std::ifstream file(filename.c_str());
+	UG_COND_THROW(!file, "Could not open data file: " + filename);
 
-	   std::string line;
-	   while (std::getline(file, line)) {
-		   /// read data
-		   MathVector<dim, number> node(0.0);
-		   M meta;
-	       std::istringstream iss(line);
-	       std::string s;
+	std::string line;
+	size_t lineNo = 0;
+	while (std::getline(file, line)) {
+		++lineNo;
 
-	       /// coordinates
-	       for (size_t i = 0; i < dim; i++) {
-		        if (!getline(iss, s, delim[m_delimIndex])) break;
-		        node[i] = boost::lexical_cast<number>(s);
-		   }
+		/// read data
+		MathVector<dim, number> node(0.0);
+		std::istringstream iss(line);
 
-	       /// meta data
-	       if (!getline(iss, s, delim[m_delimIndex])) break;
-	       meta = boost::lexical_cast<M>(s);
+		if (! (iss >> node[0]))
+			break;
 
-	       /// add the node
-	       m_kdtree.add_node_meta(node, meta);
-	   }
+		for (size_t i = 1; i < dim; ++i)
+			if ((! (iss >> node[i])))
+				UG_THROW("Reading coordinate " << i << " did not succeed on line " << lineNo << ".");
 
-	   /// finally build the tree
-	   if (!m_kdtree.build_tree())
-		   UG_THROW("KD tree could not be built.");
+		M meta;
+		if (! (iss >> meta))
+			UG_THROW("Reading meta data did not succeed on line " << lineNo << ".");
+
+		/// add the node
+		m_kdtree.add_node_meta(node, meta);
+	}
+
+	/// finally build the tree
+	if (!m_kdtree.build_tree())
+	   UG_THROW("KD tree could not be built.");
 }
 
 //////////////////////////////////////////////////////////

@@ -61,7 +61,7 @@ namespace ug {
 			 * \param[in] filename where the points are stored (with meta data)
 			 * \param[in] delimiter in the file to separate values
 			 */
-			void build_tree(const std::string& filename, const std::string& delim);
+			void build_tree(const std::string& filename);
 
 			/*!
 			 * \brief build populated tree from given vector of pairs
