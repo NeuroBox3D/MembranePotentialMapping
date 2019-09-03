@@ -1,33 +1,58 @@
+##
+ # Copyright (c) 2009-2019: G-CSC, Goethe University Frankfurt
+ #
+ # Author: Stephan Grein
+ # Creation date: 2012-02-02
+ #
+ # This file is part of NeuroBox, which is based on UG4.
+ #
+ # NeuroBox and UG4 are free software: You can redistribute it a #/or modify it
+ # under the terms of the GNU Lesser General Public License version 3
+ # (as published by the Free Software Foundation) with the following additional
+ # attribution requirements (according to LGPL/GPL v3 §7):
+ #
+ # (1) The following notice must be displayed in the appropriate legal notices
+ # of covered and combined works: "Based on UG4 (www.ug4.org/license)".
+ #
+ # (2) The following notice must be displayed at a prominent place in the
+ # terminal output of covered works: "Based on UG4 (www.ug4.org/license)".
+ #
+ # (3) The following bibliography is recommended for citation and must be
+ # preserved in all covered files:
+ # "Reiter, S., Vogel, A., Heppner, I., Rupp, M., and Wittum, G. A massively
+ #   parallel geometric multigrid solver on hierarchically distributed grids.
+ #   Computing and visualization in science 16, 4 (2013), 151-164"
+ # "Vogel, A., Reiter, S., Rupp, M., Nägel, A., and Wittum, G. UG4 -- a novel
+ #   flexible software system for simulating PDE based models on high performance
+ #   computers. Computing and visualization in science 16, 4 (2013), 165-179"
+ # "Stepniewski, M., Breit, M., Hoffer, M. and Queisser, G.
+ #   NeuroBox: computational mathematics in multiscale neuroscience.
+ #   Computing and visualization in science (2019).
+ # "Breit, M. et al. Anatomically detailed and large-scale simulations studying
+ #   synapse loss and synchrony using NeuroBox. Front. Neuroanat. 10 (2016), 8"
+ #
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ # GNU Lesser General Public License for more details.
+ ##
+ 
 ################################################################################
-# Purpose:
-# CMakeLists.txt for the experimental ug plugin membrane_potential_mapping, 
-# here fter we refer to the plugin by the abbreviation mpm in general.
-#
-# Remark: 
-# Adapted by a CMakeLists file from Sebastian Reiter and Andreas Vogel.
-
 # Import note:
 # get v7.3 of nrn from http://www.neuron.yale.edu/ftp/neuron/versions/v7.3/
 # this is supposed to work on all common platforms now
-
+#
 # Notes:
 #   I) Activate plugin by -DMembranePotentialMapping=ON 
 #  II) Activate the boost testsuite by -DMPMTestsuite=ON
 # III) Activate NEURON API by -DMPMNEURON=/path/to/your/local/neuron/install
 #  IV) Decide which NEURON version to use (either HEAD or pre 7.3 branch) by
 #      -DMPMNEURON_REVISION=ON or -DMPMNEURON_REVISION=OFF
-#   V) For now one needs to activate at a minimum the ANN C++ external library 
-#      by -DANNLIB=/path/to/your/local/annlib/install
-
+#
 # Known bugs: 
 #  I) static build won't allow mod files for now, figure out why this is the case
 # II) stringstream's default precision is float, we need to introduce setprecision
 #     parameter in all fiels if necessary ...
-
-# Author: Stephan Grein
-# Created: 2nd of February, 2012
-# See: docs directory for additional informations on the mpm plugin
-#
 ################################################################################
 
 # minimum required CMake version for our project below
@@ -36,35 +61,28 @@ cmake_minimum_required(VERSION 2.6)
 # specify project name
 project(MEMBRANE_POTENTIAL_MAPPING)
 
-# default values for cmake options
-set(MPMTestsuite OFF)
-set(MPMVGCC ON)
-set(MPMOpenMP OFF)
-set(MPMNEURON_REVISION ON)
-set(MPMNEURON_STATIC ON)
-set(SHELLTYPE "none")
 
 # show optional arguments for the plugin
 message(STATUS "")
-message(STATUS "Info: Additional options for the MembranePotentialMapping (-DMPM) plugin:")
+message(STATUS "Additional options for the MembranePotentialMapping (-DMPM) plugin:")
 
 # enable the boost testsuite
-option(MPMTestsuite "Build Testsuite" ${MPMTestsuite})
+option(MPMTestsuite "Build Testsuite" OFF)
 message(STATUS "      Testsuite:       " ${MPMTestsuite} " (options are: ON, OFF)")
 
 # which channel type
-option(MPMVGCC "Build VGCC:    " ${MPMVGCC})
-message(STATUS "      VGCC:            " ${MPMVGCC} " (options are: ON, OFF)")
+option(MPMVGCC "Build VGCC:    " 0)
+message(STATUS "      VGCC:            " ${MPMVGCC} " (options are: 0 (none), 1 (simple), 2 (default))")
 
 # build with openmp 
-option(MPMOpenMP "Build OpenMP:  " ${MPMOpenMP})
+option(MPMOpenMP "Build OpenMP:  " OFF)
 message(STATUS "      OpenMP:          " ${MPMOpenMP} " (options are: ON, OFF)")
 
 # use head NEURON revision or pre 7.3
-option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ${MPMNEURON_REVISION})
+option(MPMNEURON_REVISION "Use head revision of NEURON or pre 7.3 build? " ON)
 message(STATUS "      NEURON_REVISION: " ${MPMNEURON_REVISION} " (options are: ON, OFF)")
 
-option(MPMNEURON_STATIC "Use static NEURON build?" ${MPMNEURON_STATIC})
+option(MPMNEURON_STATIC "Use static NEURON build?" ON)
 message(STATUS "      NEURON_STATIC:   " ${MPMNEURON_STATIC} " (options are: ON, OFF)")
 
 option(SHELLTYPE "The type of shell that should be used: (options are none, readline)" "none")
@@ -166,33 +184,34 @@ endif(NOT MPMNEURON)
 # include the definitions and dependencies for ug-plugins.
 include(${UG_ROOT_CMAKE_PATH}/ug_plugin_includes.cmake)
 
-# set the sources 
-set(SOURCES_simple
+# set the sources
+set(SOURCES
 	kdtree/kd_tree.cpp
-	#vm2ug.cpp
 	plugin_main.cpp
-	bg_simple/bg.cpp
-	bg_simple/my_commands.cpp
-	bg_simple/solve.cpp
-	bg_simple/gating.cpp
-	bg_simple/spannung.cpp
-	a_u_x/a_u_x_bridge.cpp)
+	#a_u_x/a_u_x_bridge.cpp
+)
 
-set(SOURCES_default  
-	kdtree/kd_tree.cpp
-	#vm2ug.cpp 
-	plugin_main.cpp
-	bg_default/spannung.cpp
-	bg_default/my_commands.cpp
-	bg_default/bg.cpp
-	bg_default/solve.cpp
-	bg_default/gating.cpp
-	a_u_x/a_u_x_bridge.cpp)
+if("${MPMVGCC}" STREQUAL "1")
+	set (SOURCES ${SOURCES}
+		bg_simple/bg.cpp
+		bg_simple/my_commands.cpp
+		bg_simple/solve.cpp
+		bg_simple/gating.cpp
+		bg_simple/voltage.cpp
+	)
+elseif("${MPMVGCC}" STREQUAL "2")
+	set (SOURCES ${SOURCES}
+		bg_default/voltage.cpp
+		bg_default/my_commands.cpp
+		bg_default/bg.cpp
+		bg_default/solve.cpp
+		bg_default/gating.cpp
+	)
+endif("${MPMVGCC}" STREQUAL "1")
 
 # add NEURON-specific sources
 if (MPMNEURON)
-	set(SOURCES_simple ${SOURCES_simple} transformator.cpp)
-	set(SOURCES_default ${SOURCES_default} transformator.cpp)
+	set(SOURCES ${SOURCES} transformator.cpp)
 endif (MPMNEURON)
 
 # set sources for unit tests
@@ -236,23 +255,13 @@ if(buildEmbeddedPlugins)
 		# if we need head revision set it (this needs to be fixed in mpm plugin code!)
 	endif(MPMNEURON)
     
-# decide which build of the plugin you want to build
-	if("${MPMVGCC}" STREQUAL "ON")
-		ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES_default})
-	else("${MPMVGCC}" STREQUAL "ON")
-		ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES_simple})
-	endif("${MPMVGCC}" STREQUAL "ON")
+	ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES})
 	
 	if(${MPMTestsuite} STREQUAL "ON")
 		target_link_libraries (MPMTestsuite ug4 ${NEURON_LIBRARY_PATH}) 
 	endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
-	# decide which style of the plugin you want to build: note soon only one style will be available, all other BG channels will be maintained in voltage_gated_channels.
-    if(${MPMVGCC} STREQUAL "ON")
-		add_library(MembranePotentialMapping SHARED ${SOURCES_default})
-    else(${MPMVGCC} STREQUAL "ON")
-        add_library(MembranePotentialMapping SHARED ${SOURCES_simple})
-    endif(${MPMVGCC} STREQUAL "ON")
+	add_library(MembranePotentialMapping SHARED ${SOURCES})
 
    if(${SHELLTYPE} STREQUAL "readline")
 	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
