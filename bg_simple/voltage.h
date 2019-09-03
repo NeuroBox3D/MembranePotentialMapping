@@ -37,6 +37,7 @@
  * GNU Lesser General Public License for more details.
  */
 
+
 #ifndef UG__PLUGINS__MEMBRANE_POTENTIAL_MAPPING__BG_SIMPLE__VOLTAGE_H
 #define UG__PLUGINS__MEMBRANE_POTENTIAL_MAPPING__BG_SIMPLE__VOLTAGE_H
 
