@@ -37,108 +37,127 @@
  * GNU Lesser General Public License for more details.
  */
 
-/// guard
 #ifndef UG__PLUGINS__MEMBRANE_POTENTIAL_MAPPING__VM2UG_H
 #define UG__PLUGINS__MEMBRANE_POTENTIAL_MAPPING__VM2UG_H
 
-/// includes
 #include <cstddef>
 #include <vector>
 #include <utility>
-
 #include "common/types.h"  // for number
 #include "common/math/math_vector_matrix/math_vector.h"  // for MathVector
-
-#include "kdtree/kd_tree.h"
-
+#include "kdtree/kd_tree.h" // for kdtree
 
 /*! \defgroup mpm_plugin Membrane Potential Mapping plugin
  * \ingroup plugins_experimental
  * \{
  */
 namespace ug {
-namespace membrane_potential_mapping {
+  namespace membrane_potential_mapping {
 
+  template <size_t dim, typename M> class Mapper {
+  private:
+    //// non-static members
+    kd_tree<dim, M> m_kdtree;
+    size_t m_delimIndex;
 
-template <size_t dim, typename M> class Mapper {
-private:
-	//// non-static members
-	kd_tree<dim, M> m_kdtree;
-	size_t m_delimIndex;
+    /// common typedefs
+    typedef typename std::vector<std::pair<MathVector<dim, number>, M> >::const_iterator CITVPMNM;
+    typedef typename std::vector<std::pair<std::vector<number>, M> >::const_iterator CITVPVNM;
 
-	/// common typedefs
-	typedef typename std::vector<std::pair<MathVector<dim, number>, M> >::const_iterator CITVPMNM;
-	typedef typename std::vector<std::pair<std::vector<number>, M> >::const_iterator CITVPVNM;
+  public:
+    /*!
+    * \brief ctor
+    */
+    Mapper()
+    : m_kdtree(kd_tree<dim, M>()),
+      m_delimIndex(0) { }
 
-public:
-	/*!
-	 * \brief ctor
-	 */
-	Mapper() : m_kdtree(kd_tree<dim, M>()), m_delimIndex(0) {
+   /*!
+    * \brief build an empty tree
+    */
+   void build_tree();
 
-	}
+   /*!
+    * \brief build populated tree from given vector of pairs
+    * \param[in] points to be used for the tree construction
+    */
+   void build_tree
+   (
+      const std::vector<std::pair<MathVector<dim, number>, M> >& points
+   );
 
-	/*!
-	 * \brief build an empty tree
-	 */
-	void build_tree();
+   /*!
+    * \brief build populated tree from given file
+    * \param[in] filename where the points are stored (with meta data)
+    * \param[in] delimiter in the file to separate values
+    */
+   void build_tree
+   (
+     const std::string& filename
+   );
 
-	/*!
-	 * \brief build populated tree from given vector of pairs
-	 * \param[in] points to be used for the tree construction
-	 */
-	void build_tree(const std::vector<std::pair<MathVector<dim, number>, M> >& points);
+    /*!
+    * \brief build populated tree from given vector of pairs
+    * \param[in] points to be used for the tree construction
+    */
+   void build_tree
+   (
+     const std::vector<std::pair<std::vector<number>, M> >& points
+   );
+ 
+   /*!
+    * \brief add a single node
+    * \param[in] node a single point with meta data
+    */
+   void add_node
+   (
+     const std::pair<MathVector<dim, number>, M>& node
+   );
 
-	/*!
-	 * \brief build populated tree from given file
-	 * \param[in] filename where the points are stored (with meta data)
-	 * \param[in] delimiter in the file to separate values
-	 */
-	void build_tree(const std::string& filename);
+   /*!
+    * \brief add a single node
+    * \param[in] node a single point with meta data
+    */
+   void add_node
+   (
+     const std::pair<std::vector<number>, M>& node
+   );
 
-	/*!
-	 * \brief build populated tree from given vector of pairs
-	 * \param[in] points to be used for the tree construction
-	 */
-	void build_tree(const std::vector<std::pair<std::vector<number>, M> >& points);
+  /*!
+   * \brief add a single node with a value
+   * \param[in] node a single point with meta data
+   * \param[in] value the meta data
+   */
+  inline void add_node
+  (
+    const std::vector<number>&, 
+    const M& value
+  );
 
-	/*!
-	 * \brief add a single node
-	 * \param[in] node a single point with meta data
-	 */
-	void add_node(const std::pair<MathVector<dim, number>, M>& node);
+   /*!
+    * \brief query the tree for the data of the very nearest neighbor
+    * \param[in] query coordinates of a given point
+    * \return \c data
+    */
+   M get_data_from_nearest_neighbor
+   (
+     const MathVector<dim, number>& query
+   ) const;
+    
 
-	/*!
-	 * \brief add a single node
-	 * \param[in] node a single point with meta data
-	 */
-	void add_node(const std::pair<std::vector<number>, M>& node);
-
-	/*!
-	 * \brief add a single node with a value
-	 * \param[in] node a single point with meta data
-	 * \param[in] value the meta data
-	 */
-	inline void add_node(const std::vector<number>&, const M& value);
-
-	/*!
-	 * \brief query the tree for the data of the very nearest neighbor
-	 * \param[in] query coordinates of a given point
-	 */
-	M get_data_from_nearest_neighbor(const MathVector<dim, number>& query) const;
-
-	/*!
-	 * \brief query the tree for the data of the very nearest neighbor
-	 * \param[in] query coordinates of a given point
-	 */
-	M get_data_from_nearest_neighbor(const std::vector<number>& query) const;
-
-};
-
-} // end namespace mpm
+   /*!
+    * \brief query the tree for the data of the very nearest neighbor
+    * \param[in] query coordinates of a given point
+    * \return \c data
+    */
+   M get_data_from_nearest_neighbor
+   (
+     const std::vector<number>& query
+   ) const;
+   };
+  } // end namespace mpm
 } // end namespace ug
 //<! \}
 
 #include "vm2ug_impl.h"
-
 #endif // UG__PLUGINS__MEMBRANE_POTENTIAL_MAPPING__VM2UG_H
