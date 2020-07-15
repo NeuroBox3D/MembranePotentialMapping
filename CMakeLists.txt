@@ -38,21 +38,10 @@
  ##
  
 ################################################################################
-# Import note:
-# get v7.3 of nrn from http://www.neuron.yale.edu/ftp/neuron/versions/v7.3/
-# this is supposed to work on all common platforms now
-#
-# Notes:
-#   I) Activate plugin by -DMembranePotentialMapping=ON 
-#  II) Activate the boost testsuite by -DMPMTestsuite=ON
-# III) Activate NEURON API by -DMPMNEURON=/path/to/your/local/neuron/install
-#  IV) Decide which NEURON version to use (either HEAD or pre 7.3 branch) by
-#      -DMPMNEURON_REVISION=ON or -DMPMNEURON_REVISION=OFF
-#
-# Known bugs: 
-#  I) static build won't allow mod files for now, figure out why this is the case
-# II) stringstream's default precision is float, we need to introduce setprecision
-#     parameter in all fiels if necessary ...
+# Import notes:
+# Minimum required NEURON version is v7.3. The package nrn is required from the
+# following website: http://www.neuron.yale.edu/ftp/neuron/versions/v7.3/
+# This will make MembranePotentialMapping work with OSX, Linux and Windows
 ################################################################################
 
 # minimum required CMake version for our project below
@@ -91,93 +80,102 @@ message(STATUS "      SHELLTYPE:       " ${SHELLTYPE} " (options are none, readl
 
 # check for the presence of the NEURON API
 if (NOT MPMNEURON)
-	message(STATUS "      NEURON:          OFF (turn Neuron API on using -DMPMNEURON=/path/to/NEURON/install")
+  message(STATUS "      NEURON:          OFF (turn Neuron API on using -DMPMNEURON=/path/to/NEURON/installation")
 else (NOT MPMNEURON)
-	message(STATUS "      NEURON:      " $(MPMNEURON))
+  message(STATUS "      NEURON:      " $(MPMNEURON))
 
-	# check for 64 or 32 bit - works only if target and build host are identically 
-	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(MPMNEURON_ARCH "x86_64")
-	else(CMAKE_SIZEOF_VOID_P EQUAL 8)
-		set(MPMNEURON_ARCH "i686")
-	endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  # check for 64 or 32 bit - works only if target and build host are identically 
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(MPMNEURON_ARCH "x86_64")
+  else(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(MPMNEURON_ARCH "i686")
+  endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
    
-	# check for NEURON API revision (head or pre 7.3)
-	if (MPMNEURON_REVISION)
-		add_definitions(-DMPMNEURON_REVISION)
-		set(MPMNEURON_REVISION_NAME "post 7.3 (head)")
-	else(MPMNEURON_REVISION)
-		set(MPMNEURON_REVISION_NAME "pre 7.3")
-	endif(MPMNEURON_REVISION)
+  # check for NEURON API revision (head or pre 7.3)
+  if (MPMNEURON_REVISION)
+    add_definitions(-DMPMNEURON_REVISION)
+    set(MPMNEURON_REVISION_NAME "post 7.3 (head)")
+  else(MPMNEURON_REVISION)
+    set(MPMNEURON_REVISION_NAME "pre 7.3")
+  endif(MPMNEURON_REVISION)
    
-	# determine system, i. e. windows, linux or mac and set appropriate linking order 
-	if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-		set(MPMNEURON_SYSTEM_EXT "dll")
-	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-		set(MPMNEURON_SYSTEM_EXT "so")
-	elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-		set(MPMNEURON_SYSTEM_EXT "dylib")
-	endif()
+  # determine system, i. e. windows, linux or mac and set appropriate linking order 
+  if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(MPMNEURON_SYSTEM_EXT "dll")
+  elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(MPMNEURON_SYSTEM_EXT "so")
+  elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(MPMNEURON_SYSTEM_EXT "dylib")
+  endif()
    
-	# static libraries to use? (remember to compile NEURON static!) -> override in case we have static build...
-	if (MPMNEURON_STATIC)
-		set(MPMNEURON_SYSTEM_EXT "a")
-		# for now set the library manually in the static case (this is just for testing purposes, in general you dont need this line) remove this later
-		# set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/") -> my static build with head revision (without memacs please otherwise we need ncurses at compile/linking time
-		#                                                     -> this means build NEURON without memacs support at configure (this is just some terminal cursor support, which we dont need anyways)
-		#                                                     -> TODO: if build static, NEURON won't load compiled mechanisms (i. e. mod files), we need a way to figure out why
-		# set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/") -> my dynamic build with pre head revision (with memacs and ncurses at run time must be present), note this okay for non-VRL builds
-		# note we could check for static build, then remove from NEURON_LIBRARY_PATH the memacs, but this is not necessary since a non-available lib/file will be ignored by cmake
-	endif(MPMNEURON_STATIC)
+  # For now static libraries for NEURON are used (Remember to compile NEURON fully static!)
+  # If ug4 build is STATIC as well, NEURON .modfiles will not be loaded, thus we need DYNAMIC build for ug4 instead.
+  if (MPMNEURON_STATIC)
+    set(MPMNEURON_SYSTEM_EXT "a")
+      # My static NEURON build with head revision (Without memacs (terminal cursosr) 
+      # support (otherwise ncurses will ne required at compile/link time and this 
+      # may not be available on all platforms we want to support)
+      # set(MPMNEURON "/Users/stephan/Code/hg/neuron/nrn/")
 
-	set(NEURON_LIBRARY_PATH 
-		${MPMNEURON}/src/oc/modlreg.o
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
-		${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
-   
-	# set the includes for NEURON
-	set(NEURON_INCLUDE_PATH
-		${MPMNEURON} 
-		${MPMNEURON}/include
-		${MPMNEURON}/src
-		${MPMNEURON}/src/ivoc
-		${MPMNEURON}/include/nrn 
-		${MPMNEURON}/src/ivos
-		${MPMNEURON}/src/oc)
+      # My dynamic build of NEURON with pre v7.3 version (memacs and ncurses must be installed and present at runtime).
+      # Note, that this is okay for non-VRL builds in general but not for VRL builds: Issues could possibly happen.
+      # set(MPMNEURON "/Users/stephan/Code/git/neuron/nrn-7.3/")
+  
+      # Note: One could check for static build, then remove from NEURON_LIBRARY_PATH memacs, 
+      #       but this is not necessary since a non-avaialble lib or file will be ignored
+      #       by CMake and throw at most a warning: Anyway this should be fixed in the future.
+  endif(MPMNEURON_STATIC)
 
-	message(STATUS "Note: NEURON v7.3 is recommended!")
-	message(STATUS "Note: SHELLTYPE=readline is recommended!")
+
+  # Libraries are set manually for now, should provide a CMakeFind command for NEURON installations
+  set(NEURON_LIBRARY_PATH 
+    ${MPMNEURON}/src/oc/modlreg.o
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/nvkludge.o 
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnoc.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrniv.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivoc.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/liboc.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libneuron_gnu.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libscopmath.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsparse13.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libsundials.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libnrnmpi.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmemacs.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libmeschach.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libivos.${MPMNEURON_SYSTEM_EXT}
+    ${MPMNEURON}/${MPMNEURON_ARCH}/lib/libocxt.${MPMNEURON_SYSTEM_EXT})
+   
+  # set the includes for NEURON
+  set(NEURON_INCLUDE_PATH
+    ${MPMNEURON} 
+    ${MPMNEURON}/include
+    ${MPMNEURON}/src
+    ${MPMNEURON}/src/ivoc
+    ${MPMNEURON}/include/nrn 
+    ${MPMNEURON}/src/ivos
+    ${MPMNEURON}/src/oc)
+
+  message(STATUS "Note: NEURON v7.3 is recommended!")
+  message(STATUS "Note: SHELLTYPE=readline is recommended!")
          
-	# NEURON required linking to readline (this fixes the issue, that SHELLTYPE=readline was required previously!)
-	include(FindReadline.cmake)
+  # NEURON required linking to readline (this fixes the issue, that SHELLTYPE=readline was required previously!)
+  include(FindReadline.cmake)
 
-	# use additional includes for NEURON
-	include_directories(${NEURON_INCLUDE_PATH})
+  # use additional includes for NEURON
+  include_directories(${NEURON_INCLUDE_PATH})
    
-	# status report - NEURON arch and OS
-	message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
+  # status report - NEURON arch and OS
+  message(STATUS "Detected architecture ${MPMNEURON_ARCH} on ${CMAKE_SYSTEM_NAME} for the NEURON API.")
 
-	# output information on success or failure
-	message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
+  # output information on success or failure
+  message(STATUS "NEURON API is on (by -DMPMNEURON:${MPMNEURON}), you can use the full hoc language of NEURON (as provided by ${MPMNEURON_REVISION_NAME}).")
    
-	# check for readline support
-	if (READLINE_FOUND)
-		message(STATUS "Readline library was found (${READLINE_LIBRARY})")
-	else(READLINE_FOUND)
-		message(STATUS "Readline library not found - you need SHELLTYPE readline now.")
-	endif(READLINE_FOUND)
+  # check for readline support
+  if (READLINE_FOUND)
+    message(STATUS "Readline library was found (${READLINE_LIBRARY})")
+  else(READLINE_FOUND)
+    message(STATUS "Readline library not found - you need SHELLTYPE readline now.")
+  endif(READLINE_FOUND)
 endif(NOT MPMNEURON)
 
 
@@ -186,32 +184,32 @@ include(${UG_ROOT_CMAKE_PATH}/ug_plugin_includes.cmake)
 
 # set the sources
 set(SOURCES
-	kdtree/kd_tree.cpp
-	plugin_main.cpp
-	#a_u_x/a_u_x_bridge.cpp
+  kdtree/kd_tree.cpp
+  plugin_main.cpp
+  #a_u_x/a_u_x_bridge.cpp
 )
 
 if("${MPMVGCC}" STREQUAL "1")
-	set (SOURCES ${SOURCES}
-		bg_simple/bg.cpp
-		bg_simple/my_commands.cpp
-		bg_simple/solve.cpp
-		bg_simple/gating.cpp
-		bg_simple/voltage.cpp
-	)
+  set (SOURCES ${SOURCES}
+    bg_simple/bg.cpp
+    bg_simple/my_commands.cpp
+    bg_simple/solve.cpp
+    bg_simple/gating.cpp
+    bg_simple/voltage.cpp
+  )
 elseif("${MPMVGCC}" STREQUAL "2")
-	set (SOURCES ${SOURCES}
-		bg_default/voltage.cpp
-		bg_default/my_commands.cpp
-		bg_default/bg.cpp
-		bg_default/solve.cpp
-		bg_default/gating.cpp
-	)
+  set (SOURCES ${SOURCES}
+    bg_default/voltage.cpp
+    bg_default/my_commands.cpp
+    bg_default/bg.cpp
+    bg_default/solve.cpp
+    bg_default/gating.cpp
+  )
 endif("${MPMVGCC}" STREQUAL "1")
 
 # add NEURON-specific sources
 if (MPMNEURON)
-	set(SOURCES ${SOURCES} transformator.cpp)
+  set(SOURCES ${SOURCES} transformator.cpp)
 endif (MPMNEURON)
 
 # set sources for unit tests
@@ -221,8 +219,8 @@ set(SOURCES_TEST unit_tests/src/tests.cpp)
 
 # decide if you want to build the boost testsuite executable (MPMTestsuite)
 if(${MPMTestsuite} STREQUAL "ON")
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
-	add_executable(MPMTestsuite ${SOURCES_TEST})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${UG_ROOT_PATH}/bin/)
+  add_executable(MPMTestsuite ${SOURCES_TEST})
 endif(${MPMTestsuite} STREQUAL "ON")
 
 # decide if you want to build membrane_potential_mapping with OMP support
@@ -245,32 +243,32 @@ configure_file(config_cmake.h ${CMAKE_BINARY_DIR}/mpm_config.h)
 
 # create a shared library from the sources and link it against ug4.
 if(buildEmbeddedPlugins)
-	# detect if NEURON API should be used
-	if (MPMNEURON)
-		ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
+  # detect if NEURON API should be used
+  if (MPMNEURON)
+    ExportIncludes(${MPMNEURON} ${MPMNEURON}/include ${MPMNEURON}/src ${MPMNEURON}/src/ivoc ${MPMNEURON}/include/nrn ${MPMNEURON}/src/ivos ${MPMNEURON}/src/oc)
 
-		ExportDependencies(${NEURON_LIBRARY_PATH})
-		ExportDependencies(${READLINE_LIBRARY})
+    ExportDependencies(${NEURON_LIBRARY_PATH})
+    ExportDependencies(${READLINE_LIBRARY})
 
-		# if we need head revision set it (this needs to be fixed in mpm plugin code!)
-	endif(MPMNEURON)
+    # if we need head revision set it (this needs to be fixed in mpm plugin code!)
+  endif(MPMNEURON)
     
-	ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES})
-	
-	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite ug4 ${NEURON_LIBRARY_PATH}) 
-	endif(${MPMTestsuite} STREQUAL "ON")
+  ExportSources(${CMAKE_CURRENT_SOURCE_DIR} ${SOURCES})
+  
+  if(${MPMTestsuite} STREQUAL "ON")
+    target_link_libraries (MPMTestsuite ug4 ${NEURON_LIBRARY_PATH}) 
+  endif(${MPMTestsuite} STREQUAL "ON")
 else(buildEmbeddedPlugins)
-	add_library(MembranePotentialMapping SHARED ${SOURCES})
+  add_library(MembranePotentialMapping SHARED ${SOURCES})
 
    if(${SHELLTYPE} STREQUAL "readline")
-	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
+     target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
    else(${SHELLTYPE} STREQUAL "readline")
-	   target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
+     target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
    endif(${SHELLTYPE} STREQUAL "readline")
-	
-	if(${MPMTestsuite} STREQUAL "ON")
-		target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${linkLibraries})
-	endif(${MPMTestsuite} STREQUAL "ON")
-	
+  
+  if(${MPMTestsuite} STREQUAL "ON")
+    target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${linkLibraries})
+  endif(${MPMTestsuite} STREQUAL "ON")
+  
 endif(buildEmbeddedPlugins)
