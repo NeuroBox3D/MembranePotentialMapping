@@ -1,5 +1,5 @@
 ##
- # Copyright (c) 2009-2019: G-CSC, Goethe University Frankfurt
+ # Copyright (c) 2009-2020: G-CSC, Goethe University Frankfurt
  #
  # Author: Stephan Grein
  # Creation date: 2012-02-02
