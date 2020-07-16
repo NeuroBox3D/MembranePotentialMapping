@@ -270,7 +270,7 @@ else(buildEmbeddedPlugins)
    endif(${SHELLTYPE} STREQUAL "readline")
   else(MPMNEURON)
      target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries}
-  endif(MPMNEURN)
+  endif(MPMNEURON)
   
   if(${MPMTestsuite} STREQUAL "ON")
     target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${linkLibraries})
