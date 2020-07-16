@@ -262,13 +262,15 @@ if(buildEmbeddedPlugins)
 else(buildEmbeddedPlugins)
   add_library(MembranePotentialMapping SHARED ${SOURCES})
  
-  if (MPMNEURON)
+  if(MPMNEURON)
    if(${SHELLTYPE} STREQUAL "readline")
      target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
    else(${SHELLTYPE} STREQUAL "readline")
      target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
    endif(${SHELLTYPE} STREQUAL "readline")
-  endif(MPMNEURON)
+  else(MPMNEURON)
+     target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries}
+  endif(MPMNEURN)
   
   if(${MPMTestsuite} STREQUAL "ON")
     target_link_libraries (MPMTestsuite MembranePotentialMapping ug4 ${linkLibraries})
