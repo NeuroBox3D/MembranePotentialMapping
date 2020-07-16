@@ -264,9 +264,9 @@ else(buildEmbeddedPlugins)
  
   if(MPMNEURON)
    if(${SHELLTYPE} STREQUAL "readline")
-     target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
-   else(${SHELLTYPE} STREQUAL "readline")
      target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH} ${READLINE_LIBRARY})
+   else(${SHELLTYPE} STREQUAL "readline")
+     target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries} ${NEURON_LIBRARY_PATH})
    endif(${SHELLTYPE} STREQUAL "readline")
   else(MPMNEURON)
      target_link_libraries(MembranePotentialMapping ug4 ${linkLibraries}
